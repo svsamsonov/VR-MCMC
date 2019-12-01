@@ -1470,13 +1470,12 @@ As a result
 
 \appendix
 
-\section{Concentration bounds for  ULA}
+\section{Bounds for moments of  ULA}
 For $\gamma>0$, the Markov kernel $R_\gamma$
-from $(\mathbb R^d,\mathcal B(\mathbb R^d))$
-into $(\mathbb R^d,\mathcal B(\mathbb R^d))$
+on $(\mathbb R^d,\mathcal B(\mathbb R^d))$
 is defined by
 $$
-R_\gamma(x,A)=\int_{A} \frac{1}{(4 \pi \gamma)^{d/2}} \text{ exp} \left\{ -\frac{1}{4\gamma} \left\| y - x + \gamma \mu(x)\right\|^2\right\}dy,\quad A\in \mathcal B(\mathbb R^d),
+R_\gamma(x,A)=\int_{A} \frac{1}{(4 \pi \gamma)^{d/2}} \text{ exp} \left\{ -\frac{1}{4\gamma} \left\| y - x + \gamma \nabla U(x)\right\|^2\right\}dy,\quad A\in \mathcal B(\mathbb R^d),
 $$
 while, for $k,l\in\mathbb N$, $k\le l$,
 the kernel $Q_{\boldsymbol{\gamma}}^{k,l}$ is
@@ -1488,7 +1487,7 @@ $
 \begin{description}
 \item[(H1)] Assume that $\nabla U$ is Lipschitz, that is, there exists $L\geq 0$ such that 
 \begin{eqnarray*}
-\|\nabla U(x)-\nabla U(y)\|\leq L\|x-y\|, \quad x,y\in \mathbb{R}^d
+\|\nabla U(x)-\nabla U(y)\|\leq L\|x-y\|, \quad x,y\in \mathbb{R}^d.
 \end{eqnarray*}
 
 \item[(H2)] There exist $K>0,$ $M>0$ and $m>0$ such that for any $x\not\in B_K(0)	$ and any $y\in \mathbb{R}^d$ it holds 
@@ -1497,6 +1496,27 @@ $
 \end{eqnarray*}
  
 \end{description}
+
+\begin{thm}
+Suppose that
+\begin{eqnarray*}
+\sum_{p=1}^{\infty} \gamma^2_p<\infty.
+\end{eqnarray*}
+Under assumptions (H1) and (H2), then for any bounded function $f$ on $\mathbb{R}^d$ 
+we have
+\begin{eqnarray*}
+\mathsf{E}\left[\left(\sum_{p=l}^{N+n}\omega_{p,n}^{N}f(X_{p})-\bar Q_l(X_l)\right)^{4}\right] \lesssim \frac{1}{\Gamma^4_{N+2,N+n+1}},
+\end{eqnarray*}
+ and
+\begin{eqnarray*}
+\bar Q_l(X_l)=\mathsf{E}\left[\left.\sum_{p=l}^{N+n}\omega_{p,n}^{N}f(X_{p})\right|X_{l}\right].
+\end{eqnarray*}
+Moreover 
+\begin{eqnarray*}
+\mathsf{E}\left[\exp\left(\rho\left(\sum_{k=l}^{p}\gamma_{k+1}g(X_{k})-\left(\sum_{k=l}^{p}\gamma_{k+1}\right)\pi(g)\right)\right)\right]\leq C
+\end{eqnarray*}
+for some small enough $\rho>0,$  all natural $0<l\leq p<\infty$ and constant $C$ not depending on $l,p.$
+\end{thm}
 
 \bibliographystyle{plain}
 \bibliography{refs-1}
