@@ -808,11 +808,11 @@ In order to approximate the expectation \(\pi(f)\) with \(f(x)=\sum_{i=1}^d x_i,
  \begin{figure}[tbh]
 \centering
 \subfloat[Subfigure 1 list of figures text][d = 2]{
-\includegraphics[width=0.45\textwidth]{pictures/GM_2d_f1.png}
+\includegraphics[width=0.45\textwidth]{../pictures/GM_2d_f1.png}
 \label{fig:subfig1}}
 \qquad
 \subfloat[Subfigure 2 list of figures text][d = 8]{
-\includegraphics[width=0.45\textwidth]{pictures/GM_8d_f1.png}
+\includegraphics[width=0.45\textwidth]{../pictures/GM_8d_f1.png}
 \label{fig:subfig2}}
 \caption{Boxplots of ergodic averages  from the variance reduced ULA algorithms for the Gaussian mixture model. The compared estimators are the ordinary empirical average  (O), our estimator of control variates (CV-B), zero variance estimator (ZV) and the control variates using diffusion approximation (CV), along with the region obtained by the ordinary ULA of the length $10^2 \times n$ (green regions). \label{fig:1}}
 \end{figure}
@@ -827,7 +827,7 @@ where $\theta$ is a parameter of model. In order to estimate $\theta$ according 
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=0.6\textwidth]{pictures/BLR_banknotes_4d.png}
+\includegraphics[width=0.6\textwidth]{../pictures/BLR_banknotes_4d.png}
 \caption{Boxplots of ergodic averages  from the variance reduced ULA algorithms for the Logistic Regression. The compared estimators are the ordinary empirical average  (O), our estimator of control variates (CV-B), zero variance estimator (ZV) and control variates using diffusion approximation (CV).
  \label{fig:2}}
 \end{center}
@@ -861,7 +861,7 @@ Consequently,
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=0.6\textwidth]{pictures/Probit_banknotes_4d.png}
+\includegraphics[width=0.6\textwidth]{../pictures/Probit_banknotes_4d.png}
 \caption{Boxplots of ergodic averages  from the variance reduced ULA algorithms for the Probit Regression. The compared estimators are the ordinary empirical average  (O), our modified estimator (CV-B), zero variance estimator (ZV) and the estimator with control variates using asymptotic variance minimization (CV).
  \label{fig:3}}
 \end{center}
@@ -1468,6 +1468,9 @@ As a result
 \|a_{p,l,\mathbf{k}}\|_{\infty}\leq \sqrt{\gamma_l}\, \|\nabla f\|_\infty\exp\left(-b_{\mu}\sum_{r=l+1}^p \gamma_{r}  \right).
 \end{eqnarray*}
 
+\appendix
+
+\section{Concentration bounds for Markov chains}
 
 \bibliographystyle{plain}
 \bibliography{refs-1}
