@@ -1,0 +1,122 @@
+%\usepackage[notref,notcite]{showkeys}  %  comment out for final version
+%\renewcommand*\showkeyslabelformat[1]{\fbox{\normalfont\scriptsize\sffamily#1}}   % for showkeys
+\usepackage{natbib}
+%\usepackage{enumerate,url,amssymb,  mathrsfs}
+\usepackage{graphicx}
+\usepackage{xargs}
+\usepackage[active]{srcltx}
+
+\usepackage[shortlabels]{enumitem} %label option for enumerate \alph* \Alph* \roman* \Roman* or other... [label=$\bullet$], [label=\alph*]
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{upgreek}
+\usepackage{bbm}
+\usepackage{mathrsfs}
+\usepackage[norelsize,ruled,vlined]{algorithm2e}
+\usepackage{amsmath}
+\usepackage[textwidth=4cm,textsize=footnotesize]{todonotes}
+%\usepackage[disable]{todonotes}
+\usepackage{accents}
+\usepackage{dsfont}
+\usepackage{hyperref}
+
+\usepackage{aliascnt}
+\usepackage{cleveref}
+\makeatletter
+\newtheorem{theorem}{Theorem}
+\crefname{theorem}{theorem}{Theorems}
+\Crefname{Theorem}{Theorem}{Theorems}
+
+
+\newaliascnt{lemma}{theorem}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+\crefname{lemma}{lemma}{lemmas}
+\Crefname{Lemma}{Lemma}{Lemmas}
+
+\newaliascnt{corollary}{theorem}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+\crefname{corollary}{corollary}{corollaries}
+\Crefname{Corollary}{Corollary}{Corollaries}
+
+\newaliascnt{proposition}{theorem}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+\crefname{proposition}{proposition}{propositions}
+\Crefname{Proposition}{Proposition}{Propositions}
+
+\newaliascnt{definition}{theorem}
+\newtheorem{definition}[definition]{Definition}
+\aliascntresetthe{definition}
+\crefname{definition}{definition}{definitions}
+\Crefname{Definition}{Definition}{Definitions}
+
+
+\newaliascnt{definitionProposition}{theorem}
+\newtheorem{definitionProposition}[definitionProposition]{Proposition and Definition}
+\aliascntresetthe{definitionProposition}
+\crefname{Proposition and Definition}{Proposition and Definition}{Proposition and Definition}
+\Crefname{Proposition and Definition}{Proposition and Definition}{Proposition and Definition}
+
+
+\newaliascnt{remark}{theorem}
+\newtheorem{remark}[remark]{Remark}
+\aliascntresetthe{remark}
+\crefname{remark}{remark}{remarks}
+\Crefname{Remark}{Remark}{Remarks}
+
+
+\newtheorem{example}[theorem]{Example}
+\crefname{example}{example}{examples}
+\Crefname{Example}{Example}{Examples}
+
+
+\crefname{figure}{figure}{figures}
+\Crefname{Figure}{Figure}{Figures}
+
+%%les deux lignes qui suivent concernant "theoremstyle" ont été rajoutées afin de supprimer le point gras automatiquement ajouté à la fin du nom des environnement dans les environnements de type "theorem" : tout cela pour permettre
+%\newtheoremstyle{dotless}{}{}{\itshape}{}{\bfseries}{}{0pt}{}
+%\theoremstyle{dotless}
+\newtheorem{assumption}{\textbf{H}\hspace{-3pt}}
+\Crefname{assumption}{\textbf{H}\hspace{-3pt}}{\textbf{H}\hspace{-3pt}}
+\crefname{assumption}{\textbf{H}}{\textbf{H}}
+
+\newtheorem{assumptionF}{\textbf{F}\hspace{-3pt}}
+\Crefname{assumptionF}{\textbf{F}\hspace{-3pt}}{\textbf{F}\hspace{-3pt}}
+\crefname{assumptionF}{\textbf{F}}{\textbf{F}}
+
+\newtheorem{assumptionB}{\textbf{B}\hspace{-3pt}}
+\Crefname{assumptionB}{\textbf{B}\hspace{-3pt}}{\textbf{B}\hspace{-3pt}}
+\crefname{assumptionB}{\textbf{B}}{\textbf{B}}
+
+\newtheorem{assumptionM}{\textbf{M}\hspace{-3pt}}
+\Crefname{assumptionM}{\textbf{M}\hspace{-3pt}}{\textbf{M}\hspace{-3pt}}
+\crefname{assumptionM}{\textbf{M}}{\textbf{M}}
+
+
+\newcommand{\eric}[1]{\todo[color=red!20]{{\bf EM:} #1}}
+\newcommand{\erici}[1]{\todo[color=red!20,inline]{{\bf EM:} #1}}
+\newcommand{\anici}[1]{\todo[color=green!20,inline]{{\bf AH:} #1}}
+%% Les 3 lignes suivantes constitue la technique de Elodie, Matthieu et Sylvain pour obtenir la possibilité d'avoir un environnement hypothèse qui "en quelque sorte dépende d'un paramètre"
+%\newcounter{hypH}
+%\newenvironment{hypH}{\refstepcounter{hypH}\begin{itemize}
+%\item[{\bf H\arabic{hypH}}]}{\end{itemize}}
+
+% Ajout de packages personnels
+
+%\usepackage{stmaryrd}
+
+
+%% Packages pour la représentation des tableaux
+%\usepackage{slashbox}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

@@ -1,0 +1,175 @@
+%Indicatrice et parenthésages
+\newcommand\parenth[1]{\left(#1\right)}
+\newcommand\po{\left(}
+\newcommand\pf{\right)}
+\newcommand\crochet[1]{\left[#1\right]}
+\newcommand\accol[1]{\left\{#1\right\}}
+
+%Intervalles à la francaise
+%\newcommand\intoo[2]{\left]#1,#2\right[}
+%\newcommand\intof[2]{\left]#1,#2\right]}
+%\newcommand\intfo[2]{\left[#1,#2\right[}
+%\newcommand\intff[2]{\left[#1,#2\right]}
+
+%Intervalles à l'anglaise
+\newcommand\intoo[2]{\left(#1,#2\right)}
+\newcommand\intof[2]{\left(#1,#2\right]}
+\newcommand\intfo[2]{\left[#1,#2\right)}
+\newcommand\intff[2]{\left[#1,#2\right]}
+
+
+\newcommand\indic[1]{\mathds{1}_{#1}}
+\newcommand\card[1]{\left\lvert#1\right\rvert}
+\newcommand\sumforce[2]{\underset{#1}{\overset{#2}{\sum}}}
+\newcommand\prodforce[2]{\underset{#1}{\overset{#2}{\prod}}}
+\newcommand\unionforce[2]{\underset{#1}{\overset{#2}{\bigcup}}}
+\newcommand\interforce[2]{\underset{#1}{\overset{#2}{\bigcap}}}
+\newcommand\supforce[2]{\underset{#1}{\sup}\left(#2\right)}
+\newcommand\infforce[2]{\underset{#1}{\inf}\left(#2\right)}
+\newcommand\limforce[2]{\underset{#1}{\lim}\left(#2\right)}
+\newcommand\argmin[2]{\underset{#1}{\text{argmin}}\left\{#2\right\}}
+\newcommand\argmax[2]{\underset{#1}{argmax}\left(#2\right)}
+%\DeclareMathOperator*{\argmin}{argmin}
+%\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+%Produit scalaire, valeur absolue, partie entière et norme
+\newcommand\ps[2]{\left<#1\middle|#2\right>}
+\newcommand\prodscal[2]{\left\langle#1\middle|#2\right\rangle}
+\newcommand\abs[1]{\left\lvert#1\right\rvert}
+%\newcommand\norm[2]{\left\lvert\left\lvert{#2}\right\rvert\right\rvert_{#1}}
+%la commande ci-dessus fait des barres verticales trop espacées pour la norme : celle ci-dessous est bien plus adaptée
+\newcommand\norm[2]{\left\|{#2}\right\|_{#1}}
+\newcommand\pent[1]{\left\lfloor{#1}\right\rfloor}
+\newcommand\pentsup[1]{\left\lceil{#1}\right\rceil}
+
+
+\newcommand{\eqsp}{\;}
+\newcommand{\eqspp}{\ \ }
+\newcommand{\eqsppeq}{\quad \quad }
+
+
+%Raccourcis de lettres stylisées
+\newcommand\drm{\mathrm{d}}
+\newcommand\erm{\mathrm{e}}
+
+
+
+\newcommand{\Pbf}{\mathbf{P}}
+\newcommand{\Qbf}{\mathbf{Q}}
+\newcommand{\Ebf}{\mathbf{E}}
+
+
+\newcommand{\bB}{\mathbb{B}}
+\newcommand{\Dbb}{\mathbb{D}}
+\newcommand{\Pbb}{\mathbb{P}}
+\newcommand{\Ebb}{\mathbb{E}}
+\newcommand{\Nbb}{\mathbb{N}}
+\newcommand{\Zbb}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+
+
+
+\newcommand{\Lcal}{\mathcal{L}}
+\newcommand{\cB}{\mathsf{B}}
+\newcommand{\cC}{\mathsf{C}}
+\newcommand{\cF}{\mathscr{F}}
+\newcommand{\cX}{\mathscr{X}}
+
+%Ensembles courants\\
+\newcommand\set[2]{\left\lbrace #1 \, : \, #2 \right\rbrace}
+\def\Rbb{\mathbb{R}}
+
+\newcommand{\sX}{\mathsf{X}}
+
+%Signes probabilistes
+%%%%Convergence
+%\newcommand\CV[2]{\overset{\text{\tiny{#1}}}{\underset{\text{\tiny{#2}}}{\longrightarrow}}}
+\newcommand\CV[2]{\xrightarrow[\text{\tiny{#2}}]{\text{\tiny{#1}}}}
+% '$\xrightarrow[\text{au dessus}]{\text{en dessous}}$' permet de générer des flèches dont la longueur dépend de la longueur du texte qui est placé au dessus ou en dessous
+\newcommand\iid{i.i.d. }
+\newcommand\as{a.s. }
+\newcommand\ie{i.e. }
+\newcommand\wrt{w.r.t. }
+\def\cdf{c.d.f.}
+\def\pdf{p.d.f.}
+
+
+%%%%Probabilité ``normales''
+\newcommand\prob[1]{\mathbb{P}\left(#1\right)}
+\newcommand\probpar[2]{\mathbb{P}^{#1}\left(#2\right)}
+\newcommand\probcond[2]{\mathbb{P}\left(#1 \middle| #2\right)}
+\newcommand\probcondpar[3]{\mathbb{P}^{#1}\left(#2 \middle| #3\right)}
+\newcommand\esp[1]{\mathbb{E}\left[#1\right]}
+\newcommand\esppar[2]{\mathbb{E}^{#1}\left[#2\right]}
+\newcommand\espcond[2]{\mathbb{E}\left[#1 \middle| #2\right]}
+\newcommand\espcondpar[3]{\mathbb{E}^{#1}\left[#2 \middle| #3\right]}
+\newcommand\var[1]{\mathbb{V}\mathrm{ar}\left(#1\right)}
+%%%%Probabilité quenched
+\newcommand\probquenched[2]{\mathbf{P}_{#1}\left(#2\right)}
+\newcommand\probquenchedpar[3]{\mathbf{P}_{#1}^{#2}\left(#3\right)}
+\newcommand\probquenchedcond[3]{\mathbf{P}_{#1}\left(#2 \middle| #3\right)}
+\newcommand\probquenchedcondpar[4]{\mathbf{P}_{#1}^{#2}\left(#3 \middle| #4\right)}
+\newcommand\espquenched[2]{\mathbf{E}_{#1}\left[#2\right]}
+\newcommand\espquenchedpar[3]{\mathbf{E}_{#1}^{#2}\left[#3\right]}
+\newcommand\espquenchedcond[3]{\mathbf{E}_{#1}\left[#2 \middle| #3\right]}
+\newcommand\espquenchedcondpar[4]{\mathbf{E}_{#1}^{#2}\left[#3 \middle| #4\right]}
+%%%%Probabilité annealed
+\newcommand\probannealed[2]{\mathbf{P}_{#1}\left(#2\right)}
+\newcommand\probannealedpar[3]{\mathbf{P}_{#1}^{#2}\left(#3\right)}
+\newcommand\probannealedcond[3]{\mathbf{P}_{#1}\left(#2 \middle| #3\right)}
+\newcommand\probannealedcondpar[4]{\mathbf{P}_{#1}^{#2}\left(#3 \middle| #4\right)}
+\newcommand\espannealed[2]{\mathbf{E}_{#1}\left[#2\right]}
+\newcommand\espannealedpar[3]{\mathbf{E}_{#1}^{#2}\left[#3\right]}
+\newcommand\espannealedcond[3]{\mathbf{E}_{#1}\left[#2 \middle| #3\right]}
+\newcommand\espannealedcondpar[4]{\mathbf{E}_{#1}^{#2}\left[#3 \middle| #4\right]}
+%\newcommand\esptilde[1]{\tilde{\mathbb{E}}\left[#1\right]}
+%\newcommand\espsigma[1]{{\mathbb{E}_\sigma}\left[#1\right]}
+
+
+%Definition d'un nouvel environnement
+%%\newaliascnt{notation}{theorem}
+%\newtheorem{notation}[notation]{Notation}
+%%\aliascntresetthe{notation}
+%\crefname{notation}{notation}{notations}
+%\Crefname{Notation}{Notation}{Notations}
+
+% Definitions propres à ce documents
+\def\prior{\pi}
+\newcommand\betaker[2]{\mathbb{B}^{#1,#2}}
+\def\param{\vartheta}
+\def\Param{\Theta}
+\def\Ker{K}
+\def\suppprior{\mathrm{supp}(\Pi)}
+
+
+
+% noms des hypotheses
+\newcommand{\hyptag}[1]{\tag{\ensuremath{\mathbf{#1}}}} % nom d'hypothese
+
+\def\tilde{\widetilde} 
+\def\rme{\mathrm{e}}
+\def\rmd{\mathrm{d}}
+\def\Xsigma{\cX}
+\def\Xset{\sX}
+\newcommandx{\indi}[2][1=]{\mathbbm{1}^{#1}_{#2}}
+\newcommand{\indiacc}[1]{\mathbbm{1}_{\{#1\}}}
+\newcommand{\indin}[1]{\mathbbm{1}\left\{#1\right\}}
+
+\newcommandx\sequence[3][2=,3=]
+{\ifthenelse{\equal{#3}{}}{\ensuremath{\{ #1_{#2}\}}}{\ensuremath{\{ #1_{#2}, \eqsp #2 \in #3 \}}}}
+\newcommandx{\sequencen}[2][2=n\in\N]{\ensuremath{\{ #1, \eqsp #2 \}}}
+\newcommandx\sequenceDouble[4][3=,4=]
+{\ifthenelse{\equal{#3}{}}{\ensuremath{\{ (#1_{#3},#2_{#3}) \}}}{\ensuremath{\{  (#1_{#3},#2_{#3}), \eqsp #3 \in #4 \}}}}
+\newcommandx{\sequencenDouble}[3][3=n\in\N]{\ensuremath{\{ (#1_{n},#2_{n}), \eqsp #3 \}}}
+
+\newcommand{\lrb}[1]{\left[ #1 \right]}
+\newcommand{\lrcb}[1]{\left\{ #1 \right\}}
+\newcommandx{\chunk}[3][1=0,3=n-1]{{#2}_{#1}^{#3}}
+\newcommandx{\tvdist}[3][1=]{\ensuremath{\mathrm{d}^{#1}_{\mathrm{TV}}}(#2,#3)}
+\newcommand{\tvdistsym}{\ensuremath{\mathrm{d}_{\mathrm{TV}}}}
+
+\newcommandx{\CPE}[3][1=]{{\mathbb E}_{#1}\left[\left. #2 \, \right| #3 \right]} %%%% esperance conditionnelle
+\newcommand{\functionboundeddiff}[2]{\mathbb{BD}(#1,#2)}
+\newcommandx\supnorm[2][1=]{| #2 |^{#1}_\infty}
+\newcommand{\fracaa}[2]{#1 / #2}
