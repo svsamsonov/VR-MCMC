@@ -466,6 +466,49 @@ Choosing $s=t/(C\|c\|^2)$ proves Theorem~\ref{thm:ConcMarkQuant} with
 \]
 \end{proof}
 
+\section{Applications to Unadjusted Langevin Algorithm}\label{sec:ULA}
+We illustrate the applicability of the results by the example on one of the MCMC methods. Suppose that we aim at sampling from the distribution with density $\pi(x) = \frac{e^{-U(x)}}{\int\limits_{\mathbb{R}^d} e^{-U(y)}\,dy}$. One of the popular algorithms for solving this problem is the Unadjusted Langevin Algorithm, which suggests constructing the Markov Chain
+$$
+X_{k+1} = h_{k+1}(X_k) + \sqrt{2\gamma_{k+1}}Z_{k+1}, h_{k+1}(X_k) := X_{k} - \gamma_{k+1}\nabla U(X_{k}) 
+$$
+with some non-increasing sequence $\gamma_k \geq 0$, where $Z_k \sim \mathcal{N}(0,I)$ are i.i.d. standard normal $d$-dimensional random variables. Standard assumptions on the sequence $\{\gamma_k\}$ are $\sum\limits_{k=0}^{\infty}\gamma_k = \infty$ and $\sum\limits_{k=0}^{\infty}\gamma_k^2 < \infty$. Thus it is impossible to analyze properties of additive functionals of $\{X_k\}$ by standard tools, since the assumptions {\bf H2} and {\bf H3} fails in case $\gamma_k \rightarrow 0$.  Yet we might establish some alternative bounds on the speed of convergence to stationary distribution. We need to impose condition
+\par
+[{\bf C1}] Potential $U(x)$ satisfies for all $x,y \in \mathbb{R}^d$ the condition
+$$
+\|U(x) - U(y)\| \leq L\|x-y\|
+$$
+This condition obviously implies
+$$
+\|h_{k}(X) - h_k(Y)\| \leq (1+L\gamma_k)\|X-Y\|
+$$
+Hence, by \cite[Theorem~19]{durmus:moulines:2018}, we might obtain the following minorization condition
+\begin{lemma} Assume that the condition {\bf C1} holds. Then for all $x,y \in \mathbb{R}^d, n\geq 1$ it holds
+$$
+\|\delta_xQ^n - \delta_yQ^n\|_{TV} \leq \mathbb{I}(x \neq y)\left(1 - 2\Phi\left(-\frac{\|x-y\|}{2\sqrt{b_n}}\right)\right)
+$$
+where $b_n := \sum\nolimits_{i=1}^{k}\frac{\gamma_i}{\prod_{j=1}^{i}(1+L\gamma_j)^2}$
+\end{lemma}
+Now we aim at establishing Foster-Lyapunov drift conditions for the kernel $P_{\gamma_n}$.We will say that function $V(x): \mathbb{R}^d \rightarrow [1,+\infty)$ satisfies a Foster-Lyapunov drift condition for the Markov kernel $P_\gamma$ if. there are such $\overline{\gamma} > 0, \lambda \in [0,1), C > 0$ such that for any $\gamma \in (0, \overline{\gamma}]$ it holds
+\begin{equation}
+\label{eq:drift}
+P_{\gamma}V \leq \lambda^{\gamma}V + \gamma C
+\end{equation}
+Given that this condition holds, we may prove drift condition for. the kernel $Q^n$.
+\begin{lemma} Assume that $P_{\gamma}$ satisfies condition \ref{eq:drift} for any $0 < \gamma < \overline{gamma}$. Then it holds
+$$
+Q^{n,p}V \leq \lambda^{\Gamma_{p,n}}V + C\frac{\lambda^{\Gamma_{1,p}} - \lambda^{\Gamma_{1,n}}}{\log{\frac{1}{\lambda}}}
+$$ 
+\end{lemma}
+\begin{proof} For notation simplicity let us consider only $p=1$. Then by induction
+$$
+Q^{n}V \leq \lambda^{\Gamma_{1,n}}V + C \sum\limits_{k=1}^{n}\gamma_k \lambda^{\Gamma_{1,k-1}} \leq \lambda^{\Gamma_{1,n}}V + C \int\limits_{0}^{\Gamma_{1,n}}\lambda^{x}\,dx \leq
+$$
+$$
+\leq \lambda^{\Gamma_{1,n}}V + C\frac{1-\lambda^{\Gamma_{1,n}}}{\log{\frac{1}{\lambda}}}
+$$
+\end{proof}
+
+
 
 \bibliographystyle{plain}
 \bibliography{BiblioSource}
