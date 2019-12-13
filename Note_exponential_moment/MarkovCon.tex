@@ -471,7 +471,16 @@ We illustrate the applicability of the results by the example on one of the MCMC
 $$
 X_{k+1} = h_{k+1}(X_k) + \sqrt{2\gamma_{k+1}}Z_{k+1}, h_{k+1}(X_k) := X_{k} - \gamma_{k+1}\nabla U(X_{k}) 
 $$
-with some non-increasing sequence $\gamma_k \geq 0$, where $Z_k \sim \mathcal{N}(0,I)$ are i.i.d. standard normal $d$-dimensional random variables. Standard assumptions on the sequence $\{\gamma_k\}$ are $\sum\limits_{k=0}^{\infty}\gamma_k = \infty$ and $\sum\limits_{k=0}^{\infty}\gamma_k^2 < \infty$. Thus it is impossible to analyze properties of additive functionals of $\{X_k\}$ by standard tools, since the assumptions {\bf H2} and {\bf H3} fails in case $\gamma_k \rightarrow 0$.  Yet we might establish some alternative bounds on the speed of convergence to stationary distribution. We need to impose condition
+with some non-increasing sequence $\gamma_k \geq 0$, where $Z_k \sim \mathcal{N}(0,I)$ are i.i.d. standard normal $d$-dimensional random variables. Let us denote ULA kernel with parameter $\gamma$ as $P_{\gamma}$, that is,
+\begin{equation}
+\label{eq:ula_kernel}
+P_{\gamma}(x,dy) = \frac{1}{(4\pi\gamma)^{\frac{d}{2}}}\exp{\left(-\frac{\|y-x+\gamma\nabla U(x)\|^2}{4\gamma}\right)}\,dy
+\end{equation}
+Let us also introduce the multiple steps kernel
+$$
+Q^{p,n} = P_{\gamma_p}\ldots P_{\gamma_n}, Q^{n} := Q^{1,n}
+$$
+Standard assumptions on the sequence $\{\gamma_k\}$ are $\sum\limits_{k=0}^{\infty}\gamma_k = \infty$ and $\sum\limits_{k=0}^{\infty}\gamma_k^2 < \infty$. Thus it is impossible to analyze properties of additive functionals of $\{X_k\}$ by standard tools, since the assumptions {\bf H2} and {\bf H3} fails in case $\gamma_k \rightarrow 0$.  Yet we might establish some alternative bounds on the speed of convergence to stationary distribution. We need to impose condition
 \par
 [{\bf C1}] Potential $U(x)$ satisfies for all $x,y \in \mathbb{R}^d$ the condition
 $$
@@ -494,7 +503,10 @@ Now we aim at establishing Foster-Lyapunov drift conditions for the kernel $P_{\
 P_{\gamma}V \leq \lambda^{\gamma}V + \gamma C
 \end{equation}
 Given that this condition holds, we may prove drift condition for. the kernel $Q^n$.
-\begin{lemma} Assume that $P_{\gamma}$ satisfies condition \ref{eq:drift} for any $0 < \gamma < \overline{gamma}$. Then it holds
+
+\begin{lemma}
+\label{lem:drift_prod}
+ Assume that $P_{\gamma}$ satisfies condition \ref{eq:drift} for any $0 < \gamma < \overline{gamma}$. Then it holds
 $$
 Q^{n,p}V \leq \lambda^{\Gamma_{p,n}}V + C\frac{\lambda^{\Gamma_{1,p}} - \lambda^{\Gamma_{1,n}}}{\log{\frac{1}{\lambda}}}
 $$ 
@@ -507,7 +519,52 @@ $$
 \leq \lambda^{\Gamma_{1,n}}V + C\frac{1-\lambda^{\Gamma_{1,n}}}{\log{\frac{1}{\lambda}}}
 $$
 \end{proof}
+Let us check that ULA kernel \ref{} satisfies the drift condition \label{eq:drift}. We will need additional assumption
+\par
+[{\bf C2}] There exists such constants $K_1 > 0$ and $m > 0$, such that for any $x \notin B(0,K_1)$ it holds
+$$
+\langle \nabla U(x), x \rangle \geq \frac{m}{2}\|x\|^2
+$$
+Another popular condition on the potential is strong convexity outside some euclidean ball:
+\par
+[{\bf C3}] There exist constants $K_1 > 0$ and $m > 0$ such that for any $x \notin B(0,K_1)$ and $y \in \mathbb{R}^d$, it holds $\langle D^2U(x)y,y\rangle \geq m\|y\|^2$. Moreover, there exists $M \geq 0$ such that for any $x \in \mathbb{R}^d$, $\|D^3U(x)\| \leq M$.
+\par
+Yet it is possible to show that assumption {\bf C3} and {\bf C1} imply {\bf C2} (see \cite[Lemma~14]{brosse:2018:diffusion}), so in the sequel we are going to work with the condition {\bf C2}. It allows us to prove the following result
 
+\begin{lemma} Assume that the potential $U(x)$ satisfies conditions {\bf C1} and {\bf C2}. Then the kernel \ref{} satisfies drift condition \ref{eq:drift} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L^2}$ with drift function $V(x) = 1 + \|x\|^2$, constants $\lambda = \exp{-\left(\frac{m}{2}\right)}$, $C = 3K_1^2 + 2d + C_1$ for some absolute constant $C_1$.
+\end{lemma}
+
+\begin{proof} Consider $V(x) = 1 + \|x\|^2$, then
+$$
+P_{\gamma}V(x) = \int\limits_{\mathbb{R}^d}V(y)P_{\gamma}(x,dy) = \int\limits_{\mathbb{R}^d}(1+\|y\|^2)\frac{1}{(4\pi\gamma)^{\frac{d}{2}}}\exp{\left(-\frac{\|y-x+\gamma\nabla U(x)\|^2}{4\gamma}\right)}\,dy = 
+$$
+
+$$
+=1 + \frac{1}{(4\pi\gamma)^{\frac{d}{2}}}\int\limits_{\mathbb{R}^d}\|z + x - \gamma \nabla U(x)\|^2 \exp{\left(-\frac{\|z\|^2}{4\gamma}\right)}\,dz
+$$
+Let us first consider the case $x \notin B(0,K_1)$. Note that $\|z+x-\gamma \nabla U(x)\|^2 = \|z\|^2 + 2 \langle z, x - \gamma \nabla U(x) \rangle + \gamma^2 \|x - \gamma \nabla U(x)\|^2$ and the linear term vanishes after integration, moreover, for $Z \sim \mathcal{N}(0,2\gamma I_d$, it holds $\mathbb{E}\|Z\|^2 = 2\gamma d$. It remains to notice that due to {\bf C1} and {\bf C2}
+$$
+\|x - \gamma \nabla U(x) \|^2 = \|x\|^2 - 2\gamma \langle \nabla U(x), x\rangle + \gamma^2 \|\nabla U(x)\|^2 \leq
+$$
+$$
+ \leq (1-\gamma m)\|x\|^2 + 2\gamma^2 L^2 \|x\|^2 + 2\|\nabla U(0)\|^2
+$$
+Thus, plugging everything into expression for $P_{\gamma}V$ and using $\gamma < \frac{m}{4L}$, we obtain
+$$
+P_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + 2\gamma d + (\gamma m - 2\gamma^2 L^2) + 2\gamma^2\|\nabla U(0)\|^2 \leq \exp^{-\frac{\gamma m}{2}}V(x) + \gamma(d + 2\gamma \|\nabla U(0)\|^2)
+$$
+Now let $x \in B(0,K_1)$. Then simply using $\|x-\gamma \nabla U(x)\|^2 \leq 2(1+L\gamma)^2\|x\|^2 + 2\gamma^2\|\nabla U(0)\|^2$, we obtain
+$$
+P_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma\left((m - 2\gamma L^2)(1+\|x\|^2) + 2d + 2(1+L\gamma)^2\|x\|^d + 2\gamma \|\nabla U(0)\|^2\right) \leq 
+$$
+
+$$
+\leq \exp^{-\frac{\gamma m}{2}}V(x) + \gamma(3K_1^2 + 2d + C_1)
+$$
+for some absolute constant $C_1$, which does not depend on $\gamma, d, x$.
+\end{proof}
+
+It is possible to use \ref{lem:drift_prod} in order to obtain convergence rates in $V$-norm, following the ideas of \cite[Theorem~18.4.3]{douc:moulines:priouret:soulier:2018}. Namely, the following lemma holds:
 
 
 \bibliographystyle{plain}
