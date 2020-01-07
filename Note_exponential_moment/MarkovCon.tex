@@ -121,9 +121,10 @@ where $\pi$ is the unique invariant measure from {\bf H1}.
 When the Markov kernel $P$ is uniformly ergodic, then {\bf H3} holds with $V(x) = 1$.   
 \par
 Note that \cite[Proposition 14.3.1]{douc:moulines:priouret:soulier:2018} implies that if Markov kernel $P$ satisfies the drift condition {\bf H2} with the set $\cC \in \cX$, $\cC = \{x: V(x) < d\}$, then it holds for any $x \in \cC$ that
-\[
+\begin{equation}
+\label{eq:exp_moment_hit}
 \sup_{x\in \cC}\Ebb_x[\lambda^{-\sigma_{\cC}}]\leqslant M\eqsp
-\]
+\end{equation}
 with some $M$ depending on $V(x)$ and $d$.
 \par
 The following Lemma is a coupling result that replaces \cite[Lemma~6]{MR3407208}. It is instrumental in the sequel.
@@ -175,7 +176,7 @@ The main result of this paper  is the following quantitative version of Mac Diar
  %\]
 %\end{theorem}
 \begin{theorem}\label{thm:ConcMarkVErgodic}
- Assume {\bf H1}, {\bf H2} and {\bf H3} holds with function $V(x)$. Let $\cC = \{V(x) < d\}$, $n\geqslant 1$, $c\in \R^n$ and  $f\in \functionboundeddiff{\sX^n}{c}$. Then, for all $x\in \cC$ and $t > 0$,
+ Assume {\bf H1}, {\bf H2} and {\bf H3} holds with drift function $V(x)$. Let $M$ be a constant from \ref{eq:exp_moment_hit}, $\cC = \{V(x) < d\}$, $n\geqslant 1$, $c\in \R^n$ and  $f\in \functionboundeddiff{\sX^n}{c}$. Then, for all $x\in \cC$ and $t > 0$,
  \[
 \Pbb_x\big(f( \chunk[0]{X}[n-1])-\Ebb_x[f(\chunk[0]{X}[n-1])]>t\big)\leqslant \exp\bigg(-\frac{\beta t^2}{\|c\|^2}\bigg)\eqsp,
  \]
@@ -538,7 +539,7 @@ Given that this condition holds, we may prove drift condition for. the kernel $Q
 
 \begin{lemma}
 \label{lem:drift_prod}
- Assume that $P_{\gamma}$ satisfies condition \ref{eq:drift} for any $0 < \gamma < \overline{gamma}$. Then it holds
+ Assume that $P_{\gamma}$ satisfies condition \ref{eq:drift} for any $0 < \gamma < \overline{\gamma}$. Then it holds
 $$
 Q^{n,p}V \leq \lambda^{\Gamma_{p,n}}V + C\frac{\lambda^{\Gamma_{1,p}} - \lambda^{\Gamma_{1,n}}}{\log{\frac{1}{\lambda}}}
 $$ 
@@ -563,7 +564,7 @@ Another popular condition on the potential is strong convexity outside some eucl
 \par
 Yet it is possible to show that assumption {\bf C3} and {\bf C1} imply {\bf C2} (see \cite[Lemma~14]{brosse:2018:diffusion}), so in the sequel we are going to work with the condition {\bf C2}. It allows us to prove the following result
 
-\begin{lemma} Assume that the potential $U(x)$ satisfies conditions {\bf C1} and {\bf C2}. Then the kernel \ref{} satisfies drift condition \ref{eq:drift} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L^2}$ with drift function $V(x) = 1 + \|x\|^2$, constants $\lambda = \exp{-\left(\frac{m}{2}\right)}$, $C = 3K_1^2 + 2d + C_1$ for some absolute constant $C_1$.
+\begin{lemma} Assume that the potential $U(x)$ satisfies conditions {\bf C1} and {\bf C2} and without loss of generality consider $\nabla U(0) = 0$. Then the kernel \ref{} satisfies drift condition \ref{eq:drift} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L^2}$ with drift function $V(x) = 1 + \|x\|^2$, constants $\lambda = \exp{-\left(\frac{m}{2}\right)}$, $C = 3K_1^2 + 2d + C_1$ for some absolute constant $C_1 > 0$.
 \end{lemma}
 
 \begin{proof} Consider $V(x) = 1 + \|x\|^2$, then
@@ -579,15 +580,15 @@ $$
 \|x - \gamma \nabla U(x) \|^2 = \|x\|^2 - 2\gamma \langle \nabla U(x), x\rangle + \gamma^2 \|\nabla U(x)\|^2 \leq
 $$
 $$
- \leq (1-\gamma m)\|x\|^2 + 2\gamma^2 L^2 \|x\|^2 + 2\|\nabla U(0)\|^2
+ \leq (1-\gamma m)\|x\|^2 + 2\gamma^2 L^2 \|x\|^2
 $$
 Thus, plugging everything into expression for $P_{\gamma}V$ and using $\gamma < \frac{m}{4L}$, we obtain
 $$
-P_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + 2\gamma d + (\gamma m - 2\gamma^2 L^2) + 2\gamma^2\|\nabla U(0)\|^2 \leq \exp^{-\frac{\gamma m}{2}}V(x) + \gamma(d + 2\gamma \|\nabla U(0)\|^2)
+P_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + 2\gamma d + (\gamma m - 2\gamma^2 L^2) \leq \exp^{-\frac{\gamma m}{2}}V(x) + 2\gamma d
 $$
-Now let $x \in B(0,K_1)$. Then simply using $\|x-\gamma \nabla U(x)\|^2 \leq 2(1+L\gamma)^2\|x\|^2 + 2\gamma^2\|\nabla U(0)\|^2$, we obtain
+Now let $x \in B(0,K_1)$. Then simply using $\|x-\gamma \nabla U(x)\|^2 \leq 2(1+L\gamma)^2\|x\|^2$, we obtain
 $$
-P_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma\left((m - 2\gamma L^2)(1+\|x\|^2) + 2d + 2(1+L\gamma)^2\|x\|^d + 2\gamma \|\nabla U(0)\|^2\right) \leq 
+P_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma\left((m - 2\gamma L^2)(1+\|x\|^2) + 2d + 2(1+L\gamma)^2\|x\|^d\right) \leq 
 $$
 
 $$
@@ -596,6 +597,29 @@ $$
 for some absolute constant $C_1$, which does not depend on $\gamma, d, x$.
 \end{proof}
 
+Now the geometric ergodicity result readily follows from \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018}, namely, the following lemma holds:
+
+\begin{lemma} Let the potential $U(x), x \in \mathbb{R}^D$ satisfy conditions {\bf C1} and {\bf C2}. Then for $0 < \gamma < \overline{\gamma}=\frac{m}{4L^2}$, for any $x \in X$ it holds
+$$
+d_V(\delta_xQ^n_\gamma,\pi_\gamma) \leq C\rho^n\left(V(x) + \pi_\gamma(V)\right)
+$$ 
+with $V(x) = 1 + \|x\|^2$ and constants
+$$
+b = \gamma(3K_1^2 + 2D + C_1); \quad \overline{b} = b\exp^{-\frac{m\gamma}{2}} + d; \quad \varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right); \quad
+$$
+
+$$
+C = \left(1 + \exp^{-\frac{m\gamma}{2}}\right)\left(1+\frac{\overline{b}}{(1-\varepsilon)(1-\exp^{-\frac{m\gamma}{2}} - \frac{2b}{1+d})}\right);
+$$
+
+$$
+\rho = \exp^{-\gamma\left(\frac{m}{2} - 2\frac{3K_1^2 + 2D + C_1}{d}\right)\frac{\log{(1-\varepsilon)}}{\log{(1-\varepsilon)} + \log{(\exp^{-\frac{m\gamma}{2}} + \frac{2b}{d+1})}}}
+$$
+for some $C_1 > 0$, which does not depend on $d, \gamma$ and $n$.
+\end{lemma}
+
+\begin{proof} Note that the condition {\bf C1} implies that the Markov kernel $Q^n_\gamma$ satisfies $(1,\varepsilon)$-Doeblin condition with $\varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right)$. Together with drift condition {\bf C2} it allows to apply \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018} with appropriate constants. 
+\end{proof}
 
 \bibliographystyle{plain}
 \bibliography{BiblioSource}
