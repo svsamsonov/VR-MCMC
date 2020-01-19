@@ -1363,7 +1363,7 @@ A_{K}^{2}\sum_{j=l}^{q}\gamma_{j}
 \\
 &\le
 \frac{A_{K}^{2}}{(1-\gamma_1 B_\mu)^2}
-\sum_{j=l}^{q} \gamma_{j}
+\mathsf{E}\sum_{j=l}^{q} \gamma_{j}
 \left(
 \sum_{p=j+1}^{q+1} \gamma_{p} \prod_{k=l+1}^{p} \alpha_{k}
 \right)^{2}
@@ -1378,16 +1378,51 @@ A_{K}^{2}\sum_{j=l}^{q}\gamma_{j}
 %\\
 &\le
 \frac{A_{K}^{2}}{(1-\gamma_1 B_\mu)^3}
-\sum_{j=l}^{q} \gamma_{j}
+\mathsf{E}\sum_{j=l}^{q} \gamma_{j}
 \prod_{k=l}^{j} \alpha_{k}
 \left(
 \sum_{p=j+1}^{q+1} \gamma_{p} \prod_{k=j+1}^{p} \alpha_{k}
 \right)^{2}
-\\
-&\le
-\frac{A_{K}^{2}}{(1-\gamma_1 B_\mu)^3}C^3=B_K,
 \end{align*}
-where $C$ is the bound from~\eqref{eq:17042018a1}.
+
+%\som{Changed exponent from 1/2 to 2 here}
+Now, from Hoelder inequality, we obtain (with $\|X\|_p = (\mathsf{E}X^p)^{\frac{1}{p}}$)
+\begin{align*}
+\mathsf{E}\left[\sum_{j=l}^{q}\gamma_{j}\prod_{k=l}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\gamma_{p}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right] & \leq\sum_{j=l}^{q}\gamma_{j}\left\Vert \prod_{k=l}^{j}\alpha_{k}\right\Vert _{2}\left\Vert \sum_{p=j+1}^{q+1}\gamma_{p}\prod_{k=j+1}^{p}\alpha_{k}\right\Vert _{4}^{2}\\
+ & \leq\sum_{j=l}^{q}\gamma_{j}\left\Vert \prod_{k=l}^{j}\alpha_{k}\right\Vert _{2}\left(\sum_{p=j+1}^{q+1}\gamma_{p}\left\Vert \prod_{k=j+1}^{p}\alpha_{k}\right\Vert _{4}\right)^{2}.
+\end{align*}
+Now using the fact that $\prod\limits_{k=j+1}^{p}\alpha_{k} \leq \exp\left(-\sum\limits_{k=j+1}^{p}\gamma_{k}\mu'(X_{k-1})\right),$
+we get 
+\[
+\mathsf{E}\left[\sum_{j=l}^{q}\gamma_{j}\prod_{k=l}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\gamma_{p}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right]\leq\sum_{j=l}^{q}\gamma_{j} \zeta^{1/2}_{l,j}(2) \left(\sum_{p=j+1}^{q+1}\gamma_{p} \zeta^{1/4}_{j+1,p}(4)\right)^{2},
+\]
+where we denote
+\[
+\zeta_{l,j}(s)=\mathsf{E}\left[e^{-s\sum_{k=l}^{j}\gamma_{k}\mu'(X_{k-1})}\right],\quad s>0.
+\]
+From Theorem~\ref{exp_mom_ula} in Appendix~\ref{sec:appendix}, it follows that
+\[
+\zeta_{l,j}(s) \leq e^{s\kappa \Gamma^*}e^{-2s\Gamma_{l,j}\alpha}
+\]
+with $\Gamma^* = \sum\limits_{k=1}^{\infty}\gamma_k^2, \kappa = ..., \Gamma_{l,j} = \sum\limits_{k=l}^{j}\gamma_k, \alpha = \int \mu^2(x)\pi(x)\,dx$. Since $\sum\limits_{k=1}^{\infty}\gamma_k = \infty$, we may bound
+\begin{align*}
+\sum\limits_{p=j+1}^{\infty} \gamma_p e^{-2\alpha \Gamma_{j+1,p}} < \int\limits_{0}^{+\infty}e^{-2\alpha x}\,dx = \frac{1}{2\alpha}
+\end{align*}
+yielding 
+\begin{align*}
+\sum_{p=j+1}^{q+1}\gamma_{p} \zeta^{1/4}_{j+1,p}(4) \leq e^{\kappa \Gamma^*}\sum_{p=j+1}^{q+1}\gamma_{p}e^{-2\alpha \Gamma_{j+1,p}} \leq \frac{e^{\kappa \Gamma^*}}{2\alpha} 
+\end{align*}
+Using the same integral bound, 
+\begin{align*}
+\mathsf{E}\left[\sum_{j=l}^{q}\gamma_{j}\prod_{k=l}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\gamma_{p}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right] \leq
+\frac{e^{2\kappa \Gamma^*}}{2\alpha}\sum_{j=l}^{q}\gamma_{j}e^{-2\alpha \Gamma_{l,j}} \leq \frac{e^{2\kappa \Gamma^*}}{4\alpha^2}
+\end{align*}
+Plugging into bound for conditional variance, 
+\begin{align*}
+\mathsf{Var}\left[\sum_{p=l}^{q}\gamma_{p+1}\partial_{y_{l}}^{K}f\left(X_{p}\right)\Big|X_{l-1}\right] \leq
+\frac{A_{K}^{2}e^{2\kappa \Gamma^*}}{4\alpha^2(1-\gamma_1 B_\mu)^3}
+\end{align*}
+\par
 The proof is completed.
 \end{proof}
 \begin{remark}\label{rem:p-norm}
@@ -1444,7 +1479,7 @@ As a result
 
 \appendix
 
-\section{Bounds for moments of  ULA}
+\section{Bounds for moments of  ULA}\label{sec:appendix}
 For $\gamma>0$, the Markov kernel $R_\gamma$
 on $(\mathbb R^d,\mathcal B(\mathbb R^d))$
 is defined by
@@ -1459,24 +1494,91 @@ $
  We make the following assumptions. 
 
 \begin{description}
-\item[(H1)] Assume that $\nabla U$ is Lipschitz, that is, there exists $L\geq 0$ such that 
+\item[{\bf (H1)}] Assume that $\nabla U$ is Lipschitz, that is, there exists $L\geq 0$ such that 
 \begin{eqnarray*}
 \|\nabla U(x)-\nabla U(y)\|\leq L\|x-y\|, \quad x,y\in \mathbb{R}^d.
 \end{eqnarray*}
 
-\item[(H2)] There exist $K>0,$ $M>0$ and $m>0$ such that for any $x\not\in B_K(0)	$ and any $y\in \mathbb{R}^d$ it holds 
+\item[{\bf (H2)}] There exist $K>0,$ $M>0$ and $m>0$ such that for any $x\not\in B_K(0)	$ and any $y\in \mathbb{R}^d$ it holds 
 \begin{eqnarray*}
 \langle D^2U(x)y,y\rangle \geq m\|y\|^2, \quad \|D^3 U(y)\| \leq M. 
 \end{eqnarray*}
- 
 \end{description}
 
+Due to \cite[Lemma~14]{brosse:2018:diffusion}, it is known that conditions (H1) and (H2) imply the result
+
+\begin{description}
+\item[{\bf (H3)}] There exist $K_1 > 0, m > 0$, such that for any $x \not\in B_{K_1}(0)$ it holds
+\begin{eqnarray*}
+\langle \nabla U(x), x \rangle \geq \frac{m}{2}\|x\|^2
+\end{eqnarray*}
+\end{description}
+
+\begin{lem} Assume that the potential $U(x), x \in \mathbb{R}^D$ satisfies conditions {\bf (H1)} and {\bf (H3)} and without loss of generality consider $\nabla U(0) = 0$. Then the kernel \ref{} satisfies drift condition \ref{eq:drift} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L^2}$ with drift function $V(x) = 1 + \|x\|^2$, constants $\lambda = \exp{-\left(\frac{m}{2}\right)}$, $C = 3K_1^2 + 2D + C_1$ for some absolute constant $C_1 > 0$, , which does not depend on $\gamma, D, x$.
+\end{lem}
+
+\begin{proof} Consider $V(x) = 1 + \|x\|^2$, then
+$$
+P_{\gamma}V(x) = \int\limits_{\mathbb{R}^d}V(y)P_{\gamma}(x,dy) = \int\limits_{\mathbb{R}^d}(1+\|y\|^2)\frac{1}{(4\pi\gamma)^{\frac{d}{2}}}\exp{\left(-\frac{\|y-x+\gamma\nabla U(x)\|^2}{4\gamma}\right)}\,dy = 
+$$
+
+$$
+=1 + \frac{1}{(4\pi\gamma)^{\frac{d}{2}}}\int\limits_{\mathbb{R}^d}\|z + x - \gamma \nabla U(x)\|^2 \exp{\left(-\frac{\|z\|^2}{4\gamma}\right)}\,dz
+$$
+Let us first consider the case $x \notin B(0,K_1)$. Note that $\|z+x-\gamma \nabla U(x)\|^2 = \|z\|^2 + 2 \langle z, x - \gamma \nabla U(x) \rangle + \gamma^2 \|x - \gamma \nabla U(x)\|^2$ and the linear term vanishes after integration, moreover, for $Z \sim \mathcal{N}(0,2\gamma I_d$, it holds $\mathbb{E}\|Z\|^2 = 2\gamma d$. It remains to notice that due to {\bf C1} and {\bf C2}
+$$
+\|x - \gamma \nabla U(x) \|^2 = \|x\|^2 - 2\gamma \langle \nabla U(x), x\rangle + \gamma^2 \|\nabla U(x)\|^2 \leq
+$$
+$$
+ \leq (1-\gamma m)\|x\|^2 + 2\gamma^2 L^2 \|x\|^2
+$$
+Thus, plugging everything into expression for $P_{\gamma}V$ and using $\gamma < \frac{m}{4L}$, we obtain
+$$
+P_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + 2\gamma d + (\gamma m - 2\gamma^2 L^2) \leq \exp^{-\frac{\gamma m}{2}}V(x) + 2\gamma d
+$$
+Now let $x \in B(0,K_1)$. Then simply using $\|x-\gamma \nabla U(x)\|^2 \leq 2(1+L\gamma)^2\|x\|^2$, we obtain
+$$
+P_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma\left((m - 2\gamma L^2)(1+\|x\|^2) + 2d + 2(1+L\gamma)^2\|x\|^d\right) \leq 
+$$
+
+$$
+\leq \exp^{-\frac{\gamma m}{2}}V(x) + \gamma(3K_1^2 + 2D + C_1)
+$$
+for some absolute constant $C_1$.
+\end{proof}
+
+Now the geometric ergodicity result readily follows from \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018}, namely, the following lemma holds:
+
+\begin{lem} Let the potential $U(x), x \in \mathbb{R}^D$ satisfy conditions {\bf H1} and {\bf H3}. Then for $0 < \gamma < \overline{\gamma}=\frac{m}{4L^2}$, for any $x \in X$ it holds
+$$
+d_V(\delta_xQ^n_\gamma,\pi_\gamma) \leq C\rho^n\left(V(x) + \pi_\gamma(V)\right)
+$$ 
+with $V(x) = 1 + \|x\|^2$ and constants
+$$
+b = \gamma(3K_1^2 + 2D + C_1); \quad \overline{b} = b\exp^{-\frac{m\gamma}{2}} + d; \quad \varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right); \quad
+$$
+
+$$
+C = \left(1 + \exp^{-\frac{m\gamma}{2}}\right)\left(1+\frac{\overline{b}}{(1-\varepsilon)(1-\exp^{-\frac{m\gamma}{2}} - \frac{2b}{1+d})}\right);
+$$
+
+$$
+\rho = \exp^{-\gamma\left(\frac{m}{2} - 2\frac{3K_1^2 + 2D + C_1}{d}\right)\frac{\log{(1-\varepsilon)}}{\log{(1-\varepsilon)} + \log{(\exp^{-\frac{m\gamma}{2}} + \frac{2b}{d+1})}}}
+$$
+for some $C_1 > 0$, which does not depend on $d, \gamma$ and $n$.
+\end{lem}
+
+\begin{proof} Note that the condition {\bf H1} implies that the Markov kernel $Q^n_\gamma$ satisfies $(1,\varepsilon)$-Doeblin condition with $\varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right)$. Together with drift condition {\bf H2} it allows to apply \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018} with appropriate constants. 
+\end{proof}
+
+
 \begin{thm}
+\label{exp_mom_ula}
 Suppose that
 \begin{eqnarray*}
 \sum_{p=1}^{\infty} \gamma_p=\infty, \quad \sum_{p=1}^{\infty} \gamma^2_p<\infty.
 \end{eqnarray*}
-Under assumptions (H1) and (H2), then for any bounded function $g$ on $\mathbb{R}^d$ 
+Under assumptions {\bf (H1)} and {\bf (H2)}, for any bounded function $g$ on $\mathbb{R}^d$ 
 we have
 \begin{eqnarray*}
 \mathsf{E}\left[\left(\sum_{p=l}^{N+n}\omega_{p,n}^{N}g(X_{p})-\bar Q_l(X_l)\right)^{4}\right] \lesssim \frac{1}{\Gamma^4_{N+2,N+n+1}}
@@ -1491,6 +1593,49 @@ Moreover,
 \end{eqnarray*}
 for some small enough $\rho>0,$  all natural $0<l\leq p<\infty$ and constant $C$ not depending on $l,p.$
 \end{thm}
+\begin{proof}
+ Note that 
+\[
+\mathsf{E}\left[e^{-s\sum_{k=l}^{j}\gamma_{k}\mu'(X_{k-1})}\right]=\mathsf{E}\left[e^{-s\left(\sum_{k=l}^{j}\gamma_{k}\mu'(X_{k-1})-\Gamma_{l,j}\int\mu'(x)\pi(x)\,dx\right)}\right]e^{-s\Gamma_{l,j}\int\mu'(x)\pi(x)\,dx}
+\]
+ with $\Gamma_{l,j}=\sum_{k=l}^{j}\gamma_{k}.$ According to \cite[Theorem~3]{bms:exp_conc_note}, it holds
+\[
+\mathsf{E}\left[e^{-s\left(\sum_{k=l}^{j}\gamma_{k}\mu'(X_{k-1})-\Gamma_{l,j}\int\mu'(x)\pi(x)\,dx\right)}\right]\leq e^{s\varkappa\sum_{k=l}^{j}\gamma_{k}^{2}}
+\]
+ for some $\varkappa>0.$ Since $\sum_{k=1}^{\infty}\gamma_{k}^{2}\leq\Gamma^{\star},$we
+have 
+\[
+\mathsf{E}\left[e^{-s\sum_{k=l}^{j}\gamma_{k}\mu'(X_{k-1})}\right]\leq e^{s\varkappa\Gamma^{\star}}e^{-s\Gamma_{l,j}\int\mu'(x)\pi(x)\,dx}.
+\]
+Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R}),$ we have
+\[
+\int\mu'(x)\pi(x)\,dx=-\int\mu(x)\pi'(x)\,dx=2\int\mu^{2}(x)\pi(x)\,dx>0
+\]
+and as a result 
+\[
+\zeta_{l,j}(s)\leq e^{s\varkappa\Gamma^{\star}}e^{-2s\Gamma_{l,j}\int\mu^{2}(x)\pi(x)\,dx}
+\]
+ for any $l\leq j.$
+\end{proof}
+
+Suppose that now we use ULA with fixed step size, then we might use the following version of the previous theorem:
+\begin{thm} Suppose that we use ULA with constant step size $\gamma$. Under assumptions {\bf (H1)} and {\bf (H2)}, for any bounded function $g$ on $\mathbb{R}^d$ we have, given $0 < \gamma < \left(\frac{\int \mu^{\prime}(x)\pi(x)\,dx}{C_1 M}\right)^2$,
+\begin{eqnarray*}
+\mathsf{E}\left[\exp\left(\rho\left(\sum_{k=l}^{p}\gamma_{k+1}g(X_{k})-\left(\sum_{k=l}^{p}\gamma_{k+1}\right)\pi(g)\right)\right)\right]\leq C
+\end{eqnarray*}
+for some absolute constant $C$ not depending on $l,p$.
+\end{thm}
+
+\begin{proof} Note that 
+\begin{eqnarray*} 
+\int \mu^{\prime}(x)\pi_{\gamma}(x)\,dx \geq \int \mu^{\prime}(x)\pi(x)\,dx - M d_{TV}(\pi,\pi_{\gamma}) \geq \int \mu^{\prime}(x)\pi(x)\,dx - C_1\sqrt{\gamma}M
+\end{eqnarray*}
+where the precise expression for constant $C_1$ might be found in \cite[Theorem~10]{durmus:moulines:aop:2016}. Thus, for $\gamma < \left(\frac{\int \mu^{\prime}(x)\pi(x)\,dx}{C_1 M}\right)^2$, we obtain along the lines of the proof of Theorem~16 that
+$$
+\int \mu^{\prime}(x)\pi_{\gamma}(x)\,dx > 0
+$$
+
+\end{proof}
 
 \bibliographystyle{plain}
 \bibliography{refs-1}
