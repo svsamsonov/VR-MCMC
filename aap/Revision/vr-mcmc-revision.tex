@@ -1385,7 +1385,6 @@ A_{K}^{2}\sum_{j=l}^{q}\gamma_{j}
 \right)^{2}
 \end{align*}
 
-%\som{Changed exponent from 1/2 to 2 here}
 Now, from Hoelder inequality, we obtain (with $\|X\|_p = (\mathsf{E}X^p)^{\frac{1}{p}}$)
 \begin{align*}
 \mathsf{E}\left[\sum_{j=l}^{q}\gamma_{j}\prod_{k=l}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\gamma_{p}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right] & \leq\sum_{j=l}^{q}\gamma_{j}\left\Vert \prod_{k=l}^{j}\alpha_{k}\right\Vert _{2}\left\Vert \sum_{p=j+1}^{q+1}\gamma_{p}\prod_{k=j+1}^{p}\alpha_{k}\right\Vert _{4}^{2}\\
@@ -1402,9 +1401,21 @@ where we denote
 \]
 From Theorem~\ref{exp_mom_ula} in Appendix~\ref{sec:appendix}, it follows that
 \[
+\mathsf{E}\left[e^{-s\left(\sum_{k=l}^{j}\gamma_{k}\mu'(X_{k-1})-\Gamma_{l,j}\int\mu'(x)\pi(x)\,dx\right)}\right]\leq e^{s\kappa\sum_{k=l}^{j}\gamma_{k}^{2}}
+\]
+with constant $\kappa = ...$. We used the fact that $\mu^{\prime}(x)$ is bounded. Denote $\sum_{k=1}^{\infty}\gamma_{k}^{2} = \Gamma^{\star}$, then we have 
+\[
+\mathsf{E}\left[e^{-s\sum_{k=l}^{j}\gamma_{k}\mu'(X_{k-1})}\right]\leq e^{s\varkappa\Gamma^{\star}}e^{-s\Gamma_{l,j}\int\mu'(x)\pi(x)\,dx}.
+\]
+Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R})$, we have
+\[
+\int\mu'(x)\pi(x)\,dx=-\int\mu(x)\pi'(x)\,dx=2\int\mu^{2}(x)\pi(x)\,dx>0
+\]
+yielding the final bound
+\[
 \zeta_{l,j}(s) \leq e^{s\kappa \Gamma^*}e^{-2s\Gamma_{l,j}\alpha}
 \]
-with $\Gamma^* = \sum\limits_{k=1}^{\infty}\gamma_k^2, \kappa = ..., \Gamma_{l,j} = \sum\limits_{k=l}^{j}\gamma_k, \alpha = \int \mu^2(x)\pi(x)\,dx$. Since $\sum\limits_{k=1}^{\infty}\gamma_k = \infty$, we may bound
+where $\Gamma_{l,j} = \sum\limits_{k=l}^{j}\gamma_k, \alpha = \int \mu^2(x)\pi(x)\,dx$. Since $\sum\limits_{k=1}^{\infty}\gamma_k = \infty$, we may estimate
 \begin{align*}
 \sum\limits_{p=j+1}^{\infty} \gamma_p e^{-2\alpha \Gamma_{j+1,p}} < \int\limits_{0}^{+\infty}e^{-2\alpha x}\,dx = \frac{1}{2\alpha}
 \end{align*}
