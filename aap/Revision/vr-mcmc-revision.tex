@@ -38,6 +38,7 @@
 \modulolinenumbers[5]
 \newcommand{\proofendsign}{$\Box$}
 \newtheorem{thm}{Theorem}
+\newtheorem{definition}{Definition}
 \newtheorem{lem}[thm]{Lemma}
 \newtheorem{prop}[thm]{Proposition}
 \newtheorem{remark}{Remark}
@@ -47,6 +48,9 @@
  {{\hspace*{\fill}\proofendsign\par\bigskip}}
 \def\TV{\operatorname{TV}}
 \newcommand{\jac}[1]{\operatorname{J} _{#1}}
+
+%added command for indicator - SS
+\newcommand{\indiacc}[1]{\mathbbm{1}_{\{#1\}}}
 
 \newcommand*{\argmin}{\operatornamewithlimits{arg\,min}}
 \newcommand*{\const}{\mathrm{const}}
@@ -1491,9 +1495,9 @@ As a result
 \appendix
 
 \section{Bounds for moments of  ULA}\label{sec:appendix}
-For $\gamma>0$, the Markov kernel $R_\gamma$
-on $(\mathbb R^d,\mathcal B(\mathbb R^d))$
-is defined by
+In this appendix we give some definitions and prove auxiliary results which are the used to bound the exponential moment of the additive functional of ULA chain (Theorem~\ref{th:exp_mom_ula}).
+\par
+For $\gamma>0$, the Markov kernel $R_\gamma$ on $(\mathbb R^d,\mathcal B(\mathbb R^d))$, corresponding to the Unadjusted Langevin Algorithm with step $\gamma$ is defined by
 \begin{equation}
 \label{eq:kernel}
 R_\gamma(x,A)=\int_{A} \frac{1}{(4 \pi \gamma)^{d/2}} \text{ exp} \left\{ -\frac{1}{4\gamma} \left\| y - x + \gamma \nabla U(x)\right\|^2\right\}dy,\quad A\in \mathcal B(\mathbb R^d),
@@ -1503,7 +1507,7 @@ the kernel $Q_{\boldsymbol{\gamma}}^{k,l}$ is
 $
 Q_{\boldsymbol{\gamma}}^{k,l}=R_{\gamma_l}\cdots R_{\gamma_k}.
 $
- We make the following assumptions. 
+We make the following assumptions. 
 
 \begin{description}
 \item[{\bf (H1)}] Assume that $\nabla U$ is Lipschitz, that is, there exists $L\geq 0$ such that 
@@ -1517,13 +1521,23 @@ $
 \end{eqnarray*}
 \end{description}
 
-Due to \cite[Lemma~14]{brosse:2018:diffusion}, conditions {\bf (H1)} and {\bf (H2)} imply that there exist $K_1 > 0, m > 0$, such that for any $x \not\in B_{K_1}(0)$ it holds
+Due to \cite[Lemma~14]{brosse:2018:diffusion}, conditions {\bf (H1)} and {\bf (H2)} implies that there exist constants $K_1 > 0, m > 0$, such that for any $x \not\in B_{K_1}(0)$ it holds
 \begin{equation}
 \label{eq:H3}
 \langle \nabla U(x), x \rangle \geq \frac{m}{2}\|x\|^2
 \end{equation}
 
-\begin{lem} Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$. Then the kernel $R_\gamma$ from \ref{eq:kernel} satisfies drift condition \ref{eq:drift} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L^2}$ with drift function $V(x) = 1 + \|x\|^2$, constants $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = \frac{25K_1^2}{8} + 2d + m$ with $K_1$ from \ref{eq:H3}, $m$ from {\bf (H2)}. 
+We would show that conditions {\bf (H1)} and {\bf (H2)} are sufficient to show that ULA kernel $R_\gamma$ satisfies the so-called drift condition:
+\begin{definition}
+\label{def:drift}
+We say that the Markov kernel $R_\gamma$ satisfies Foster-Lyapunov drift condition if there exist a measurable function $V: X \rightarrow [1; +\infty)$, real numbers $\lambda \in (0,1)$ and $C > 0$ such that for any $x \in X$,
+\begin{eqnarray*}
+RV(x) \leq \lambda^{\gamma} V(x) + \gamma C
+\end{eqnarray*}
+\end{definition}
+
+
+\begin{lem} Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$. Then the kernel $R_\gamma$ from \ref{eq:kernel} satisfies drift condition \ref{def:drift} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L^2}$ with drift function $V(x) = 1 + \|x\|^2$, constants $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = \frac{25K_1^2}{8} + 2d + m$ where $K_1$ is from \ref{eq:H3}, $m$ is from {\bf (H2)}. 
 \end{lem}
 
 \begin{proof} Consider $V(x) = 1 + \|x\|^2$, then
@@ -1552,41 +1566,40 @@ R_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + 2\gamma d + (\gamma m - 2
 $$
 Now let $x \in B(0,K_1)$. Then simply using $\|x-\gamma \nabla U(x)\|^2 \leq 2(1+L\gamma)^2\|x\|^2$, we obtain
 $$
-R_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma\left((m - 2\gamma L^2)(1+\|x\|^2) + 2d + 2(1+L\gamma)^2\|x\|^d\right) \leq 
+R_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma\left((m - 2\gamma L^2)(1+\|x\|^2) + 2d + 2(1+L\gamma)^2\|x\|^2\right) \leq 
 $$
 
 $$
 \leq \exp^{-\frac{\gamma m}{2}}V(x) + \gamma(\frac{25K_1^2}{8} + 2d + m)
 $$
-for some absolute constant $C_1$.
 \end{proof}
 
-Now the geometric ergodicity result readily follows from \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018}, namely, the following lemma holds:
+For now let us assume for simplicity that we run ULA with fixed step size $\gamma$. Then it is known that under assumption {\bf H1} corresponding Markov chain would have unique stationary distribution $\pi_\gamma$, which is not equal to $\pi$. Yet this chain will be $V-$geometrically ergodic due to \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018}. Namely, the following lemma holds:
 
-\begin{lem} Let the potential $U(x), x \in \mathbb{R}^D$ satisfy conditions {\bf H1} and {\bf H3}. Then for $0 < \gamma < \overline{\gamma}=\frac{m}{4L^2}$, for any $x \in X$ it holds
+\begin{lem} Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf H1} and {\bf H2}. Then for $0 < \gamma < \overline{\gamma}=\frac{m}{4L^2}$, for any $x \in X$ it holds
 $$
 d_V(\delta_xQ^n_\gamma,\pi_\gamma) \leq C\rho^n\left(V(x) + \pi_\gamma(V)\right)
 $$ 
 with $V(x) = 1 + \|x\|^2$ and constants
 $$
-b = \gamma(3K_1^2 + 2D + C_1); \quad \overline{b} = b\exp^{-\frac{m\gamma}{2}} + d; \quad \varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right); \quad
-$$
-
-$$
 C = \left(1 + \exp^{-\frac{m\gamma}{2}}\right)\left(1+\frac{\overline{b}}{(1-\varepsilon)(1-\exp^{-\frac{m\gamma}{2}} - \frac{2b}{1+d})}\right);
 $$
 
 $$
-\rho = \exp^{-\gamma\left(\frac{m}{2} - 2\frac{3K_1^2 + 2D + C_1}{d}\right)\frac{\log{(1-\varepsilon)}}{\log{(1-\varepsilon)} + \log{(\exp^{-\frac{m\gamma}{2}} + \frac{2b}{d+1})}}}
+b = \gamma(\frac{25K_1^2}{8} + 2d + m); \quad \overline{b} = b\exp^{-\frac{m\gamma}{2}} + d; \quad \varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right); \quad
+$$
+
+$$
+\rho = \exp^{-\gamma\left(\frac{m}{2} - 2\frac{\frac{25K_1^2}{8} + 2d + m}{d}\right)\frac{\log{(1-\varepsilon)}}{\log{(1-\varepsilon)} + \log{(\exp^{-\frac{m\gamma}{2}} + \frac{2b}{d+1})}}}
 $$
 \end{lem}
 
-\begin{proof} Note that the condition {\bf H1} implies that the Markov kernel $Q^n_\gamma$ satisfies $(1,\varepsilon)$-Doeblin condition with $\varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right)$. Together with drift condition {\bf H2} it allows to apply \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018} with appropriate constants. 
+\begin{proof} Note that the condition {\bf (H1)} implies that the Markov kernel $Q^n_\gamma$ satisfies $(1,\varepsilon)$-Doeblin condition with $\varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right)$. Together with drift condition \ref{eq:drift} it allows to apply \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018} with appropriate constants. 
 \end{proof}
 
 
 \begin{thm}
-\label{exp_mom_ula}
+\label{th:exp_mom_ula}
 Suppose that
 \begin{eqnarray*}
 \sum_{p=1}^{\infty} \gamma_p=\infty, \quad \sum_{p=1}^{\infty} \gamma^2_p<\infty.
