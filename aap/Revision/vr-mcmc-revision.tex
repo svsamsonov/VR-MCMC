@@ -27,8 +27,10 @@
 
 \newcommand{\eric}[1]{\todo[color=purple!10, author=Eric]{#1}}
 \newcommand{\erici}[1]{\todo[inline,color=purple!10, author=Eric]{#1}}
-\newcommand{\denis}[1]{\todo[color=green!10, author=Eric]{#1}}
-\newcommand{\denisi}[1]{\todo[inline,color=green!10, author=Eric]{#1}}
+\newcommand{\denis}[1]{\todo[color=green!10, author=Denis]{#1}}
+\newcommand{\denisi}[1]{\todo[inline,color=green!10, author=Denis]{#1}}
+\newcommand{\sergey}[1]{\todo[color=red!10, author=Sergey]{#1}}
+\newcommand{\sergeyi}[1]{\todo[inline,color=red!10, author=Sergey]{#1}}
 
 \def\rmd{\mathrm{d}}
 \def\rme{\mathrm{e}}
@@ -1537,7 +1539,9 @@ RV(x) \leq \lambda^{\gamma} V(x) + \gamma C
 \end{definition}
 
 
-\begin{lem} Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$. Then the kernel $R_\gamma$ from \ref{eq:kernel} satisfies drift condition \ref{def:drift} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L^2}$ with drift function $V(x) = 1 + \|x\|^2$, constants $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = \frac{25K_1^2}{8} + 2d + m$ where $K_1$ is from \ref{eq:H3}, $m$ is from {\bf (H2)}. 
+\begin{lem}
+\label{lem:drift}
+ Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$. Then the kernel $R_\gamma$ from \ref{eq:kernel} satisfies drift condition \ref{def:drift} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L^2}$ with drift function $V(x) = 1 + \|x\|^2$, constants $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = \frac{25K_1^2}{8} + 2d + m$ with $K_1$ from \ref{eq:H3}, $m$ from {\bf (H2)}. 
 \end{lem}
 
 \begin{proof} Consider $V(x) = 1 + \|x\|^2$, then
@@ -1574,15 +1578,17 @@ $$
 $$
 \end{proof}
 
-For now let us assume for simplicity that we run ULA with fixed step size $\gamma$. Then it is known that under assumption {\bf H1} corresponding Markov chain would have unique stationary distribution $\pi_\gamma$, which is not equal to $\pi$. Yet this chain will be $V-$geometrically ergodic due to \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018}. Namely, the following lemma holds:
+For now let us assume for simplicity that we run ULA with fixed step size $\gamma$. Then it is known that under assumption {\bf (H1)} corresponding Markov chain would have unique stationary distribution $\pi_\gamma$, which is different from $\pi$. Yet this chain will be $V-$geometrically ergodic due to \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018}. Namely, the following lemma holds:
 
-\begin{lem} Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf H1} and {\bf H2}. Then for $0 < \gamma < \overline{\gamma}=\frac{m}{4L^2}$, for any $x \in X$ it holds
+\begin{lem}
+\label{lem:v_ergodicity}
+ Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)}. Then for $0 < \gamma < \overline{\gamma}=\frac{m}{4L^2}$, for any $x \in X$ it holds
 $$
-d_V(\delta_xQ^n_\gamma,\pi_\gamma) \leq C\rho^n\left(V(x) + \pi_\gamma(V)\right)
+d_V(\delta_xQ_{\boldsymbol{\gamma}}^{1,n},\pi_\gamma) \leq C\rho^n\left(V(x) + \pi_\gamma(V)\right)
 $$ 
 with $V(x) = 1 + \|x\|^2$ and constants
 $$
-C = \left(1 + \exp^{-\frac{m\gamma}{2}}\right)\left(1+\frac{\overline{b}}{(1-\varepsilon)(1-\exp^{-\frac{m\gamma}{2}} - \frac{2b}{1+d})}\right);
+C = \left(1 + \exp{\left(-\frac{m\gamma}{2}\right)}\right)\left(1+\frac{\overline{b}}{(1-\varepsilon)(1-\exp{\left(-\frac{m\gamma}{2}\right)} - \frac{2b}{1+d})}\right);
 $$
 
 $$
@@ -1590,13 +1596,56 @@ b = \gamma(\frac{25K_1^2}{8} + 2d + m); \quad \overline{b} = b\exp^{-\frac{m\gam
 $$
 
 $$
-\rho = \exp^{-\gamma\left(\frac{m}{2} - 2\frac{\frac{25K_1^2}{8} + 2d + m}{d}\right)\frac{\log{(1-\varepsilon)}}{\log{(1-\varepsilon)} + \log{(\exp^{-\frac{m\gamma}{2}} + \frac{2b}{d+1})}}}
+\rho = \exp{\left(-\gamma\left(\frac{m}{2} - 2\frac{\frac{25K_1^2}{8} + 2d + m}{d}\right)\frac{\log{(1-\varepsilon)}}{\log{(1-\varepsilon)} + \log{(\exp{\left(-\frac{m\gamma}{2}\right)} + \frac{2b}{d+1})}}\right)}
 $$
 \end{lem}
 
-\begin{proof} Note that the condition {\bf (H1)} implies that the Markov kernel $Q^n_\gamma$ satisfies $(1,\varepsilon)$-Doeblin condition with $\varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right)$. Together with drift condition \ref{eq:drift} it allows to apply \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018} with appropriate constants. 
+\begin{proof} Note that the condition {\bf (H1)} implies that the Markov kernel $Q^{1,n}_{\boldsymbol{\gamma}}$ satisfies $(1,\varepsilon)$-Doeblin condition with $\varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right)$. Together with drift condition \ref{eq:drift} it allows to apply \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018} with appropriate constants. 
 \end{proof}
 
+Aforementioned lemmas allow us to bound the exponential moment of the additive functional of ULA. Namely, the following theorem holds
+
+\begin{thm}
+\label{thm:ula_const_size}
+Suppose that ULA kernel \ref{eq:kernel} satisfies assumptions {\bf (H1)} and {\bf (H2)}, and let $X_1,\ldots,X_n,\ldots$ be generated by ULA with constant step size $\gamma$. Let $X_0 = x$ be fixed. Then for any bounded function $g(x) : \mathbb{R}^d \rightarrow \mathbb{R}, |g(x)| \leq M$, it holds
+\begin{eqnarray*}
+\mathsf{E}\left[\exp\left(-\rho\gamma\sum_{k=l}^{p}\left(g(X_{k})-\pi_{\gamma}(g)\right)\right)\right] \leq C_1\exp{\left(s^2 \kappa \gamma^2 (p-l+1)\right)}
+\end{eqnarray*}
+for some absolute constant $C_1$ not depending on $l,p$.
+\end{thm}
+
+\begin{proof} Conditions {\bf (H1)} and {\bf (H2)} imply that the Markov kernel $R_\gamma$ is $V-$ergodic (lemma \ref{lem:v_ergodicity}) and satisfies drift condition \ref{lem:drift}. Due to \cite[Theorem~3, Fact 3]{moulines:bound_dif:2019}, we obtain the following bound
+\begin{align*}
+\mathsf{E}_x\left[\exp\left(-s\gamma\sum_{k=l}^{p}\left(g(X_{k}) - \mathsf{E}_x g(X_k)\right)\right)\right] \leq \exp{\left(s^2 \kappa \gamma^2 (p-l+1)\right)}
+\end{align*}
+\sergey{I will put precise constant later}
+with constant $\kappa = ...$. Note that
+\begin{align*}
+\mathsf{E}\left[\exp\left(-s\gamma\sum_{k=l}^{p}\left(g(X_{k})-\pi_{\gamma}(g)\right)\right)\right] = 
+\end{align*}
+
+\begin{align*}
+=\mathsf{E}_x\left[\exp{\left(-s\gamma\sum_{k=l}^{p}\left(g(X_{k}) - \mathsf{E}_x g(X_k)\right)\right)}\right]
+\exp{\left(s\gamma\sum\limits_{k=l}^{p}\left(\pi_\gamma (g) - \mathsf{E}_x g(X_k)\right)\right)}
+\end{align*}
+Using lemma~\ref{lem:v_ergodicity},
+\begin{align*}
+|\mathsf{E} g(X_k) - \pi_\gamma(g)| \leq Md_V(\pi_\gamma, \delta_xQ^{1,n}_{\boldsymbol{\gamma}}) \leq CM\rho^k\left(V(x) + \pi_\gamma(V)\right)
+\end{align*}
+Hence,
+\begin{align*}
+\exp{\left(s\gamma\sum\limits_{k=l}^{p}\left(\pi_\gamma (g) - \mathsf{E}_x g(X_k)\right)\right)} \leq \exp{\left(s\gamma CM(V(x) + \pi_\gamma(V))\frac{\rho^l - \rho^{p+1}}{1-\rho}\right)}
+\end{align*}
+and the statement follows.
+\end{proof}
+
+Let us formulate and prove prove analogue of the previous theorem for inhomogeneous Markov chain with step size $\gamma_1,\ldots,\gamma_n,\ldots$. Note that under assumptions $\sum_{p=1}^{\infty} \gamma_p=\infty, \quad \sum_{p=1}^{\infty} \gamma^2_p<\infty$ and {\bf (H1)} the stationary distribution of ULA-based chain will be equal to $\pi$. We will need additional assumption
+\begin{description}
+\item[{\bf (H3)}] There exist such constants $\rho > 0, K_3 > 0$ that 
+\begin{eqnarray*}
+d_V(\delta_xQ_{\boldsymbol{\gamma}}^{1,n},\pi) \leq K_3 V(x) \rho^n 
+\end{eqnarray*}
+\end{description}
 
 \begin{thm}
 \label{th:exp_mom_ula}
@@ -1604,64 +1653,43 @@ Suppose that
 \begin{eqnarray*}
 \sum_{p=1}^{\infty} \gamma_p=\infty, \quad \sum_{p=1}^{\infty} \gamma^2_p<\infty.
 \end{eqnarray*}
-Under assumptions {\bf (H1)} and {\bf (H2)}, for any bounded function $g$ on $\mathbb{R}^d$ 
+Under assumptions {\bf (H1)}, {\bf (H2)} and {\bf (H3)}, for any bounded function $g$ on $\mathbb{R}^d$ 
 we have
+%\begin{eqnarray*}
+%\mathsf{E}\left[\left(\sum_{p=l}^{N+n}\omega_{p,n}^{N}g(X_{p})-\bar Q_l(X_l)\right)^{4}\right] \lesssim \frac{1}{\Gamma^4_{N+2,N+n+1}}
+%\end{eqnarray*}
+ %and
+%\begin{eqnarray*}
+%\bar Q_l(X_l)=\mathsf{E}\left[\left.\sum_{p=l}^{N+n}\omega_{p,n}^{N}f(X_{p})\right|X_{l}\right].
+%\end{eqnarray*}
+%Moreover, 
 \begin{eqnarray*}
-\mathsf{E}\left[\left(\sum_{p=l}^{N+n}\omega_{p,n}^{N}g(X_{p})-\bar Q_l(X_l)\right)^{4}\right] \lesssim \frac{1}{\Gamma^4_{N+2,N+n+1}}
+\mathsf{E}\left[\exp\left(-s\left(\sum_{k=l}^{p}\gamma_{k+1}g(X_{k})-\left(\sum_{k=l}^{p}\gamma_{k+1}\right)\pi(g)\right)\right)\right]\leq C
 \end{eqnarray*}
- and
-\begin{eqnarray*}
-\bar Q_l(X_l)=\mathsf{E}\left[\left.\sum_{p=l}^{N+n}\omega_{p,n}^{N}f(X_{p})\right|X_{l}\right].
-\end{eqnarray*}
-Moreover, 
-\begin{eqnarray*}
-\mathsf{E}\left[\exp\left(\rho\left(\sum_{k=l}^{p}\gamma_{k+1}g(X_{k})-\left(\sum_{k=l}^{p}\gamma_{k+1}\right)\pi(g)\right)\right)\right]\leq C
-\end{eqnarray*}
-for some small enough $\rho>0,$  all natural $0<l\leq p<\infty$ and constant $C$ not depending on $l,p.$
+for all natural $0<l\leq p<\infty$ with constant $C$ not depending on $l,p.$
 \end{thm}
 \begin{proof}
- Note that 
-\[
-\mathsf{E}\left[e^{-s\sum_{k=l}^{j}\gamma_{k}\mu'(X_{k-1})}\right]=\mathsf{E}\left[e^{-s\left(\sum_{k=l}^{j}\gamma_{k}\mu'(X_{k-1})-\Gamma_{l,j}\int\mu'(x)\pi(x)\,dx\right)}\right]e^{-s\Gamma_{l,j}\int\mu'(x)\pi(x)\,dx}
-\]
- with $\Gamma_{l,j}=\sum_{k=l}^{j}\gamma_{k}.$ According to \cite[Theorem~3]{bms:exp_conc_note}, it holds
-\[
-\mathsf{E}\left[e^{-s\left(\sum_{k=l}^{j}\gamma_{k}\mu'(X_{k-1})-\Gamma_{l,j}\int\mu'(x)\pi(x)\,dx\right)}\right]\leq e^{s\varkappa\sum_{k=l}^{j}\gamma_{k}^{2}}
-\]
- for some $\varkappa>0.$ Since $\sum_{k=1}^{\infty}\gamma_{k}^{2}\leq\Gamma^{\star},$we
-have 
-\[
-\mathsf{E}\left[e^{-s\sum_{k=l}^{j}\gamma_{k}\mu'(X_{k-1})}\right]\leq e^{s\varkappa\Gamma^{\star}}e^{-s\Gamma_{l,j}\int\mu'(x)\pi(x)\,dx}.
-\]
-Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R}),$ we have
-\[
-\int\mu'(x)\pi(x)\,dx=-\int\mu(x)\pi'(x)\,dx=2\int\mu^{2}(x)\pi(x)\,dx>0
-\]
-and as a result 
-\[
-\zeta_{l,j}(s)\leq e^{s\varkappa\Gamma^{\star}}e^{-2s\Gamma_{l,j}\int\mu^{2}(x)\pi(x)\,dx}
-\]
- for any $l\leq j.$
+
+ Note that under assumptions {\bf (H1)}, {\bf (H2)} and {\bf (H3)} it holds due to \cite[Theorem~4]{moulines:bound_dif:2019} that
+ \begin{align*}
+\mathsf{E}_x\left[\exp\left(-s\left(\sum_{k=l}^{p}\gamma_{k+1}g(X_{k}) - \mathsf{E}_x \left(\sum\limits_{k=l}^{p}\gamma_{k+1}g(X_k)\right)\right)\right)\right] \leq \exp{\left(s^2 \kappa \sum\limits_{k=l}^{p}\gamma_{k+1}^2\right)} \leq \exp{\left(s^2 \kappa \Gamma^*\right)}
+\end{align*}
+\sergey{This theorem is not yet written in the second paper}
+with $\Gamma^* = \sum\limits_{k=1}^{\infty}\gamma_k^2 < \infty$ and $\kappa = ...$. Using the same transformation as in theorem~\ref{thm:ula_const_size}, and using the bound
+\begin{align*}
+|\mathsf{E}_x f(X_k) - \pi(f)| \leq K_3 M \rho^{\Gamma_{1,k}}V(x)
+\end{align*}
+we obtain
+\begin{align*}
+\mathsf{E}\left[\exp\left(-s\left(\sum_{k=l}^{p}\gamma_{k+1}g(X_{k})-\left(\sum_{k=l}^{p}\gamma_{k+1}\right)\pi(g)\right)\right)\right] \leq \exp{\left(s^2 \kappa \Gamma^*\right)}\exp{\left(K_3 M V(x) \sum\limits_{k=l}^{p}\rho^{\Gamma_{1,k}}\gamma_{k+1}\right)} \leq
+\end{align*}
+
+\begin{align*}
+\leq \exp{\left(s^2 \kappa \Gamma^*\right)}\exp{\left(K_3 M V(x) \rho^{\Gamma_{1,k}} \int\limits_{0}^{+\infty}\rho^y\,dy\right)} = \exp{\left(s^2 \kappa \Gamma^*\right)}\exp{\left(K_3 M V(x) \frac{\rho^{\Gamma_{1,k}}}{\ln{\rho}}\right)}
+\end{align*}
 \end{proof}
 
-Suppose that now we use ULA with fixed step size, then we might use the following version of the previous theorem:
-\begin{thm} Suppose that we use ULA with constant step size $\gamma$. Under assumptions {\bf (H1)} and {\bf (H2)}, for any bounded function $g$ on $\mathbb{R}^d$ we have, given $0 < \gamma < \left(\frac{\int \mu^{\prime}(x)\pi(x)\,dx}{C_1 M}\right)^2$,
-\begin{eqnarray*}
-\mathsf{E}\left[\exp\left(\rho\left(\sum_{k=l}^{p}\gamma_{k+1}g(X_{k})-\left(\sum_{k=l}^{p}\gamma_{k+1}\right)\pi(g)\right)\right)\right]\leq C
-\end{eqnarray*}
-for some absolute constant $C$ not depending on $l,p$.
-\end{thm}
-
-\begin{proof} Note that 
-\begin{eqnarray*} 
-\int \mu^{\prime}(x)\pi_{\gamma}(x)\,dx \geq \int \mu^{\prime}(x)\pi(x)\,dx - M d_{TV}(\pi,\pi_{\gamma}) \geq \int \mu^{\prime}(x)\pi(x)\,dx - C_1\sqrt{\gamma}M
-\end{eqnarray*}
-where the precise expression for constant $C_1$ might be found in \cite[Theorem~10]{durmus:moulines:aop:2016}. Thus, for $\gamma < \left(\frac{\int \mu^{\prime}(x)\pi(x)\,dx}{C_1 M}\right)^2$, we obtain along the lines of the proof of Theorem~16 that
-$$
-\int \mu^{\prime}(x)\pi_{\gamma}(x)\,dx > 0
-$$
-
-\end{proof}
+The proof is completed.
 
 \bibliographystyle{plain}
 \bibliography{refs-1}
