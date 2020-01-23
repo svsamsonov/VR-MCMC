@@ -1663,17 +1663,23 @@ we have
 %\bar Q_l(X_l)=\mathsf{E}\left[\left.\sum_{p=l}^{N+n}\omega_{p,n}^{N}f(X_{p})\right|X_{l}\right].
 %\end{eqnarray*}
 %Moreover, 
-\begin{eqnarray*}
+\begin{eqnarray}
+\label{eq:exp_decrease_step}
 \mathsf{E}\left[\exp\left(-s\left(\sum_{k=l}^{p}\gamma_{k+1}g(X_{k})-\left(\sum_{k=l}^{p}\gamma_{k+1}\right)\pi(g)\right)\right)\right]\leq C
-\end{eqnarray*}
-for all natural $0<l\leq p<\infty$ with constant $C$ not depending on $l,p.$
+\end{eqnarray}
+for all natural $0<l\leq p<\infty$ with constant $C$ not depending on $l,p.$. Moreover, 
+\begin{eqnarray}
+\label{eq:var_decrease_step}
+\mathsf{Var}_x{\left(\sum_{k=l}^{l+n-1}\frac{\gamma_{k+1}}{\Gamma_{l+1,l+n}}g(X_k) - \mathsf{E}_x \sum_{k=l}^{l+n-1}\frac{\gamma_{k+1}}{\Gamma_{l+1,l+n}}g(X_k)\right)} \leq \frac{C_1}{\Gamma_{l+1,l+n}}
+\end{eqnarray}
 \end{thm}
 \begin{proof}
 
  Note that under assumptions {\bf (H1)}, {\bf (H2)} and {\bf (H3)} it holds due to \cite[Theorem~4]{moulines:bound_dif:2019} that
- \begin{align*}
+ \begin{align}
+ \label{eq:exp_bounded_dif}
 \mathsf{E}_x\left[\exp\left(-s\left(\sum_{k=l}^{p}\gamma_{k+1}g(X_{k}) - \mathsf{E}_x \left(\sum\limits_{k=l}^{p}\gamma_{k+1}g(X_k)\right)\right)\right)\right] \leq \exp{\left(s^2 \kappa \sum\limits_{k=l}^{p}\gamma_{k+1}^2\right)} \leq \exp{\left(s^2 \kappa \Gamma^*\right)}
-\end{align*}
+\end{align}
 \sergey{This theorem is not yet written in the second paper}
 with $\Gamma^* = \sum\limits_{k=1}^{\infty}\gamma_k^2 < \infty$ and $\kappa = ...$. Using the same transformation as in theorem~\ref{thm:ula_const_size}, and using the bound
 \begin{align*}
@@ -1688,9 +1694,15 @@ we obtain
 \leq \exp{\left(s^2 \kappa \Gamma^*\right)}\exp{\left(K_3 M V(x) \rho^{\Gamma_{1,k}} \int\limits_{0}^{+\infty}\rho^y\,dy\right)} = \exp{\left(s^2 \kappa \Gamma^*\right)}\exp{\left(K_3 M V(x) \frac{\rho^{\Gamma_{1,k}}}{\ln{\rho}}\right)}
 \end{align*}
 \end{proof}
-
-The proof is completed.
-
+which proves \ref{eq:exp_decrease_step}. Note that from \ref{eq:exp_bounded_dif} by Taylor expansion for small $s$ we obtain
+\begin{align*}
+1 + \frac{s^2}{2}\mathsf{Var}_x{\left(\sum_{k=l}^{l+n-1}\gamma_{k+1}g(X_k) - \mathsf{E}_x \sum_{k=l}^{l+n-1}\gamma_{k+1}g(X_k)\right)} + O(s^3) \leq 1 + s^2 \kappa \sum\limits_{k=l+1}^{l+n}\gamma_{k}^2 + O(s^4)
+\end{align*}
+Since it holds for arbitarily small $s$, the variance is bounded by
+\begin{align*}
+\mathsf{Var}_x{\left(\sum_{k=l}^{l+n-1}\gamma_{k+1}g(X_k) - \mathsf{E}_x \sum_{k=l}^{l+n-1}\gamma_{k+1}g(X_k)\right)} \leq 2\kappa \sum\limits_{k=l+1}^{l+n}\gamma_{k}^2 \leq 2\kappa \Gamma_{l+1,l+n}
+\end{align*}
+Now we need to divide both parts by $\Gamma^2_{l+1,l+n}$ to get \ref{eq:var_decrease_step}. The proof is completed.
 \bibliographystyle{plain}
 \bibliography{refs-1}
 \end{document}
