@@ -1,5 +1,7 @@
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
+*/*.pyc
+./__pychache__/*
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
@@ -262,3 +264,5 @@ TSWLatexianTemp*
 *.sta
 
 ~/Note_exponential_moment/*.pdf
+~/*.pyc
+
