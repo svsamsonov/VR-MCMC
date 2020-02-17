@@ -125,17 +125,17 @@ Monte Carlo and Markov Chain Monte Carlo methods. Introduction to many of the va
 Suppose that we wish to compute $\pi(f):=\mathsf{E}\left[f(X)\right]$, where $X$
 is a random vector-valued in $\mathcal{X}\subseteq\mathbb{R}^{d}$ with a density $\pi$ and $f:$
 $\mathcal{X}\to\mathbb{R}$ with $f\in L^2(\pi)$.
-The idea of the so-called control variates variance reduction method
+The idea of the control variates variance reduction method
  is to find a cheaply computable random variable $\zeta$ with $\mathsf{E}[\zeta]=0$ and \(\mathsf{E}[\zeta^2]<\infty,\)
 such that the variance of the r.v. $f(X)-\zeta$ is small.  The complexity of the problem of constructing classes $Z$ of control variates \(\zeta\) satisfying   $\mathsf{E}[\zeta]=0$ essentially depends on the degree of our knowledge on \(\pi.\)
-For example, if \(\pi\) is analytically known and satisfies some regularity conditions, one can apply the well-known technique of  polynomial interpolation to construct control variates enjoying  some optimality properties, see, for example, Section~3.2 in \cite{dimov2008monte}. Alternatively, if an orthonormal system in \(L^2(\pi)\) is analytically available, one can build control variates \(\zeta\) as a linear combination of the corresponding basis functions, see \cite{GobetCV}. Furthermore, if \(\pi\) is known only up to a normalizing constant (which is often the case in Bayesian statistics), one can apply the recent approach of control variates  depending only on the gradient \(\nabla \log \pi\)  using Schr\(\ddot{\text{o}}\)dinger-type Hamiltonian operator in  \cite{mira2013zero} and so-called Stein operator in \cite{brosse2018diffusion}.
+For example, if \(\pi\) is analytically known and satisfies some regularity conditions, one can apply the well-known technique of  polynomial interpolation to construct control variates enjoying  some optimality properties, see, for example, Section~3.2 in \cite{dimov2008monte}. Alternatively, if an orthonormal system in \(L^2(\pi)\) is analytically available, one can build control variates \(\zeta\) as a linear combination of the corresponding basis functions, see \cite{GobetCV}. Furthermore, if \(\pi\) is known only up to a normalizing constant (which is often the case in Bayesian statistics), one can apply the recent approach of control variates  depending only on the gradient \(\nabla \log \pi\)  using Schr\(\ddot{\text{o}}\)dinger-type Hamiltonian operator in  \cite{mira2013zero} and Stein operator in \cite{brosse2018diffusion}.
 In some situations \(\pi\) is not known analytically, but \(X\) can be represented as a function of  simple random variables with known distribution.
 Such  situation arises, for example, in the case of functionals of  discretized diffusion processes. In this case a Wiener chaos-type decomposition can be used to construct control variates with nice theoretical properties, see \cite{belomestny2018stratified}.
 Note that in order to compare different  variance reduction approaches, one has to analyze their complexity, that is, the number of numerical operations required to achieve a prescribed magnitude of the resulting variance.
 
 
 The situation becomes much more difficult in the case of MCMC algorithms, where one  has to work with a
-Markov chain \(X_p,\) \(p=0,1,2,\ldots,\) whose marginal distribution  converges  to \(\pi\) as time grows. One important class of the variance reduction methods in this case  is based on the so-called Poisson equation for the corresponding  Markov chain. It was observed in Henderson~\cite{henderson1997variance}  that if a time-homogeneous Markov chain \((X_p)\) is stationary with stationary distribution \(\pi,\) then for any real-valued function \(G \in L^1(\pi) \) defined on the state space of the Markov chain \((X_p),\)  the function \(U(x) := G(x)-\mathsf{E}[G(X_{1})|X_0 = x]\) has zero mean with respect to \(\pi\).  The best choice for the function \(G\) corresponds to a solution of the so-called Poisson equation  \(\mathsf{E}[G(X_{1})|X_0 = x]-G(x)=-f(x)+\pi(f)\).  Moreover, it is also related to the minimal asymptotic variance in the corresponding central limit theorem, see \cite{duncan2016variance} and \cite{mira2013zero}.   Although the Poisson equation involves the quantity of interest \(\pi(f)\)  and can not be  solved explicitly in most cases, this idea still can be used to construct some  approximations for the optimal zero-variance control variates. For example,  Henderson~\cite{henderson1997variance} proposed to compute approximations for the solution of the Poisson equation for specific Markov chains with particular emphasis on models arising in stochastic network theory. In \cite{dellaportas2012control} and \cite{brosse2018diffusion}  series-type control variates are introduced and studied for reversible Markov chains. It is assumed in \cite{dellaportas2012control}  that the one-step conditional expectations  can be computed explicitly  for a set of basis functions. The authors in \cite{brosse2018diffusion} proposed another approach tailored to diffusion setting which doesn't require the computation of integrals of basis functions and only involves  applications of the underlying generator.
+Markov chain \(X_p,\) \(p=0,1,2,\ldots,\) whose marginal distribution  converges  to \(\pi\) as time grows. One important class of the variance reduction methods in this case  is based on the Poisson equation for the corresponding  Markov chain. It was observed in~\cite{henderson1997variance}  that if a time-homogeneous Markov chain \((X_p)\) is stationary with stationary distribution \(\pi,\) then for any real-valued function \(G \in L^1(\pi) \) defined on the state space of the Markov chain \((X_p),\)  the function \(U(x) := G(x)-\mathsf{E}[G(X_{1})|X_0 = x]\) has zero mean with respect to \(\pi\).  The best choice for the function \(G\) corresponds to a solution of the Poisson equation  \(\mathsf{E}[G(X_{1})|X_0 = x]-G(x)=-f(x)+\pi(f)\).  Moreover, it is also related to the minimal asymptotic variance in the corresponding central limit theorem, see \cite{duncan2016variance} and \cite{mira2013zero}.   Although the Poisson equation involves the quantity of interest \(\pi(f)\)  and can not be  solved explicitly in most cases, this idea still can be used to construct some  approximations for the optimal zero-variance control variates. For example,  \cite{henderson1997variance} proposed to compute approximations for the solution of the Poisson equation for specific Markov chains with particular emphasis on models arising in stochastic network theory. In \cite{dellaportas2012control} and \cite{brosse2018diffusion}  series-type control variates are introduced and studied for reversible Markov chains. It is assumed in \cite{dellaportas2012control}  that the one-step conditional expectations  can be computed explicitly  for a set of basis functions. The authors in \cite{brosse2018diffusion} proposed another approach tailored to diffusion setting which does not require the computation of integrals of basis functions and only involves  applications of the underlying generator.
 \par
 In this paper we focus on the  Langevin type algorithms which got much attention recently, see \cite{dalalyan2017theoretical,durmus:moulines:2017, MR2353037, MR3861816, MR2977986} and references therein. We propose  a generic variance reduction method for these and other types algorithms, which is purely non-asymptotic and does not require that    the conditional expectations of the corresponding Markov chain can be computed  or that the generator is known analytically. Moreover, we do not need to assume stationarity or/and sampling under the invariant distribution \(\pi.\) We rigorously analyse the convergence of the method and study its complexity. It is shown that  our variance-reduced Langevin algorithm outperforms the standard Langevin algorithms in terms of complexity.
 \par
@@ -167,7 +167,7 @@ discrete-time Markov chain $(X_{p})_{p\geq0}$ defined by
 X_{p+1}=X_{p}-\gamma_{p+1}\mu(X_{p})+\sqrt{\gamma_{p+1}}Z_{p+1},\end{equation}
 where $\left(Z_{p}\right)_{p\geq1}$ is an i.i.d.\ sequence of $d$-dimensional
 standard Gaussian random vectors. If
-${\mu=\frac{\nabla U}{2}}$
+$\mu=(1/2) \nabla U$
 for some continuously differentiable function $U,$ then Markov chain~\eqref{eq:chain} can be used to approximately sample from the density
 \begin{equation}\label{eq:stationary_distr}
 \pi(x)= \mathrm{const}\,\rme^{-U(x)}, \quad \mathrm{const}= \left. 1 \middle /{\int_{\mathbb{R}^{d}} \rme^{-U(x)}\, \rmd x,} \right.
@@ -209,7 +209,7 @@ where
 \end{eqnarray*}
 \end{enumerate}
 \end{algorithm}
-Then, as shown in Metropolis et al.~\cite{metropolis1953equation}, this transition is reversible with respect to \(\pi\) and therefore preserves the stationary density \(\pi\). If \(q_p\) have a wide enough
+This transition is reversible with respect to \(\pi\) and therefore preserves the stationary density \(\pi\); see \cite[Chapter~2]{moulines2018}. If \(q_p\) have a wide enough
 support to eventually reach any region
 of the state space \(\mathcal{X}\) with positive mass
 under \(\pi\), then this transition is irreducible and $\pi$ is a maximal irreducibility measure \cite{mengersen:tweedie:1996}. The  Metropolis-Adjusted Langevin algorithm (MALA) takes  \eqref{eq:chain} as proposal, that is,
@@ -233,7 +233,7 @@ where \((U_{p})_{p\geq 1}\) is an i.i.d. sequence of uniformly distributed on \(
   Let \((X_t)_{t\in [0,T]}\) be the unique strong solution to a  SDE of the form:
 \begin{eqnarray}
 \label{eq:sde-inv}
-dX_t=b(X_t)\,dt+\sigma(X_t)\,dW_t,\quad t\geq 0,	
+dX_t=b(X_t)\, \rmd t+\sigma(X_t)\, \rmd W_t,\quad t\geq 0,	
 \end{eqnarray}
 where \(W\) is a standard \(\mathbb{R}^m\)-valued Brownian motion, \(b:\) \(\mathbb{R}^d\to \mathbb{R}^d\) and \(\sigma:\) \(\mathbb{R}^d\times \mathbb{R}^m \to \mathbb{R}^d\) are locally Lipschitz continuous functions with at most linear growth.
 The process \((X_t)_{t\geq 0}\) is a Markov
@@ -581,8 +581,7 @@ We first generate \(\NtrainPath\)  paths conditionally independent of the $\sigm
 \[
 \TrainSet=\Bigl\{(X^{(s)}_{N+1},\ldots,X^{(s)}_{N+n}),\quad s=1,\ldots,\NtrainPath\Bigr\}
 \]
-of the chain \(X\)
-(the so-called ``training paths'').
+of the chain \(X\) (referred to as \emph{training paths}).
 The regression algorithm proceeds with estimating the  functions \((\bar Q_{l})\) by solving  the least squares optimization problems
 \begin{equation}\label{eq:06042018a1}
 {\widehat  Q}_{l}=\argmin_{\psi\in \Psi}\sum_{s=1}^{\NtrainPath} \left | \sum_{p=l}^{N+n}\omega_{p,n}^{N}f(X^{(s)}_{p})-\psi(X^{(s)}_{l})\right|^2
