@@ -432,10 +432,11 @@ The representation \eqref{eq:coeff_mart} suggests that the variance of  the  var
 \label{eq:29032018a3}
 \pi_{K,n}^N(f)=\pi_n^N(f)-M_{K,n}^N(f)
 \end{equation}
-should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_k'(\xi_l)]=0$ if $k \ne k'$, we obtain
-\[
-\mathsf{Var}[\pi_{K,n}^N(f)]\leq\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\mathsf{E}[A^2_{n-l,k}(X_{N+l-1})]
-\]
+should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_{k'}(\xi_l)]=0$ if $k \ne k'$, we obtain
+\begin{equation}
+\label{eq:expression-variance}
+\PVar[\pi_{K,n}^N(f)]\leq\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X_{N+l-1})]
+\end{equation}
 and $\mathsf{Var}[\pi_{K,n}^N(f)]$ is small provided that the coefficients $A_{s,k}$ decay fast enough as $k\to \infty.$
 In the next section   we provide a detailed   analysis of  $\mathsf{Var}[\pi_{K,n}^N(f)]$  for the  ULA  algorithm (see Example~\ref{exam:langevin-algorithm}).
 \section{Analysis of variance reduced ULA}
@@ -631,7 +632,7 @@ Finally, for a multi-index $\mathbf{k}=(k_i)\in\mathbb N_0^d$, we use the notati
 \(\mathbf{k} ! :=k_1!\cdot\ldots\cdot k_d !\)
 
 \begin{lem}\label{eq:a_repr}
-Fix some \(\mathbf{k},\mathbf{k}'\in \mathbb{N}_0^d\) with \(\mathbf{k}'\le \mathbf{k}\) componentwise.  Then the following representation holds
+For any \(\mathbf{k},\mathbf{k}'\in \mathbb{N}_0^d\) such that \(\mathbf{k}'\le \mathbf{k}\) componentwise and $\| \mathbf{k}' \| \leq K$, the following representation holds
 \[
 \bar a_{p,\mathbf{k}}(x)=\left(\gamma^{|\mathbf{k}'|}\frac{(\mathbf{k}-\mathbf{k}') !}{\mathbf{k}!}\right)^{1/2}
 \PE\left[
@@ -681,7 +682,7 @@ The last expression yields the result.
 
 For multi-indices $\mathbf k,\mathbf k'\in\mathbb N_0^d$
 with $\mathbf k'\le\mathbf k$ componentwise
-and $\mathbf k'\ne\mathbf k$,
+and $\mathbf k'\ne\mathbf k$, $\| k' \| \leq K$, 
 we get applying first Lemma~\ref{eq:a_repr},
 \begin{equation*}
 A_{s,\mathbf{k}}(x)
@@ -694,22 +695,20 @@ where $A_{s,\mathbf{k}}$ is defined in \eqref{eq:definition-A-s,k}.
 Assume that $\mu$ and $f$ are $K\times d$ times continuously differentiable.
 Then, given $\mathbf k\in\mathbb N_0^d$,
 by taking $\mathbf k'= \mathbf k'(\mathbf k)
-=(K1_{\{k_1>K\}},\ldots,K1_{\{k_d>K\}})$, we get
-\begin{align}
+=K(\indiacc{k_1>K}\,\ldots, \indiacc{k_d>K})$, we get
+\begin{multline}
 \label{eq:sum_abar}
-\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}A^2_{s,\mathbf{k}}(x) & =\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}\left(\gamma^{|\mathbf{k}'|}\frac{(\mathbf{k}-\mathbf{k}')!}{\mathbf{k}!}\right)Q_s(\mathbf{k}',\mathbf{k}-\mathbf{k}')\\
-\nonumber
- & =\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}\gamma^{|I|K}\sum_{\mathbf{m}_{I}\in\mathbb{N}_{I}^{d}}\frac{\mathbf{m}_{I}!}{\left(\mathbf{m}_{I}+\mathbf{K}_{I}\right)!}
- \\
- \nonumber
- & \hspace{1em}\times\sum_{\mathbf{m}_{I^c}\in \mathbb{N}^d_{0,I^c},\,\|\mathbf{m}_{I^c}\|\leq K}Q_s(\mathbf{\mathbf{K}}_{I},\mathbf{m}_{I}+\mathbf{m}_{I^c}),
-\end{align}
+\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}A^2_{s,\mathbf{k}}(x)  
+=\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}\left(\gamma^{|\mathbf{k}'|}\frac{(\mathbf{k}-\mathbf{k}')!}{\mathbf{k}!}\right)Q_s(\mathbf{k}',\mathbf{k}-\mathbf{k}')\\
+= \left\{ \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}\gamma^{|I|K}\sum_{\mathbf{m}_{I}\in\mathbb{N}_{I}^{d}}\frac{\mathbf{m}_{I}!}{\left(\mathbf{m}_{I}+\mathbf{K}_{I}\right)!} \right\}
+\left\{ \sum_{\mathbf{m}_{I^c}\in \mathbb{N}^d_{0,I^c},\,\|\mathbf{m}_{I^c}\|\leq K}Q_s(\mathbf{\mathbf{K}}_{I},\mathbf{m}_{I}+\mathbf{m}_{I^c}) \right\},
+\end{multline}
 where for any two multi-indices \(\mathbf{r},\) \(\mathbf{q}\) from \(\mathbb{N}_0^d\)
-\begin{eqnarray*}
+\begin{equation*}
 Q_s(\mathbf{r},\mathbf{q})
 =
-\left(\mathsf{E}_x\left[\frac{1}{s}\sum_{p=1}^{s}\left(\partial_{y_{1}}^{\mathbf r}f\left(X_{p}\right)-\mathsf{E}_x\left[\partial_{y_{1}}^{\mathbf r}f\left(X_{p}\right)\right]\right)\mathbf{H}_{\mathbf{q}}(Z_{1})\right]\right)^{2}.
-\end{eqnarray*}
+\left\{\PE\left[\frac{1}{s}\sum_{p=1}^{s}\left\{\partial_{1}^{\mathbf r}f\left(X^x_{p}\right)-\PE\left[\partial_{1}^{\mathbf r}f\left(X^x_{p}\right)\right]\right\}\mathbf{H}_{\mathbf{q}}(Z_{1})\right]\right\}^{2}.
+\end{equation*}
 In \eqref{eq:sum_abar} the first sum runs over all nonempty subsets $I$ of the set $\{1,\ldots,d\}.$
 For any subset $I,$ $\mathbb{N}_{I}^{d}$ stands for a set
 of multi-indices $\mathbf{m}_{I}$ with elements $m_{i}=0,$ $i\not\in I,$
@@ -723,12 +722,12 @@ Applying the estimate
 we get
 \begin{eqnarray*}
 \sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}A^2_{s,\mathbf{k}}(x)&\leq &
-\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset} (\gamma_{l}/2)^{|I|K}
+\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset} (\gamma/2)^{|I|K}
 \\
 && \times\sum_{\mathbf{m}_{I}\in\mathbb{N}_{I}^{d}} \sum_{\mathbf{m}_{I^c}\in \mathbb{N}^d_{0,I^c},\,\|\mathbf{m}_{I^c}\|\leq K} Q(\mathbf{\mathbf{K}}_{I},\mathbf{m}_{I}+\mathbf{m}_{I^c})
 \\
 &\leq &
-\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset} (\gamma_{l}/2)^{|I|K} \sum_{\mathbf{m}\in\mathbb{N}_0^{d}} Q(\mathbf{\mathbf{K}}_{I},\mathbf{m}).
+\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset} (\gamma/2)^{|I|K} \sum_{\mathbf{m}\in\mathbb{N}_0^{d}} Q(\mathbf{\mathbf{K}}_{I},\mathbf{m}).
 \end{eqnarray*}
 Now using the consequence
 $\sum_{\mathbf{m}\in \mathbb{N}^d_0} \langle\xi,\mathbf{H}_\mathbf{m}(Z_1)\rangle^2\le\langle\xi,\xi\rangle$
@@ -737,13 +736,13 @@ we derive
 \begin{eqnarray*}
 \sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}A^2_{s,\mathbf{k}}(x)
 &\leq & \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
-\left(\frac{\gamma_{l}}{2}\right)^{|I|K}
-\mathsf{Var}_x\left(\frac{1}{s}\sum_{p=1}^{s}\partial_{1}^{\mathbf{K}_I}f\left(X_{p}\right)
+\left(\frac{\gamma}{2}\right)^{|I|K}
+\PVar\left(s^{-1}\sum\nolimits_{p=1}^{s}\partial_{1}^{\mathbf{K}_I}f\left(X^x_{p}\right)
 \right)
 \end{eqnarray*}
 Next we show that under the conditions  of Theorem~\ref{th:mr}
 \begin{eqnarray*}
-\mathsf{Var}_x\left(\frac{1}{s}\sum_{p=1}^{s}\partial_{1}^{\mathbf{K}_I}f\left(X_{p}\right)
+\PVar\left(s^{-1}\sum\nolimits_{p=1}^{s}\partial_{1}^{\mathbf{K}_I}f\left(X^x_{p}\right)
 \right)\leq W_s(x)
 \end{eqnarray*}
 for all $x$ and some family of functions $(W_s)_{s\geq 1}$ such that  the sum $\sum_{s=1}^n \mathsf{E}[W_s(X_{N+n-s-1})]$ is bounded uniformly in $n\in \mathbb{N}.$
