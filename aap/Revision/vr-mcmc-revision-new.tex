@@ -400,9 +400,10 @@ Q_{p,l}(x)=\mathsf{E}\left[\left.Q_{p,l+1}(X_{l+1})\right|X_{l}=x\right].
 %=\mathsf{E}[Q_{p,l+1}(\Phi_{l+1}(x,\xi))]
 \end{eqnarray}
 In the case $\Phi_l=\Phi$ for all $l\geq 1,$ we have
-\begin{eqnarray*}
+\begin{equation}
+\label{eq:definition-bar-a}
 \bar a_{r,k}(x)=\mathsf{E}\left[\phi_k\left(\xi\right)Q_{r}\left(\Phi(x,\xi)\right)\right]
-\end{eqnarray*}
+\end{equation}
 with  \(Q_{r}(x)=\mathsf{E}\left[\left.f(X_{r})\right|X_{0}=x\right],\) $r\in \mathbb{N}.$
 \end{prop}
 \par
@@ -421,9 +422,10 @@ M_{K,n}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{k=1}^{K}\sum_{l=1}^{p} 
 \label{eq:29032018a5}
 \end{eqnarray}
 where
-\[
-A_{s,k}(x)=\frac{1}{s}\sum_{r=0}^{s}\bar a_{r,k}(x).
-\]
+\begin{equation}
+\label{eq:definition-A-s,k}
+A_{s,k}(x)=\frac{1}{s}\sum_{r=1}^{s}\bar a_{r,k}(x).
+\end{equation}
 Since \(X_{l-1}\) is independent of \(\xi_{l}\) and \tcr{\(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq 1,\)} \eric{I do not understand this}  the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
 The representation \eqref{eq:coeff_mart} suggests that the variance of  the  variance-reduced estimator
 \begin{equation}
@@ -553,14 +555,14 @@ with respect to the components of~$y_j$:
 :=\partial^{k_d}_{y_j^d}
 \ldots
 \partial^{k_1}_{y_j^1}
-h(y_1,\ldots,z_m),
+h(y_1,\ldots,y_m),
 \quad y_j=(y_j^1,\ldots,y_j^d).
 \]
 In the particular case $m=1$ we can drop
 the subscript $y_1$ in that notation.
 \begin{thm}\label{th:mr}
 Assume {\bf (H1)} and {\bf (H2)}.
-Suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K\geq 2$ times continuously differentiable
+Suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K \times d \geq 2$ times continuously differentiable
 and for all $x\in\mathbb R^d$ and  \(\mathbf{k}\) satisfying \(0<\|\mathbf{k}\|\leq  K,\)
 \begin{equation}
 \label{eq:smooth-mu}
@@ -633,12 +635,13 @@ Fix some \(\mathbf{k},\mathbf{k}'\in \mathbb{N}_0^d\) with \(\mathbf{k}'\le \mat
 \[
 \bar a_{p,\mathbf{k}}(x)=\left(\gamma^{|\mathbf{k}'|}\frac{(\mathbf{k}-\mathbf{k}') !}{\mathbf{k}!}\right)^{1/2}
 \PE\left[
-\partial_{1}^{\mathbf{k}'}f(X^x_p)\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_l)\right] \eqsp.
+\partial_{1}^{\mathbf{k}'}f(X^x_p)\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_1)\right] \eqsp,
 \]
+where $\bar a_{p,\mathbf{k}}$ is defined in \eqref{eq:definition-bar-a}.
 \end{lem}
 
 \begin{proof}
-Let $\boldsymbol{\varphi}(z)=\frac{1}{(2\pi)^{d/2}} \exp\{-|z|^2/2\}$,
+Let $\boldsymbol{\varphi}(z)=(2\pi)^{-d/2} \exp(-|z|^2/2)$,
 $z\in\mathbb R^d$, denote the density of a $d$-dimensional
 standard Gaussian random vector.
 We first remark that, for the normalized Hermite polynomial $\mathbf H_{\mathbf k}$ on $\mathbb R^d$,
@@ -655,21 +658,21 @@ This enables to use the integration by parts in vector form as follows
 \int_{\mathbb R^d}\ldots\int_{\mathbb R^d}
 f\circ G_{p}(x,\sqrt{\gamma}z_{1},\ldots,\sqrt{\gamma}z_{p})
 \mathbf{H}_{\mathbf{k}}(z_{1})\boldsymbol{\varphi}(z_1)
-\prod_{j=2}^p\boldsymbol{\varphi}(z_j)\, dz_{1}\ldots dz_{p}
+\prod_{j=2}^p\boldsymbol{\varphi}(z_j)\, \rmd z_{1}\ldots \rmd z_{p}
 \\
 & =
 \frac{1}{\sqrt{\mathbf k!}}
 \int_{\mathbb R^d}\ldots\int_{\mathbb R^d}
 f\circ G_{p}(x,\sqrt{\gamma}z_{1},\ldots,\sqrt{\gamma}z_{p})
 (-1)^{|\mathbf{k}|}\partial^{\mathbf{k}} \boldsymbol{\varphi}(z_1)
-\prod_{j=2}^p\boldsymbol{\varphi}(z_j)\, dz_{1}\ldots dz_{p}
+\prod_{j=2}^p\boldsymbol{\varphi}(z_j)\, \rmd z_{1}\ldots  \rmd z_{p}
 \\
 & =
 \frac{\gamma^{|\mathbf k'|/2}}{\sqrt{\mathbf k!}}
 \int_{\mathbb R^d}\ldots\int_{\mathbb R^d}
 \partial_{1}^{\mathbf k'}[f\circ G_{p}](x,\sqrt{\gamma}z_{1},\ldots,\sqrt{\gamma}z_{p})
 (-1)^{|\mathbf{k}-\mathbf k'|}\partial^{\mathbf{k}-\mathbf k'} \boldsymbol{\varphi}(z_1)
-\prod_{j=2}^p\boldsymbol{\varphi}(z_j)\, dz_{1}\ldots dz_{p}
+\prod_{j=2}^p\boldsymbol{\varphi}(z_j)\, \rmd z_{1}\ldots \rmd z_{p}
 \\
  & =\gamma^{|\mathbf{k}'|/2}\frac{\sqrt{(\mathbf{k}-\mathbf{k}')!}}{\sqrt{\mathbf{k}!}}\mathsf{E}\left[\partial_{y_{1}}^{\mathbf{k}'}[f\circ G_{p}](x,\sqrt{\gamma}Z_{1},\ldots,\sqrt{\gamma}Z_{p})\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_{1})\right].
 \end{align*}
@@ -679,15 +682,15 @@ The last expression yields the result.
 For multi-indices $\mathbf k,\mathbf k'\in\mathbb N_0^d$
 with $\mathbf k'\le\mathbf k$ componentwise
 and $\mathbf k'\ne\mathbf k$,
-we get applying first Lemma~\ref{eq:a_repr}
+we get applying first Lemma~\ref{eq:a_repr},
 \begin{equation*}
 A_{s,\mathbf{k}}(x)
 =\left(\gamma^{|\mathbf{k}'|}\frac{(\mathbf{k}-\mathbf{k}')!}{\mathbf{k}!}\right)^{1/2}
 \,
-\mathsf{E}_x\left[
-\frac{1}{s}\sum_{r=1}^{s}(\partial_{1}^{\mathbf{k}'} f(X_r)-\mathsf{E}_x\partial_{1}^{\mathbf{k}'}f(X_r))\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_1)\right]
+\PE\left[
+s^{-1} \sum\nolimits_{r=1}^{s}\{\partial_{1}^{\mathbf{k}'} f(X^x_r)-\PE[\partial_{1}^{\mathbf{k}'}f(X^x_r)]\}\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_1)\right]
 \end{equation*}
-
+where $A_{s,\mathbf{k}}$ is defined in \eqref{eq:definition-A-s,k}.
 Assume that $\mu$ and $f$ are $K\times d$ times continuously differentiable.
 Then, given $\mathbf k\in\mathbb N_0^d$,
 by taking $\mathbf k'= \mathbf k'(\mathbf k)
