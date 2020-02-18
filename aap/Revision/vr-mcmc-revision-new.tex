@@ -181,10 +181,10 @@ Fix a sequence of positive time steps \((\gamma_p)_{p\geq 1}.\) Given a Borel fu
 consider a non-homogeneous
 discrete-time Markov chain $(X_{p})_{p\geq0}$ defined by
 \begin{equation}\label{eq:chain}
-X_{p+1}=X_{p}-\gamma_{p+1}\mu(X_{p})+\sqrt{\gamma_{p+1}}Z_{p+1},\end{equation}
+X_{p+1}=X_{p}-\gamma_{p+1}\mu(X_{p})+\sqrt{2 \gamma_{p+1}}Z_{p+1},\end{equation}
 where $\left(Z_{p}\right)_{p\geq1}$ is an i.i.d.\ sequence of $d$-dimensional
 standard Gaussian random vectors. If
-$\mu=(1/2) \nabla U$
+$\mu= \nabla U$
 for some continuously differentiable function $U,$ then Markov chain~\eqref{eq:chain} can be used to approximately sample from the density
 \begin{equation}\label{eq:stationary_distr}
 \pi(x)= \mathrm{const}\,\rme^{-U(x)}, \quad \mathrm{const}= \left. 1 \middle /{\int_{\mathbb{R}^{d}} \rme^{-U(x)}\, \rmd x,} \right.
@@ -493,7 +493,7 @@ Hence both estimators
 $\pi_n^N(f)$ and $\pi_{K,n}^N(f)$ have the same conditional bias.
 Notice that this remains true also when we substitute
 the coefficients $a_{p,l,\mathbf{k}}$ in~\eqref{eq:29032018a5}
-with some independent approximations $\widehat a_{p,l,\mathbf{k}}.$ 
+with some independent approximations $\widehat a_{p,l,\mathbf{k}}.$
 
 Denote by $\pi($ denotes the probability measure on $\mathbb R^d$
 with density $\pi$ of~\eqref{eq:stationary_distr};
@@ -525,7 +525,7 @@ Different specific upper bounds for the squared bias
 can be deduced from~\eqref{eq:06042018a2}
 using results of Section~3 in~\cite{durmus:moulines:2017}
 on bounds in the total variation distance. It is known  that under assumptions {\bf (H1)} and {\bf (H2)},   the corresponding Markov chain has a unique stationary distribution $\pi_\gamma$, which is different from $\pi$. Moreover, as shown in Proposition, \tcr{(Appendix)}
-\eric{put a precise reference here} 
+\eric{put a precise reference here}
  \begin{equation}
 \label{eq:bias}
 \tvnorm{\delta_x\kerULA_{\gamma}^{n}-\pi_\gamma} \leq C_1\rho^{\gamma n}\left(V(x) + \pi_\gamma(V)\right), \quad \tvnorm{\pi-\pi_\gamma} \leq C_2 \sqrt{\gamma}
@@ -539,19 +539,34 @@ under {\bf (H1)} and {\bf (H2)} is derived in Section.  In particular, for any b
 \end{equation}
 where $\lesssim$ stands for inequality up to a constant depending on constants $L_U,$ $m_U,$  $M_U$ and $\|f\|_\infty.$
 One of the main results of this paper is the following  upper bound for the variance of $\pi_{K,n}^{N}(f).$
-\erici{the notation $\partial^{\mathbf{k}}$ should be defined here}
+We start by introducing some notations.
+For $m\in\mathbb N$, a smooth function
+$h\colon\mathbb R^{d\times m}\to\mathbb R$
+with arguments being denoted
+$(y_1,\ldots,y_m)$, $y_i\in\mathbb R^d$, $i=1,\ldots,m$,
+a multi-index $\mathbf k=(k_i)\in\mathbb N_0^d$,
+and $j\in\{1,\ldots,m\}$,
+we use the notation $\partial^{\mathbf k}_{y_j} h$ for the multiple derivative of $h$
+with respect to the components of~$y_j$:
+\[
+\partial^{\mathbf k}_{j} h(y_1,\ldots,y_m)
+:=\partial^{k_d}_{y_j^d}
+\ldots
+\partial^{k_1}_{y_j^1}
+h(y_1,\ldots,z_m),
+\quad y_j=(y_j^1,\ldots,y_j^d).
+\]
+In the particular case $m=1$ we can drop
+the subscript $y_1$ in that notation.
 \begin{thm}\label{th:mr}
 Assume {\bf (H1)} and {\bf (H2)}.
 Suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K\geq 2$ times continuously differentiable
-and it holds
+and for all $x\in\mathbb R^d$, $j \in \{1,\dots,d\}$ and  \(\mathbf{k}\) satisfying \(0<\|\mathbf{k}\|\leq  K,\)
 \begin{equation}
 \label{eq:smooth-mu}
-|\partial^{\mathbf{k}} f(x)|\le  B_f, \quad |\partial^{\mathbf{k}} U (x)|\leq B_\mu, \quad
-x\in\mathbb R^d
+|\partial_j^{\mathbf{k}} f(x)|\le  B_f, \quad |\partial_j^{\mathbf{k}} \mu (x)|\leq B_\mu \eqsp.
 \end{equation}
-\eric{I have replaced $\mu$ by $U$; in this section we use mostly $U$ and not $\mu$; we could use $\mu$ but in such case it would be better to recall that $\mu= \nabla U/2$}
-\eric{Is it required to assume that the gradient is bounded ? It contradicts assumption (H2) which assumes a quadratic growth at infinity - coercivity of the operator ?}
-for all \(\mathbf{k}\) with \(0<\|\mathbf{k}\|\leq  K.\)  Then it holds
+Then it holds
 \begin{eqnarray}
 \label{eq:var-bound}
 \PVar\left(\pi_{K,n}^{N}(f)\right)\lesssim n^{-1} \gamma^{K-2} \eqsp,
@@ -586,25 +601,6 @@ for all $x$ and some family of functions $(W_s)_{s\geq 1}$ such that  the sum $\
 \section{Proofs}
 \label{sec:proofs}
 \subsection{Proof of Theorem~\ref{th:mr}}
-We start with introducing some notations.
-For $m\in\mathbb N$, a smooth function
-$h\colon\mathbb R^{d\times m}\to\mathbb R$
-with arguments being denoted
-$(y_1,\ldots,y_m)$, $y_i\in\mathbb R^d$, $i=1,\ldots,m$,
-a multi-index $\mathbf k=(k_i)\in\mathbb N_0^d$,
-and $j\in\{1,\ldots,m\}$,
-we use the notation $\partial^{\mathbf k}_{y_j} h$ for the multiple derivative of $h$
-with respect to the components of~$y_j$:
-$$
-\partial^{\mathbf k}_{j} h(y_1,\ldots,y_m)
-:=\partial^{k_d}_{y_j^d}
-\ldots
-\partial^{k_1}_{y_j^1}
-h(y_1,\ldots,z_m),
-\quad y_j=(y_j^1,\ldots,y_j^d).
-$$
-In the particular case $m=1$ we can drop
-the subscript $y_1$ in that notation.
 For $l\le p$, we have the representation
 \[
 X_{p}=G_{p}(X_0,\sqrt{\gamma}Z_{1},\ldots,\sqrt{\gamma}Z_{p}),
@@ -614,13 +610,8 @@ where the function \(G_{p}:\) \(\mathbb{R}^{d\times(p+1)}\to \mathbb{R}^{d}\) is
 \label{eq:definition-G-p-l}
 G_{p}(x,y_1,\ldots,y_p):=\Phi(\cdot,y_{p})\circ\Phi(\cdot,y_{p-1})\circ\ldots\circ\Phi(x,y_{1})
 \end{equation}
-with
-\[
-\Phi(x,y)=x-\gamma\mu(x)+y,
-\quad x,y\in\mathbb R^d.
-\]
-As a consequence,
-for a function $f\colon\mathbb R^d\to\mathbb R$
+with, for $x,y\in\mathbb R^d$,   $\Phi(x,y)=x-\gamma\mu(x)+y$. 
+As a consequence, for a function $f\colon\mathbb R^d\to\mathbb R$
 as in Section~\ref{sec:setup}, we have
 $$
 f\left(X_{p}\right) =f\circ G_{p}(X_{0},\sqrt{\gamma}Z_{1},\ldots,\sqrt{\gamma}Z_{p}).
@@ -634,6 +625,7 @@ we use the shorthand notation
 \end{equation}
 whenever the function $f\circ G_{p}$ is smooth enough
 (that is, $f$ and $\mu$ need to be smooth enough).
+\eric{this notation is a bit confusing, $f \circ G_p$ is defined on $p (d+1)$ coordinates}
 Finally, for a multi-index $\mathbf{k}=(k_i)\in\mathbb N_0^d$, we use the notation
 \(\mathbf{k} ! :=k_1!\cdot\ldots\cdot k_d !\)
 
