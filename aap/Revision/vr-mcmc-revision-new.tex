@@ -561,10 +561,10 @@ the subscript $y_1$ in that notation.
 \begin{thm}\label{th:mr}
 Assume {\bf (H1)} and {\bf (H2)}.
 Suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K\geq 2$ times continuously differentiable
-and for all $x\in\mathbb R^d$, $j \in \{1,\dots,d\}$ and  \(\mathbf{k}\) satisfying \(0<\|\mathbf{k}\|\leq  K,\)
+and for all $x\in\mathbb R^d$ and  \(\mathbf{k}\) satisfying \(0<\|\mathbf{k}\|\leq  K,\)
 \begin{equation}
 \label{eq:smooth-mu}
-|\partial_j^{\mathbf{k}} f(x)|\le  B_f, \quad |\partial_j^{\mathbf{k}} \mu (x)|\leq B_\mu \eqsp.
+|\partial^{\mathbf{k}} f(x)|\le  B_f, \quad |\partial^{\mathbf{k}} \mu (x)|\leq B_\mu \eqsp.
 \end{equation}
 Then it holds
 \begin{eqnarray}
@@ -601,9 +601,9 @@ for all $x$ and some family of functions $(W_s)_{s\geq 1}$ such that  the sum $\
 \section{Proofs}
 \label{sec:proofs}
 \subsection{Proof of Theorem~\ref{th:mr}}
-For $l\le p$, we have the representation
+For $l\le p$ and $x \in \rset^d$, we have the representation
 \[
-X_{p}=G_{p}(X_0,\sqrt{\gamma}Z_{1},\ldots,\sqrt{\gamma}Z_{p}),
+X^x_{p}=G_{p}(x,\sqrt{\gamma}Z_{1},\ldots,\sqrt{\gamma}Z_{p}),
 \]
 where the function \(G_{p}:\) \(\mathbb{R}^{d\times(p+1)}\to \mathbb{R}^{d}\) is defined as
 \begin{equation}
@@ -629,12 +629,12 @@ Finally, for a multi-index $\mathbf{k}=(k_i)\in\mathbb N_0^d$, we use the notati
 \(\mathbf{k} ! :=k_1!\cdot\ldots\cdot k_d !\)
 
 \begin{lem}\label{eq:a_repr}
-Fix some \(\mathbf{k},\mathbf{k}'\in \mathbb{N}_0^d\) with \(\mathbf{k}'\le \mathbf{k}\) componentswise.  Then the following representation holds
-$$
+Fix some \(\mathbf{k},\mathbf{k}'\in \mathbb{N}_0^d\) with \(\mathbf{k}'\le \mathbf{k}\) componentwise.  Then the following representation holds
+\[
 \bar a_{p,\mathbf{k}}(x)=\left(\gamma^{|\mathbf{k}'|}\frac{(\mathbf{k}-\mathbf{k}') !}{\mathbf{k}!}\right)^{1/2}
-\mathsf E\left[\left.
-\partial_{1}^{\mathbf{k}'}f(X_p)\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_l)\right|X_{0}=x\right].
-$$
+\PE\left[
+\partial_{1}^{\mathbf{k}'}f(X^x_p)\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_l)\right] \eqsp.
+\]
 \end{lem}
 
 \begin{proof}
