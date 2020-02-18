@@ -22,7 +22,12 @@
 \usepackage{xargs}
 %\usepackage{showlabels}
 
+\def\PE{\mathsf{E}}
+\def\PVar{\mathsf{Var}}
 \newcommandx{\CPE}[3][1=]{{\mathsf E}_{#1}\left[\left. #2 \, \right| #3 \right]}
+\newcommand{\ps}[2]{\langle #1, #2 \rangle}
+\def\nset{\mathbb{N}}
+\def\rset{\mathbb{R}}
 \usepackage[textsize=footnotesize]{todonotes} % pour voir les commentaires
 
 \newcommand{\eric}[1]{\todo[color=purple!10, author=Eric]{#1}}
@@ -52,6 +57,7 @@
 \newcommand{\jac}[1]{\operatorname{J} _{#1}}
 
 %added command for indicator - SS
+\newcommand{\indi}[1]{\mathbbm{1}_{#1}}
 \newcommand{\indiacc}[1]{\mathbbm{1}_{\{#1\}}}
 
 \newcommand*{\argmin}{\operatornamewithlimits{arg\,min}}
@@ -60,6 +66,10 @@
 \usepackage{graphicx}
 \newcommand*{\ol}{\overline}
 
+\newcommand{\tcr}[1]{\textcolor{red}{#1}}
+\newcommand{\tvnorm}[1]{\| #1 \|_{\operatorname{TV}}}
+\def\kerULA{\operatorname{Q}}
+\def\eqsp{\,}
 \begin{document}
 
 \begin{frontmatter}
@@ -132,17 +142,17 @@ Monte Carlo and Markov Chain Monte Carlo methods. Introduction to many of the va
 Suppose that we wish to compute $\pi(f):=\mathsf{E}\left[f(X)\right]$, where $X$
 is a random vector-valued in $\mathcal{X}\subseteq\mathbb{R}^{d}$ with a density $\pi$ and $f:$
 $\mathcal{X}\to\mathbb{R}$ with $f\in L^2(\pi)$.
-The idea of the so-called control variates variance reduction method
+The idea of the control variates variance reduction method
  is to find a cheaply computable random variable $\zeta$ with $\mathsf{E}[\zeta]=0$ and \(\mathsf{E}[\zeta^2]<\infty,\)
 such that the variance of the r.v. $f(X)-\zeta$ is small.  The complexity of the problem of constructing classes $Z$ of control variates \(\zeta\) satisfying   $\mathsf{E}[\zeta]=0$ essentially depends on the degree of our knowledge on \(\pi.\)
-For example, if \(\pi\) is analytically known and satisfies some regularity conditions, one can apply the well-known technique of  polynomial interpolation to construct control variates enjoying  some optimality properties, see, for example, Section~3.2 in \cite{dimov2008monte}. Alternatively, if an orthonormal system in \(L^2(\pi)\) is analytically available, one can build control variates \(\zeta\) as a linear combination of the corresponding basis functions, see \cite{GobetCV}. Furthermore, if \(\pi\) is known only up to a normalizing constant (which is often the case in Bayesian statistics), one can apply the recent approach of control variates  depending only on the gradient \(\nabla \log \pi\)  using Schr\(\ddot{\text{o}}\)dinger-type Hamiltonian operator in  \cite{mira2013zero} and so-called Stein operator in \cite{brosse2018diffusion}.
+For example, if \(\pi\) is analytically known and satisfies some regularity conditions, one can apply the well-known technique of  polynomial interpolation to construct control variates enjoying  some optimality properties, see, for example, Section~3.2 in \cite{dimov2008monte}. Alternatively, if an orthonormal system in \(L^2(\pi)\) is analytically available, one can build control variates \(\zeta\) as a linear combination of the corresponding basis functions, see \cite{GobetCV}. Furthermore, if \(\pi\) is known only up to a normalizing constant (which is often the case in Bayesian statistics), one can apply the recent approach of control variates  depending only on the gradient \(\nabla \log \pi\)  using Schr\(\ddot{\text{o}}\)dinger-type Hamiltonian operator in  \cite{mira2013zero} and Stein operator in \cite{brosse2018diffusion}.
 In some situations \(\pi\) is not known analytically, but \(X\) can be represented as a function of  simple random variables with known distribution.
 Such  situation arises, for example, in the case of functionals of  discretized diffusion processes. In this case a Wiener chaos-type decomposition can be used to construct control variates with nice theoretical properties, see \cite{belomestny2018stratified}.
 Note that in order to compare different  variance reduction approaches, one has to analyze their complexity, that is, the number of numerical operations required to achieve a prescribed magnitude of the resulting variance.
 
 
 The situation becomes much more difficult in the case of MCMC algorithms, where one  has to work with a
-Markov chain \(X_p,\) \(p=0,1,2,\ldots,\) whose marginal distribution  converges  to \(\pi\) as time grows. One important class of the variance reduction methods in this case  is based on the so-called Poisson equation for the corresponding  Markov chain. It was observed in Henderson~\cite{henderson1997variance}  that if a time-homogeneous Markov chain \((X_p)\) is stationary with stationary distribution \(\pi,\) then for any real-valued function \(G \in L^1(\pi) \) defined on the state space of the Markov chain \((X_p),\)  the function \(U(x) := G(x)-\mathsf{E}[G(X_{1})|X_0 = x]\) has zero mean with respect to \(\pi\).  The best choice for the function \(G\) corresponds to a solution of the so-called Poisson equation  \(\mathsf{E}[G(X_{1})|X_0 = x]-G(x)=-f(x)+\pi(f)\).  Moreover, it is also related to the minimal asymptotic variance in the corresponding central limit theorem, see \cite{duncan2016variance} and \cite{mira2013zero}.   Although the Poisson equation involves the quantity of interest \(\pi(f)\)  and can not be  solved explicitly in most cases, this idea still can be used to construct some  approximations for the optimal zero-variance control variates. For example,  Henderson~\cite{henderson1997variance} proposed to compute approximations for the solution of the Poisson equation for specific Markov chains with particular emphasis on models arising in stochastic network theory. In \cite{dellaportas2012control} and \cite{brosse2018diffusion}  series-type control variates are introduced and studied for reversible Markov chains. It is assumed in \cite{dellaportas2012control}  that the one-step conditional expectations  can be computed explicitly  for a set of basis functions. The authors in \cite{brosse2018diffusion} proposed another approach tailored to diffusion setting which doesn't require the computation of integrals of basis functions and only involves  applications of the underlying generator.
+Markov chain \(X_p,\) \(p=0,1,2,\ldots,\) whose marginal distribution  converges  to \(\pi\) as time grows. One important class of the variance reduction methods in this case  is based on the Poisson equation for the corresponding  Markov chain. It was observed in~\cite{henderson1997variance}  that if a time-homogeneous Markov chain \((X_p)\) is stationary with stationary distribution \(\pi,\) then for any real-valued function \(G \in L^1(\pi) \) defined on the state space of the Markov chain \((X_p),\)  the function \(U(x) := G(x)-\mathsf{E}[G(X_{1})|X_0 = x]\) has zero mean with respect to \(\pi\).  The best choice for the function \(G\) corresponds to a solution of the Poisson equation  \(\mathsf{E}[G(X_{1})|X_0 = x]-G(x)=-f(x)+\pi(f)\).  Moreover, it is also related to the minimal asymptotic variance in the corresponding central limit theorem, see \cite{duncan2016variance} and \cite{mira2013zero}.   Although the Poisson equation involves the quantity of interest \(\pi(f)\)  and can not be  solved explicitly in most cases, this idea still can be used to construct some  approximations for the optimal zero-variance control variates. For example,  \cite{henderson1997variance} proposed to compute approximations for the solution of the Poisson equation for specific Markov chains with particular emphasis on models arising in stochastic network theory. In \cite{dellaportas2012control} and \cite{brosse2018diffusion}  series-type control variates are introduced and studied for reversible Markov chains. It is assumed in \cite{dellaportas2012control}  that the one-step conditional expectations  can be computed explicitly  for a set of basis functions. The authors in \cite{brosse2018diffusion} proposed another approach tailored to diffusion setting which does not require the computation of integrals of basis functions and only involves  applications of the underlying generator.
 \par
 In this paper we focus on the  Langevin type algorithms which got much attention recently, see \cite{dalalyan2017theoretical,durmus:moulines:2017, MR2353037, MR3861816, MR2977986} and references therein. We propose  a generic variance reduction method for these and other types algorithms, which is purely non-asymptotic and does not require that    the conditional expectations of the corresponding Markov chain can be computed  or that the generator is known analytically. Moreover, we do not need to assume stationarity or/and sampling under the invariant distribution \(\pi.\) We rigorously analyse the convergence of the method and study its complexity. It is shown that  our variance-reduced Langevin algorithm outperforms the standard Langevin algorithms in terms of complexity.
 \par
@@ -171,10 +181,10 @@ Fix a sequence of positive time steps \((\gamma_p)_{p\geq 1}.\) Given a Borel fu
 consider a non-homogeneous
 discrete-time Markov chain $(X_{p})_{p\geq0}$ defined by
 \begin{equation}\label{eq:chain}
-X_{p+1}=X_{p}-\gamma_{p+1}\mu(X_{p})+\sqrt{\gamma_{p+1}}Z_{p+1},\end{equation}
+X_{p+1}=X_{p}-\gamma_{p+1}\mu(X_{p})+\sqrt{2 \gamma_{p+1}}Z_{p+1},\end{equation}
 where $\left(Z_{p}\right)_{p\geq1}$ is an i.i.d.\ sequence of $d$-dimensional
 standard Gaussian random vectors. If
-${\mu=\frac{\nabla U}{2}}$
+$\mu= \nabla U$
 for some continuously differentiable function $U,$ then Markov chain~\eqref{eq:chain} can be used to approximately sample from the density
 \begin{equation}\label{eq:stationary_distr}
 \pi(x)= \mathrm{const}\,\rme^{-U(x)}, \quad \mathrm{const}= \left. 1 \middle /{\int_{\mathbb{R}^{d}} \rme^{-U(x)}\, \rmd x,} \right.
@@ -216,7 +226,7 @@ where
 \end{eqnarray*}
 \end{enumerate}
 \end{algorithm}
-Then, as shown in Metropolis et al.~\cite{metropolis1953equation}, this transition is reversible with respect to \(\pi\) and therefore preserves the stationary density \(\pi\). If \(q_p\) have a wide enough
+This transition is reversible with respect to \(\pi\) and therefore preserves the stationary density \(\pi\); see \cite[Chapter~2]{moulines2018}. If \(q_p\) have a wide enough
 support to eventually reach any region
 of the state space \(\mathcal{X}\) with positive mass
 under \(\pi\), then this transition is irreducible and $\pi$ is a maximal irreducibility measure \cite{mengersen:tweedie:1996}. The  Metropolis-Adjusted Langevin algorithm (MALA) takes  \eqref{eq:chain} as proposal, that is,
@@ -240,14 +250,15 @@ where \((U_{p})_{p\geq 1}\) is an i.i.d. sequence of uniformly distributed on \(
   Let \((X_t)_{t\in [0,T]}\) be the unique strong solution to a  SDE of the form:
 \begin{eqnarray}
 \label{eq:sde-inv}
-dX_t=b(X_t)\,dt+\sigma(X_t)\,dW_t,\quad t\geq 0,	
+\rmd X_t=b(X_t)\, \rmd t+\sigma(X_t)\, \rmd W_t,\quad t\geq 0,	
 \end{eqnarray}
 where \(W\) is a standard \(\mathbb{R}^m\)-valued Brownian motion, \(b:\) \(\mathbb{R}^d\to \mathbb{R}^d\) and \(\sigma:\) \(\mathbb{R}^d\times \mathbb{R}^m \to \mathbb{R}^d\) are locally Lipschitz continuous functions with at most linear growth.
 The process \((X_t)_{t\geq 0}\) is a Markov
 process and let \(L\) denote its infinitesimal generator defined by
-\begin{eqnarray*}
-Lg=b^\top \nabla g+\frac{1}{2}\text{Tr}(\sigma^\top D^2g\sigma)
-\end{eqnarray*}
+\begin{equation*}
+Lg=b^\top \nabla g+\frac{1}{2}\operatorname{Tr}(\sigma^\top D^2g\sigma)
+\end{equation*}
+\eric{do we need a trace here ? I think also that $D^2$ is not defined }
 for any \(g\in C^2(\mathbb{R}^d).\)
 If there exists a continuously twice differentiable Lyapunov function \(V:\) \(\mathbb{R}^d\to \mathbb{R}_{+}\) such that
 \begin{eqnarray*}
@@ -271,19 +282,20 @@ On the contrary, our method can be directly used to reduce the variance of the e
 \section{Martingale representation and variance reduction}
 \label{seq:mart_repr}
 In this section we give a general discrete-time martingale representation for  Markov chains of the type  \eqref{eq:chain_gen} which is  used below to construct an efficient variance reduction algorithm. Let \((\phi_k)_{k\in \mathbb{Z}_+}\) be a complete orthonormal system in \(L^2(\mathbb{R}^m, P_{\xi})\) with \(\phi_0\equiv 1\).  In particular, we have
-\begin{eqnarray*}
+\begin{equation*}
 \mathsf{E}[\phi_i(\xi)\phi_j(\xi)]=\delta_{ij},\quad i,j\in  \mathbb{Z}_{+}
-\end{eqnarray*}
+\end{equation*}
 with \(\xi \sim P_{\xi}.\)
 Notice that this implies that the random variables
-$\phi_k(\xi)$, $k\ge1$, are centered. As an example, we can take  multivariate Hermite polynomials for the ULA algorithm and a tensor product of Shifted Legendre polynomials for "uniform part" and Hermite polynomials for "gaussian part"  of the random variable $\xi = (u, z)^T$ in MALA, as the Shifted Legendre polynomials are orthogonal with respect to the Lebesgue measure on \([0,1].\) In the sequel, we denote by $(\mathcal{G}_p)_{p\in \mathbb{Z}_+}$  the filtration
+$\phi_k(\xi)$, $k\ge1$, are centered. As an example, we can take  multivariate Hermite polynomials for the ULA algorithm and a tensor product of Shifted Legendre polynomials for "uniform part" and Hermite polynomials for "Gaussian part"  of the random variable $\xi = (u, z)^T$ in MALA, as the Shifted Legendre polynomials are orthogonal with respect to the Lebesgue measure on \([0,1].\) In the sequel, we denote by $(\mathcal{G}_p)_{p\in \mathbb{Z}_+}$  the filtration
 generated by generated by $(\xi_p)_{p \in \mathbb{N}^*}$ with the convention $\mathcal{G}_0=\mathrm{triv}$.
-
+\erici{It would be perhaps interesting to state the conditions satisfied by the functions $(\Phi_l)_{l \geq 1}$ here}
 \begin{thm}\label{prop:29032018a1}
  Let $f$ be a Borel function $\mathbb{R}^{d}\to\mathbb R$ such that
-$\mathsf{E}\left[\left|f(X_{p})\right|^{2}\right]<\infty$,   where $(X_{p})_{p\geq 0}$ is a Markov chain of the form \eqref{eq:chain_gen} for some kernels $(\Phi_l)_{l\geq 1}.$  
+$\mathsf{E}\left[\left|f(X_{p})\right|^{2}\right]<\infty$,   where $(X_{p})_{p\geq 0}$ is a Markov chain of the form \eqref{eq:chain_gen} for some sequence of functions $(\Phi_l)_{l\geq 1}.$
 Then,
 for $p>j$, the following representation holds in \(L^2(P)\)
+\eric{I would write \tcr{$L^2(\mathsf{P})$} to be coherent with the notation $\mathsf{E}$ and we need to define what is the underlying probability space}
 \begin{eqnarray}
 \label{eq:mart_repr}
 f(X_{p})=\mathsf{E}\left[\left.f(X_{p})\right|\mathcal G_{j}\right]+\sum_{k=1}^{\infty}\sum_{l=j+1}^{p}a_{p,l,k}(X_{l-1})\phi_k\left(\xi_{l}\right),
@@ -295,31 +307,29 @@ a_{p,l,k}(x)=\mathsf{E}\left[\left.f(X_{p})\phi_k\left(\xi_{l}\right)\right|X_{l
 \end{eqnarray}
 \end{thm}
 \begin{cor}
-If  all the kernels $\Phi_l,$ $l\geq 1,$ are equal,  then  the representation \eqref{eq:mart_repr} takes the form 
+If  all the kernels $\Phi_l,$ $l\geq 1,$ are equal,  then  the representation \eqref{eq:mart_repr} takes the form
 \begin{eqnarray*}
 f(X_{p})=\mathsf{E}\left[\left.f(X_{p})\right|\mathcal G_{j}\right]+\sum_{k=1}^{\infty}\sum_{l=j+1}^{p}\bar a_{p-l,k}(X_{l-1})\phi_k\left(\xi_{l}\right)
 \end{eqnarray*}
-with 
+with
 \begin{eqnarray*}
 \bar a_{r,k}(x)=\mathsf{E}\left[\left.f(X_{r})\phi_k\left(\xi_{1}\right)\right|X_{0}=x\right], \quad r, k\in \mathbb{N}.
 \end{eqnarray*}
 
 \end{cor}
-\begin{proof}
+\begin{proof}[Proof of Theorem~\ref{prop:29032018a1}]
 The expansion obviously holds for $p=1$ and $j=0$.
-Indeed, due to the orthonormality and completeness
-of the system $\left(\phi_{k}\right)$, we have
+Indeed, since $\left(\phi_{k}\right)_{k \geq 0}$ is a complete orthonormal system of , we have for all $x \in \rset^d$,
+\eric{it is clear, but we must say in which sense this equality should be understood}
 \[
-f(X_{1})=\mathsf{E}\left[f(X_{1})\right]+\sum_{k\geq1}a_{1,1,k}(X_0)\phi_{k}(\xi_{1})
+f(X^x_{1})=\PE[f(X_{1}^x)]+\sum_{k\geq1}a_{1,1,k}(x)\phi_{k}(\xi_{1})
 \]
-with
-\[
-a_{1,1,k}(x_0)=\CPE{f(X_{1})\phi_{k}\left(\xi_{1}\right)}{X_0=x_0},
-\]
-provided $\mathsf{E}\left[\left|f(X_{1})\right|^{2}\right]<\infty.$
-Recall that $\mathcal{G}_l=\sigma(\xi_{1},\ldots,\xi_{l}),$
+with $a_{1,1,k}(x)=\PE[f(X_{1}^x)\phi_{k}(\xi_{1})]$,
+provided $\PE[|f(X^x_{1})|^{2}]<\infty.$
+\tcr{Recall that $\mathcal{G}_l=\sigma(\xi_{1},\ldots,\xi_{l}),$
 $l=1,2,\ldots, $
-and $\mathcal{G}_0=\mathrm{triv}$.
+and $\mathcal{G}_0=\mathrm{triv}$.}
+\eric{do we need this, this is recalled ten lines above}
 Suppose that (\ref{eq:mart_repr})
 holds for $p=q$, all $j<q$, and all Borel-measurable functions
 $f$ with $\mathsf{E}\left[|f(X_{q})|^2\right]<\infty$.
@@ -389,7 +399,7 @@ The functions \((Q_{p,l})_{l=0}^p\)  can be computed by the backward recurrence:
 Q_{p,l}(x)=\mathsf{E}\left[\left.Q_{p,l+1}(X_{l+1})\right|X_{l}=x\right].
 %=\mathsf{E}[Q_{p,l+1}(\Phi_{l+1}(x,\xi))]
 \end{eqnarray}
-In the case $\Phi_l=\Phi$ for all $l\geq 1,$ we have 
+In the case $\Phi_l=\Phi$ for all $l\geq 1,$ we have
 \begin{eqnarray*}
 \bar a_{r,k}(x)=\mathsf{E}\left[\phi_k\left(\xi\right)Q_{r}\left(\Phi(x,\xi)\right)\right]
 \end{eqnarray*}
@@ -410,26 +420,26 @@ M_{K,n}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{k=1}^{K}\sum_{l=1}^{p} 
 &=& \sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left(1+\frac{N-l}{n}\right)A_{N+n-l,k}(X_{l-1})\phi_{k}\left(\xi_{l}\right),
 \label{eq:29032018a5}
 \end{eqnarray}
-where 
+where
 \[
 A_{s,k}(x)=\frac{1}{s}\sum_{r=0}^{s}\bar a_{r,k}(x).
 \]
-Since \(X_{l-1}\) is independent of \(\xi_{l}\) and \(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq l,\)  the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
+Since \(X_{l-1}\) is independent of \(\xi_{l}\) and \tcr{\(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq 1,\)} \eric{I do not understand this}  the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
 The representation \eqref{eq:coeff_mart} suggests that the variance of  the  variance-reduced estimator
 \begin{equation}
 \label{eq:29032018a3}
 \pi_{K,n}^N(f)=\pi_n^N(f)-M_{K,n}^N(f)
 \end{equation}
-should be small for \(K\) large enough. Indeed, due to orthonormality  we have
+should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_k'(\xi_l)]=0$ if $k \ne k'$, we obtain
 \[
 \mathsf{Var}[\pi_{K,n}^N(f)]\leq\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\mathsf{E}[A^2_{n-l,k}(X_{N+l-1})]
-\] 
+\]
 and $\mathsf{Var}[\pi_{K,n}^N(f)]$ is small provided that the coefficients $A_{s,k}$ decay fast enough as $k\to \infty.$
 In the next section   we provide a detailed   analysis of  $\mathsf{Var}[\pi_{K,n}^N(f)]$  for the  ULA  algorithm (see Example~\ref{exam:langevin-algorithm}).
 \section{Analysis of variance reduced ULA}
 \label{sec:ula_analysis}
 In this section we perform the convergence analysis of the ULA algorithm. For the sake of clarity and notational simplicity we restrict our attention to the constant time step, that is, we take $\gamma=\gamma_1=\gamma_2=\ldots.$
-We shall use the notations $\mathbb N=\{1,2,\ldots\}$ and $\mathbb N_0=\mathbb N\cup\{0\}$.
+\tcr{We shall use the notations $\nset=\{1,2,\ldots\}$ and $\nset_0=\mathbb N\cup\{0\}$.} \eric{these notations are used before; it is best to put all the notations in a short paragraph just after the introduction}
 By $H_k$, $k\in\mathbb N_0$,
 we denote the normalized Hermite polynomial on $\mathbb R$, that is,
 $$
@@ -450,35 +460,30 @@ M_{K,n}^N(f) & =\sum_{\mathbf k\colon 0<\|\mathbf{k}\|\le K}\sum_{l=1}^{n}\Bigl(
 \label{eq:29032018a5}
 \notag
 \end{align}
-with \(\|\mathbf{k}\|=\max_{i} k_i.\) 
+with \(\|\mathbf{k}\|=\max_{i} k_i.\)
 For an estimator $\rho(f)\in\{\pi_n^N(f),\pi_{K,n}^N(f)\}$
 of $\pi(f)$ (see \eqref{eq:29032018a2} and \eqref{eq:29032018a3}), we shall be interested in the Mean Squared Error (MSE),
 which can be decomposed as the sum of the squared  bias
 and the  variance:
-\begin{eqnarray}\label{eq:29032018a4}
-\mathrm{MSE}\left[\rho(f)\right]
-&=&\mathsf{E}\left[(\rho(f)-\pi(f))^2\right]
-\\
-\nonumber
-&=&\left(\mathsf{E}[\rho(f)]-\pi(f)\right)^2
-+\mathsf{Var}[\rho(f)].
-\end{eqnarray}
-Our analysis will be done under the following two assumptions. 
-
+\begin{equation}
+\label{eq:29032018a4}
+\mathrm{MSE}\left[\rho(f)\right] = \PE\left[\left\{\rho(f)-\pi(f)\right\}^2\right]
+=\left\{\PE[\rho(f)]-\pi(f)\right\}^2 +\PVar[\rho(f)].
+\end{equation}
+Our analysis is carried out under the following two assumptions:
 \begin{description}
-\item[(H1)][\textbf{Lipschitz continuity}] Assume that $\nabla U$ is Lipschitz, that is, there exists $L_U\geq 0$ such that 
+\item[(H1)][\textbf{Lipschitz continuity}] The potential $U$ is differentiable and $\nabla U$ is Lipschitz, that is, there exists $L_U < \infty$ such that
 \begin{eqnarray*}
-|\nabla U(x)-\nabla U(y)|\leq L_U|x-y|, \quad x,y\in \mathbb{R}^d.
+|\nabla U(x)-\nabla U(y)|\leq L_U|x-y|, \quad x,y\in \rset^d.
 \end{eqnarray*}
-\item[(H2)][\textbf{Convexity outside a ball}] There exist $K_U>0,$ $M_U>0$ and $m_U>0$ such that for any $x\not\in B_{K_U}(0)$  it holds 
-\begin{eqnarray*}
-\langle D^2U(x),x\rangle \geq \frac{m_U}{2}\|x\|^2. 
-\end{eqnarray*}
+\item[(H2)][\textbf{Convexity outside a ball}] There exist $K_U>0,$ $M_U>0$ and $m_U>0$ such that for any $x\not\in B_{K_U}(0)$  it holds
+\begin{equation*}
+\ps{D^2U(x)}{x} \geq (m_U/2)\|x\|^2.
+\end{equation*}
 \end{description}
 First we analyse the biases of the estimators
 $\pi_n^N(f)$ and $\pi_{K,n}^N(f).$
-\subsection{Squared bias}
-Due to the martingale transform structure
+\paragraph{Squared bias:} Due to the martingale transform structure
 of $M_{K,n}^N(f)$,
 we have
 \[
@@ -488,93 +493,53 @@ Hence both estimators
 $\pi_n^N(f)$ and $\pi_{K,n}^N(f)$ have the same conditional bias.
 Notice that this remains true also when we substitute
 the coefficients $a_{p,l,\mathbf{k}}$ in~\eqref{eq:29032018a5}
-with some independent approximations $\widehat a_{p,l,\mathbf{k}}.$ For a bounded Borel function~$f$,
+with some independent approximations $\widehat a_{p,l,\mathbf{k}}.$
+
+Denote by $\pi($ denotes the probability measure on $\mathbb R^d$
+with density $\pi$ of~\eqref{eq:stationary_distr};
+for $\gamma>0$, define the Markov kernel $Q_\gamma$ associated to one-step of the ULA algorithm by
+\[
+\kerULA_{\gamma}(x,A)=\int_{A} \frac{1}{(4 \pi \gamma)^{d/2}} \text{ exp} \left\{ -\frac{1}{4\gamma} \left\| y - x + \gamma \mu(x)\right\|^2\right\} \rmd y.
+\]
+\eric{what is the notation convention here; I do not like much $\mathcal{Q}$ but $Q$ is already define and it is perhaps not a great idea to supersede the previous notation}
+For a bounded Borel function~$f$,
 we can estimate the conditional bias
-similarly to the beginning of ~\cite[Section~4]{durmus:moulines:2017}:
-\begin{align}
-\left(\mathsf{E}[\pi_{K,n}^N(f)]-\pi(f)\right)^2
-&=\left(\mathsf{E}[\pi_{n}^N(f)]-\pi(f)\right)^2
-\label{eq:06042018a2}\\
-&\le
+similarly to~\cite[Section~4]{durmus:moulines:2017}:
+\begin{equation}
+\label{eq:06042018a2}
+\left\{\mathsf{E}[\pi_{K,n}^N(f)]-\pi(f)\right\}^2
+=\left(\mathsf{E}[\pi_{n}^N(f)]-\pi(f)\right)^2
+\le
 \frac{\mathrm{osc}(f)^2}{n}\sum_{p=N+1}^{N+n}
-\|\delta_x Q_\gamma^{p}-\pi(\cdot)\|_{TV}^2,
-\notag
-\end{align}
+\tvnorm{\delta_x \kerULA_\gamma^{p}-\pi(\cdot)}^2,
+\end{equation}
 where
 $\mathrm{osc}(f):=\sup_{x\in\mathbb R^d}f(x)-\inf_{x\in\mathbb R^d}f(x)$,
-$\|\mu-\nu\|_{\TV}$ denotes the total variation distance
+$\tvnorm{\mu-\nu}$ denotes the total variation distance
 between probability measures $\mu$ and $\nu$, that is,
-$$
-\|\mu-\nu\|_{TV}=\sup_{A\in\mathcal B(\mathbb R^d)}
-|\mu(A)-\nu(A)|,
-$$
-$\pi(\cdot)$ denotes the probability measure on $\mathbb R^d$
-with density $\pi$ of~\eqref{eq:stationary_distr};
-for $\gamma>0$, the Markov kernel $Q_\gamma$
-is defined by
-$$
-\mathcal{Q}_\gamma(x,A)=\int_{A} \frac{1}{(4 \pi \gamma)^{d/2}} \text{ exp} \left\{ -\frac{1}{4\gamma} \left\| y - x + \gamma \mu(x)\right\|^2\right\}dy.
-$$
+\[
+\tvnorm{\mu-\nu}=\sup_{A\in\mathcal B(\mathbb R^d)}
+|\mu(A)-\nu(A)| \eqsp.
+\]
 Different specific upper bounds for the squared bias
 can be deduced from~\eqref{eq:06042018a2}
 using results of Section~3 in~\cite{durmus:moulines:2017}
-on bounds in the total variation distance. It is known  that under assumptions {\bf (H1)} and {\bf (H2)}  the corresponding Markov chain has a unique stationary distribution $\pi_\gamma$, which is different from $\pi$. Moreover, as shown in Proposition (Appendix) \begin{eqnarray}
+on bounds in the total variation distance. It is known  that under assumptions {\bf (H1)} and {\bf (H2)},   the corresponding Markov chain has a unique stationary distribution $\pi_\gamma$, which is different from $\pi$. Moreover, as shown in Proposition, \tcr{(Appendix)}
+\eric{put a precise reference here}
+ \begin{equation}
 \label{eq:bias}
-\|\delta_x\mathcal{Q}_{\gamma}^{n}-\pi_\gamma\|_{TV} \leq C_1\rho^{\gamma n}\left(V(x) + \pi_\gamma(V)\right), \quad \|\pi-\pi_\gamma\|_{TV} \leq C_2 \sqrt{\gamma}
-\end{eqnarray}
+\tvnorm{\delta_x\kerULA_{\gamma}^{n}-\pi_\gamma} \leq C_1\rho^{\gamma n}\left(V(x) + \pi_\gamma(V)\right), \quad \tvnorm{\pi-\pi_\gamma} \leq C_2 \sqrt{\gamma}
+\end{equation}
 for  $V(x) = 1 + \|x\|^2,$ some $\rho\in (0,1)$ and  constants $C_1,$ $C_2>0$ independent of $\gamma$  and $n.$
-\subsection{Variance}
-An upper bound for the variance of the classical estimator~\eqref{eq:29032018a2}
+\paragraph{Variance:} An upper bound for the variance of the classical estimator~\eqref{eq:29032018a2}
 under {\bf (H1)} and {\bf (H2)} is derived in Section.  In particular, for any bounded function $f,$
-\begin{eqnarray}
+\begin{equation}
 \label{eq:var-mc}
-\mathsf{Var}[\pi_n^N(f)]\lesssim \frac{1}{n\gamma},
-\end{eqnarray}
-where $\lesssim$ stands for inequality up to a constant depending on constants $L_U,$ $m_U,$  $M_U$ and $\|f\|_\infty.$ 
-One of the main results of this paper is the following  upper bound for the variance of $\pi_{K,n}^{N}(f).$ 
-\begin{thm}\label{th:mr}
-Assume {\bf (H1)} and {\bf (H2)}.
-Suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K\geq 2$ times continuously differentiable
-and it holds
-\begin{eqnarray}
-\label{eq:smooth-mu}
-|\partial^{\mathbf{k}} f(x)|\le  B_f, \quad |\partial^{\mathbf{k}} \mu (x)|\leq B_\mu, \quad 
-x\in\mathbb R^d
-\end{eqnarray}
-for all \(\mathbf{k}\) with \(0<\|\mathbf{k}\|\leq  K.\)  Then it holds 
-\begin{eqnarray}
-\label{eq:var-bound}
-\mathsf{Var}\left[\pi_{K,n}^{N}(f)\right]\lesssim \frac{\gamma^{K-2}}{n},
-\end{eqnarray}
-where \(\lesssim\) stands for inequality up to a constant not depending  on $\gamma,$ \(n\) and \(N.\)
-\end{thm}
-Let us sketch the main steps of the proof. First using integration by parts we prove that 
-\begin{eqnarray}
-\label{eq:Ask-part}
-A_{s,\mathbf{k}}(x)=\gamma^{|\mathbf{k}'|/2}\frac{\sqrt{(\mathbf{k}-\mathbf{k}')!}}{\sqrt{\mathbf{k}!}}\mathsf{E}\left[ \partial_{Z_1}^{\mathbf{k}'} F(x,Z_1,\ldots,Z_s) \mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_{1})\right]
-\end{eqnarray}
-where $F_s(X_0,Z_1,\ldots,Z_s)=\frac{1}{s}\sum_{r=0}^s f(X_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
-stands for a weak partial derivative of the functional $F_s$ that also can be viewed as discretised version of Malliavin derivative. From \eqref{eq:Ask-part}, we derive
-\begin{eqnarray*}
-\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1} A^2_{s,\mathbf{k}}(x)\leq \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
-\left(\frac{\gamma}{2}\right)^{|I|K}
-\mathsf{Var}_x\left(\frac{1}{s}\sum_{p=1}^{s}\partial_{y_{1}}^{\mathbf{K}_I}f\left(X_{p}\right)
-\right),
-\end{eqnarray*}
-where the sum runs over all nonempty subsets $I$ of the set $\{1,\ldots,d\}$ and 
-\[
-\mathbf{\mathbf{K}}_{I}=(K1_{\{1\in I\}},\ldots,K1_{\{d\in I\}}).
-\]
- Finally we show via  the Poincare inequality that under smoothness assumption \eqref{eq:smooth-mu} it holds
-\begin{eqnarray*}
-\mathsf{Var}_x\left(\frac{1}{s}\sum_{p=1}^{s}\partial_{y_{1}}^{\mathbf{K}_I}f\left(X_{p}\right)
-\right)\leq W_s(x)
-\end{eqnarray*}
-for all $x$ and some family of functions $(W_s)_{s\geq 1}$ such that  the sum $\sum_{s=1}^n \mathsf{E}[W_s(X_{N+n-s-1})]$ is bounded uniformly in $n\in \mathbb{N}.$
-\section{Proofs}
-\label{sec:proofs}
-\subsection{Proof of Theorem~\ref{th:mr}}
-We start with introducing some notations.
+\PVar[\pi_n^N(f)]\lesssim (n\gamma)^{-1} \eqsp,
+\end{equation}
+where $\lesssim$ stands for inequality up to a constant depending on constants $L_U,$ $m_U,$  $M_U$ and $\|f\|_\infty.$
+One of the main results of this paper is the following  upper bound for the variance of $\pi_{K,n}^{N}(f).$
+We start by introducing some notations.
 For $m\in\mathbb N$, a smooth function
 $h\colon\mathbb R^{d\times m}\to\mathbb R$
 with arguments being denoted
@@ -583,32 +548,70 @@ a multi-index $\mathbf k=(k_i)\in\mathbb N_0^d$,
 and $j\in\{1,\ldots,m\}$,
 we use the notation $\partial^{\mathbf k}_{y_j} h$ for the multiple derivative of $h$
 with respect to the components of~$y_j$:
-$$
+\[
 \partial^{\mathbf k}_{j} h(y_1,\ldots,y_m)
 :=\partial^{k_d}_{y_j^d}
 \ldots
 \partial^{k_1}_{y_j^1}
 h(y_1,\ldots,z_m),
 \quad y_j=(y_j^1,\ldots,y_j^d).
-$$
+\]
 In the particular case $m=1$ we can drop
 the subscript $y_1$ in that notation.
-For $l\le p$, we have the representation
+\begin{thm}\label{th:mr}
+Assume {\bf (H1)} and {\bf (H2)}.
+Suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K\geq 2$ times continuously differentiable
+and for all $x\in\mathbb R^d$ and  \(\mathbf{k}\) satisfying \(0<\|\mathbf{k}\|\leq  K,\)
+\begin{equation}
+\label{eq:smooth-mu}
+|\partial^{\mathbf{k}} f(x)|\le  B_f, \quad |\partial^{\mathbf{k}} \mu (x)|\leq B_\mu \eqsp.
+\end{equation}
+Then it holds
+\begin{eqnarray}
+\label{eq:var-bound}
+\PVar\left(\pi_{K,n}^{N}(f)\right)\lesssim n^{-1} \gamma^{K-2} \eqsp,
+\end{eqnarray}
+where \tcr{\(\lesssim\) stands for inequality up to a constant not depending  on $\gamma,$ \(n\) and \(N.\)}
+\eric{this is defined less precisely just above}
+\end{thm}
+Let us sketch the main steps of the proof. First using integration by parts we prove that
+\begin{eqnarray}
+\label{eq:Ask-part}
+A_{s,\mathbf{k}}(x)=\gamma^{|\mathbf{k}'|/2}\frac{\sqrt{(\mathbf{k}-\mathbf{k}')!}}{\sqrt{\mathbf{k}!}}\mathsf{E}\left[ \partial_{Z_1}^{\mathbf{k}'} F(x,Z_1,\ldots,Z_s) \mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_{1})\right]
+\end{eqnarray}
+where $F_s(X_0,Z_1,\ldots,Z_s)=s^{-1}\sum_{r=0}^s f(X_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
+stands for a weak partial derivative of the functional $F_s$ that also can be viewed as discretised version of Malliavin derivative. From \eqref{eq:Ask-part}, we derive
+\begin{eqnarray*}
+\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1} A^2_{s,\mathbf{k}}(x)\leq \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
+\left(\frac{\gamma}{2}\right)^{|I|K}
+\PVar_x\left( s^{-1} \sum\nolimits_{p=1}^{s}\partial_{y_{1}}^{\mathbf{K}_I}f\left(X_{p}\right)
+\right),
+\end{eqnarray*}
+where the sum runs over all nonempty subsets $I$ of the set $\{1,\ldots,d\}$ and
 \[
-X_{p}=G_{p}(X_0,\sqrt{\gamma}Z_{1},\ldots,\sqrt{\gamma}Z_{p}),
+\mathbf{\mathbf{K}}_{I}=K(\indi{I}(1),\ldots, \indi{I}(d)).
+\]
+ Finally we show via  the Poincare inequality that under smoothness assumption \eqref{eq:smooth-mu} it holds
+ \eric{Since we do note state was $W_s$ is, it is a bit difficult to guess why we are using a Poincare inequality there}
+\begin{equation*}
+\PVar_x\left(s^{-1} \sum\nolimits_{p=1}^{s}\partial_{y_{1}}^{\mathbf{K}_I}f\left(X_{p}\right)
+\right)\leq W_s(x)
+\end{equation*}
+for all $x$ and some family of functions $(W_s)_{s\geq 1}$ such that  the sum $\sum_{s=1}^n \mathsf{E}[W_s(X_{N+n-s-1})]$ is bounded uniformly in $n\in \mathbb{N}.$
+\section{Proofs}
+\label{sec:proofs}
+\subsection{Proof of Theorem~\ref{th:mr}}
+For $l\le p$ and $x \in \rset^d$, we have the representation
+\[
+X^x_{p}=G_{p}(x,\sqrt{\gamma}Z_{1},\ldots,\sqrt{\gamma}Z_{p}),
 \]
 where the function \(G_{p}:\) \(\mathbb{R}^{d\times(p+1)}\to \mathbb{R}^{d}\) is defined as
 \begin{equation}
 \label{eq:definition-G-p-l}
 G_{p}(x,y_1,\ldots,y_p):=\Phi(\cdot,y_{p})\circ\Phi(\cdot,y_{p-1})\circ\ldots\circ\Phi(x,y_{1})
 \end{equation}
-with
-\[
-\Phi(x,y)=x-\gamma\mu(x)+y,
-\quad x,y\in\mathbb R^d.
-\]
-As a consequence,
-for a function $f\colon\mathbb R^d\to\mathbb R$
+with, for $x,y\in\mathbb R^d$,   $\Phi(x,y)=x-\gamma\mu(x)+y$. 
+As a consequence, for a function $f\colon\mathbb R^d\to\mathbb R$
 as in Section~\ref{sec:setup}, we have
 $$
 f\left(X_{p}\right) =f\circ G_{p}(X_{0},\sqrt{\gamma}Z_{1},\ldots,\sqrt{\gamma}Z_{p}).
@@ -626,12 +629,12 @@ Finally, for a multi-index $\mathbf{k}=(k_i)\in\mathbb N_0^d$, we use the notati
 \(\mathbf{k} ! :=k_1!\cdot\ldots\cdot k_d !\)
 
 \begin{lem}\label{eq:a_repr}
-Fix some \(\mathbf{k},\mathbf{k}'\in \mathbb{N}_0^d\) with \(\mathbf{k}'\le \mathbf{k}\) componentswise.  Then the following representation holds
-$$
+Fix some \(\mathbf{k},\mathbf{k}'\in \mathbb{N}_0^d\) with \(\mathbf{k}'\le \mathbf{k}\) componentwise.  Then the following representation holds
+\[
 \bar a_{p,\mathbf{k}}(x)=\left(\gamma^{|\mathbf{k}'|}\frac{(\mathbf{k}-\mathbf{k}') !}{\mathbf{k}!}\right)^{1/2}
-\mathsf E\left[\left.
-\partial_{1}^{\mathbf{k}'}f(X_p)\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_l)\right|X_{0}=x\right].
-$$
+\PE\left[
+\partial_{1}^{\mathbf{k}'}f(X^x_p)\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_l)\right] \eqsp.
+\]
 \end{lem}
 
 \begin{proof}
@@ -735,7 +738,7 @@ we derive
 \mathsf{Var}_x\left(\frac{1}{s}\sum_{p=1}^{s}\partial_{1}^{\mathbf{K}_I}f\left(X_{p}\right)
 \right)
 \end{eqnarray*}
-Next we show that under the conditions  of Theorem~\ref{th:mr}  
+Next we show that under the conditions  of Theorem~\ref{th:mr}
 \begin{eqnarray*}
 \mathsf{Var}_x\left(\frac{1}{s}\sum_{p=1}^{s}\partial_{1}^{\mathbf{K}_I}f\left(X_{p}\right)
 \right)\leq W_s(x)
@@ -796,7 +799,7 @@ Under assumptions of Theorem~\ref{th:mr},
 for all natural $r\le K$ and $l\le p$, there exist constants $C_r$ (not depending on $l$ and $p$) such that
 \begin{equation}
 \label{eq:08062018b2}
-\left|\partial_{y_l}^r X_p \right| \le C_r\prod_{k=l+1}^p (1-\gamma\mu'(X_{k-1}))\quad \text{a.s.} 
+\left|\partial_{y_l}^r X_p \right| \le C_r\prod_{k=l+1}^p (1-\gamma\mu'(X_{k-1}))\quad \text{a.s.}
 \end{equation}
 where $\partial_{y_l}^r X_p$ is defined in \eqref{eq:definition-differential-f-p}. Moreover, we can choose $C_1=1$.
 \end{lem}
@@ -1009,7 +1012,7 @@ we proceed as follows
 \\
 &\le
 \frac{\gamma^3 A_{K}^{2}}{(1-\gamma B_\mu)^2}
-\mathsf{E}\sum_{j=1}^{q} 
+\mathsf{E}\sum_{j=1}^{q}
 \left(\sum_{p=j+1}^{q+1}  \prod_{k=2}^{p} \alpha_{k}
 \right)^{2}
 \\
@@ -1023,7 +1026,7 @@ we proceed as follows
 %\\
 &\le
 \frac{\gamma^3 A_{K}^{2}}{(1-\gamma B_\mu)^3}
-\mathsf{E}\sum_{j=1}^{q} 
+\mathsf{E}\sum_{j=1}^{q}
 \prod_{k=1}^{j} \alpha_{k}
 \left(\sum_{p=j+1}^{q+1}  \prod_{k=j+1}^{p} \alpha_{k}
 \right)^{2}
@@ -1035,7 +1038,7 @@ Now, from the H\"older inequality, we obtain (with $\|X\|_p = (\mathsf{E}X^p)^{\
  & \leq\sum_{j=1}^{q} \left\Vert \prod_{k=1}^{j}\alpha_{k}\right\Vert _{2}\left(\sum_{p=j+1}^{q+1}\left\Vert \prod_{k=j+1}^{p}\alpha_{k}\right\Vert _{4}\right)^{2}.
 \end{align*}
 Now using the fact that $\prod\limits_{k=j+1}^{p}\alpha_{k} \leq \exp\left(-\sum\limits_{k=j+1}^{p}\gamma\mu'(X_{k-1})\right),$
-we get 
+we get
 \[
 \mathsf{E}\left[\sum_{j=1}^{q}\prod_{k=1}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right]\leq\sum_{j=1}^{q} \zeta^{1/2}_{1,j}(2) \left(\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4)\right)^{2},
 \]
@@ -1047,7 +1050,7 @@ From Theorem~\ref{thm:ula_const_size} in Appendix~\ref{sec:appendix}, it follows
 \[
 \mathsf{E}\left[e^{-u\gamma\left(\sum_{k=l}^{j}[\mu'(X_{k-1})-\pi_\gamma(\mu')]\right)}\right]\leq e^{u^2\varkappa (j-l-1)\gamma^{2}}
 \]
-with constant $\varkappa = ...$, where we used the fact that $\mu^{\prime}(x)$ is bounded. Then we have 
+with constant $\varkappa = ...$, where we used the fact that $\mu^{\prime}(x)$ is bounded. Then we have
 \[
 \mathsf{E}\left[e^{-s\sum_{k=l}^{j}\gamma_{k}\mu'(X_{k-1})}\right]\leq e^{s^2\varkappa \gamma^2(j-l-1)}e^{-s\gamma (j-l-1)\pi_\gamma(\mu')}.
 \]
@@ -1060,12 +1063,12 @@ yielding the final bound
 \[
 \zeta_{l,j}(s) \leq e^{s^2\kappa (j-l-1) \gamma^2}e^{-2s\gamma(j-l-1)\alpha}
 \]
-where $ \alpha = \int \mu^2(x)\pi(x)\,dx$. 
-Finally 
+where $ \alpha = \int \mu^2(x)\pi(x)\,dx$.
+Finally
 \begin{align*}
-\mathsf{E}\left[\sum_{j=1}^{q}\prod_{k=1}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right]  \lesssim 
+\mathsf{E}\left[\sum_{j=1}^{q}\prod_{k=1}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right]  \lesssim
 \end{align*}
-Plugging into bound for conditional variance, 
+Plugging into bound for conditional variance,
 \begin{align*}
 \mathsf{Var}\left[\sum_{p=l}^{q}\gamma_{p+1}\partial_{y_{l}}^{K}f\left(X_{p}\right)\Big|X_{l-1}\right] \leq
 \frac{A_{K}^{2}e^{2\kappa \Gamma^*}}{4\alpha^2(1-\gamma_1 B_\mu)^3}
@@ -1090,21 +1093,21 @@ RV(x) \leq \lambda^{\gamma} V(x) + \gamma C
 
 \begin{lem}
 \label{lem:drift}
- Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$. Then the kernel $R_\gamma$ from \ref{eq:kernel} satisfies drift condition \ref{def:drift} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L^2}$ with drift function $V(x) = 1 + \|x\|^2$, constants $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = \frac{25K_1^2}{8} + 2d + m$ with $K_1$ from \ref{eq:H3}, $m$ from {\bf (H2)}. 
+ Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$. Then the kernel $R_\gamma$ from \ref{eq:kernel} satisfies drift condition \ref{def:drift} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L^2}$ with drift function $V(x) = 1 + \|x\|^2$, constants $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = \frac{25K_1^2}{8} + 2d + m$ with $K_1$ from \ref{eq:H3}, $m$ from {\bf (H2)}.
 \end{lem}
 
 \begin{proof} Consider $V(x) = 1 + \|x\|^2$, then
 $$
-R_{\gamma}V(x) = \int\limits_{\mathbb{R}^d}V(y)P_{\gamma}(x,dy) = \int\limits_{\mathbb{R}^d}(1+\|y\|^2)\frac{1}{(4\pi\gamma)^{\frac{d}{2}}}\exp{\left(-\frac{\|y-x+\gamma\nabla U(x)\|^2}{4\gamma}\right)}\,dy = 
+R_{\gamma}V(x) = \int\limits_{\mathbb{R}^d}V(y)P_{\gamma}(x,dy) = \int\limits_{\mathbb{R}^d}(1+\|y\|^2)\frac{1}{(4\pi\gamma)^{\frac{d}{2}}}\exp{\left(-\frac{\|y-x+\gamma\nabla U(x)\|^2}{4\gamma}\right)}\,dy =
 $$
 
 $$
 =1 + \frac{1}{(4\pi\gamma)^{\frac{d}{2}}}\int\limits_{\mathbb{R}^d}\|z + x - \gamma \nabla U(x)\|^2 \exp{\left(-\frac{\|z\|^2}{4\gamma}\right)}\,dz
 $$
-Let us first consider the case $x \notin B(0,K_1)$. Note that 
+Let us first consider the case $x \notin B(0,K_1)$. Note that
 $$
 \|z+x-\gamma \nabla U(x)\|^2 = \|z\|^2 + 2 \langle z, x - \gamma \nabla U(x) \rangle + \gamma^2 \|x - \gamma \nabla U(x)\|^2
-$$ 
+$$
 and the linear term vanishes after integration, moreover, for $Z \sim \mathcal{N}(0,2\gamma I_d)$, it holds $\mathbb{E}\|Z\|^2 = 2\gamma d$. It remains to notice that due to {\bf H1} and {\bf H2} (which implies \ref{eq:H3}),
 $$
 \|x - \gamma \nabla U(x) \|^2 = \|x\|^2 - 2\gamma \langle \nabla U(x), x\rangle + \gamma^2 \|\nabla U(x)\|^2 \leq
@@ -1119,7 +1122,7 @@ R_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + 2\gamma d + (\gamma m - 2
 $$
 Now let $x \in B(0,K_1)$. Then simply using $\|x-\gamma \nabla U(x)\|^2 \leq 2(1+L\gamma)^2\|x\|^2$, we obtain
 $$
-R_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma\left((m - 2\gamma L^2)(1+\|x\|^2) + 2d + 2(1+L\gamma)^2\|x\|^2\right) \leq 
+R_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma\left((m - 2\gamma L^2)(1+\|x\|^2) + 2d + 2(1+L\gamma)^2\|x\|^2\right) \leq
 $$
 
 $$
@@ -1134,7 +1137,7 @@ For now let us assume for simplicity that we run ULA with fixed step size $\gamm
  Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)}. Then for $0 < \gamma < \overline{\gamma}=\frac{m}{4L^2}$, for any $x \in X$ it holds
 $$
 d_V(\delta_xQ_{\boldsymbol{\gamma}}^{1,n},\pi_\gamma) \leq C\rho^n\left(V(x) + \pi_\gamma(V)\right)
-$$ 
+$$
 with $V(x) = 1 + \|x\|^2$ and constants
 $$
 C = \left(1 + \exp{\left(-\frac{m\gamma}{2}\right)}\right)\left(1+\frac{\overline{b}}{(1-\varepsilon)(1-\exp{\left(-\frac{m\gamma}{2}\right)} - \frac{2b}{1+d})}\right);
@@ -1149,7 +1152,7 @@ $$
 $$
 \end{lem}
 
-\begin{proof} Note that the condition {\bf (H1)} implies that the Markov kernel $Q^{1,n}_{\boldsymbol{\gamma}}$ satisfies $(1,\varepsilon)$-Doeblin condition with $\varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right)$. Together with drift condition \ref{eq:drift} it allows to apply \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018} with appropriate constants. 
+\begin{proof} Note that the condition {\bf (H1)} implies that the Markov kernel $Q^{1,n}_{\boldsymbol{\gamma}}$ satisfies $(1,\varepsilon)$-Doeblin condition with $\varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right)$. Together with drift condition \ref{eq:drift} it allows to apply \cite[Theorem~19.4.1]{douc:moulines:priouret:soulier:2018} with appropriate constants.
 \end{proof}
 
 Aforementioned lemmas allow us to bound the exponential moment of the additive functional of ULA. Namely, the following theorem holds
@@ -1170,7 +1173,7 @@ for some absolute constant $C_1$ not depending on $l,p$.
 \sergey{I will put precise constant later}
 with constant $\kappa = ...$. Note that
 \begin{align*}
-\mathsf{E}\left[\exp\left(-s\gamma\sum_{k=l}^{p}\left(g(X_{k})-\pi_{\gamma}(g)\right)\right)\right] = 
+\mathsf{E}\left[\exp\left(-s\gamma\sum_{k=l}^{p}\left(g(X_{k})-\pi_{\gamma}(g)\right)\right)\right] =
 \end{align*}
 
 \begin{align*}
@@ -1190,9 +1193,9 @@ and the statement follows.
 
 Let us formulate and prove prove analogue of the previous theorem for inhomogeneous Markov chain with step size $\gamma_1,\ldots,\gamma_n,\ldots$. Note that under assumptions $\sum_{p=1}^{\infty} \gamma_p=\infty, \quad \sum_{p=1}^{\infty} \gamma^2_p<\infty$ and {\bf (H1)} the stationary distribution of ULA-based chain will be equal to $\pi$. We will need additional assumption
 \begin{description}
-\item[{\bf (H3)}] There exist such constants $\rho > 0, K_3 > 0$ that 
+\item[{\bf (H3)}] There exist such constants $\rho > 0, K_3 > 0$ that
 \begin{eqnarray*}
-d_V(\delta_xQ_{\boldsymbol{\gamma}}^{1,n},\pi) \leq K_3 V(x) \rho^n 
+d_V(\delta_xQ_{\boldsymbol{\gamma}}^{1,n},\pi) \leq K_3 V(x) \rho^n
 \end{eqnarray*}
 \end{description}
 
@@ -1202,7 +1205,7 @@ Suppose that
 \begin{eqnarray*}
 \sum_{p=1}^{\infty} \gamma_p=\infty, \quad \sum_{p=1}^{\infty} \gamma^2_p<\infty.
 \end{eqnarray*}
-Under assumptions {\bf (H1)}, {\bf (H2)} and {\bf (H3)}, for any bounded function $g$ on $\mathbb{R}^d$ 
+Under assumptions {\bf (H1)}, {\bf (H2)} and {\bf (H3)}, for any bounded function $g$ on $\mathbb{R}^d$
 we have
 %\begin{eqnarray*}
 %\mathsf{E}\left[\left(\sum_{p=l}^{N+n}\omega_{p,n}^{N}g(X_{p})-\bar Q_l(X_l)\right)^{4}\right] \lesssim \frac{1}{\Gamma^4_{N+2,N+n+1}}
@@ -1211,12 +1214,12 @@ we have
 %\begin{eqnarray*}
 %\bar Q_l(X_l)=\mathsf{E}\left[\left.\sum_{p=l}^{N+n}\omega_{p,n}^{N}f(X_{p})\right|X_{l}\right].
 %\end{eqnarray*}
-%Moreover, 
+%Moreover,
 \begin{eqnarray}
 \label{eq:exp_decrease_step}
 \mathsf{E}\left[\exp\left(-s\left(\sum_{k=l}^{p}\gamma_{k+1}g(X_{k})-\left(\sum_{k=l}^{p}\gamma_{k+1}\right)\pi(g)\right)\right)\right]\leq C
 \end{eqnarray}
-for all natural $0<l\leq p<\infty$ with constant $C$ not depending on $l,p.$. Moreover, 
+for all natural $0<l\leq p<\infty$ with constant $C$ not depending on $l,p.$. Moreover,
 \begin{eqnarray}
 \label{eq:var_decrease_step}
 \mathsf{Var}_x{\left(\sum_{k=l}^{l+n-1}\frac{\gamma_{k+1}}{\Gamma_{l+1,l+n}}g(X_k) - \mathsf{E}_x \sum_{k=l}^{l+n-1}\frac{\gamma_{k+1}}{\Gamma_{l+1,l+n}}g(X_k)\right)} \leq \frac{C_1}{\Gamma_{l+1,l+n}}
