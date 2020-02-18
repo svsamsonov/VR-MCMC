@@ -69,12 +69,15 @@ def set_function(f_type,traj,inds_arr,params):
         for traj_ind in range(len(traj)):
             for point_ind in range(len(inds_arr)):
                 f_vals[traj_ind,:,point_ind] = copy.deepcopy(traj[traj_ind][:,inds_arr[point_ind]]**2)
-    
     elif f_type == "3rd_moment": #params is ignored in this case
         f_vals = np.zeros((len(traj),len(traj[0]),len(inds_arr)),dtype = float)
         for traj_ind in range(len(traj)):
             for point_ind in range(len(inds_arr)):
                 f_vals[traj_ind,:,point_ind] = copy.deepcopy(traj[traj_ind][:,inds_arr[point_ind]]**3)
+    elif f_type == "sum": #params is ignored in this case
+        f_vals = np.zeros((len(traj),len(traj[0]),len(inds_arr)),dtype = float)
+        for traj_ind in range(len(traj)):
+            f_vals[traj_ind,:,0] = copy.deepcopy(np.sum(traj[traj_ind],axis=1))   
                 
     elif f_type == "exp_linear":
         f_vals = np.zeros((len(traj),len(traj[0]),1),dtype = float)
