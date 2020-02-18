@@ -23,7 +23,11 @@
 %\usepackage{showlabels}
 
 \def\PE{\mathsf{E}}
+\def\PVar{\mathsf{Var}}
 \newcommandx{\CPE}[3][1=]{{\mathsf E}_{#1}\left[\left. #2 \, \right| #3 \right]}
+\newcommand{\ps}[2]{\langle #1, #2 \rangle}
+\def\nset{\mathbb{N}}
+\def\rset{\mathbb{R}}
 \usepackage[textsize=footnotesize]{todonotes} % pour voir les commentaires
 
 \newcommand{\eric}[1]{\todo[color=purple!10, author=Eric]{#1}}
@@ -53,6 +57,7 @@
 \newcommand{\jac}[1]{\operatorname{J} _{#1}}
 
 %added command for indicator - SS
+\newcommand{\indi}[1]{\mathbbm{1}_{#1}}
 \newcommand{\indiacc}[1]{\mathbbm{1}_{\{#1\}}}
 
 \newcommand*{\argmin}{\operatornamewithlimits{arg\,min}}
@@ -62,7 +67,9 @@
 \newcommand*{\ol}{\overline}
 
 \newcommand{\tcr}[1]{\textcolor{red}{#1}}
-
+\newcommand{\tvnorm}[1]{\| #1 \|_{\operatorname{TV}}}
+\def\kerULA{\operatorname{Q}}
+\def\eqsp{\,}
 \begin{document}
 
 \begin{frontmatter}
@@ -251,7 +258,7 @@ process and let \(L\) denote its infinitesimal generator defined by
 \begin{equation*}
 Lg=b^\top \nabla g+\frac{1}{2}\operatorname{Tr}(\sigma^\top D^2g\sigma)
 \end{equation*}
-\eric{do we need a trace here ?}
+\eric{do we need a trace here ? I think also that $D^2$ is not defined }
 for any \(g\in C^2(\mathbb{R}^d).\)
 If there exists a continuously twice differentiable Lyapunov function \(V:\) \(\mathbb{R}^d\to \mathbb{R}_{+}\) such that
 \begin{eqnarray*}
@@ -417,13 +424,13 @@ where
 \[
 A_{s,k}(x)=\frac{1}{s}\sum_{r=0}^{s}\bar a_{r,k}(x).
 \]
-Since \(X_{l-1}\) is independent of \(\xi_{l}\) and \(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq l,\)  the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
+Since \(X_{l-1}\) is independent of \(\xi_{l}\) and \tcr{\(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq 1,\)} \eric{I do not understand this}  the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
 The representation \eqref{eq:coeff_mart} suggests that the variance of  the  variance-reduced estimator
 \begin{equation}
 \label{eq:29032018a3}
 \pi_{K,n}^N(f)=\pi_n^N(f)-M_{K,n}^N(f)
 \end{equation}
-should be small for \(K\) large enough. Indeed, due to orthonormality  we have
+should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_k'(\xi_l)]=0$ if $k \ne k'$, we obtain
 \[
 \mathsf{Var}[\pi_{K,n}^N(f)]\leq\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\mathsf{E}[A^2_{n-l,k}(X_{N+l-1})]
 \]
@@ -432,7 +439,7 @@ In the next section   we provide a detailed   analysis of  $\mathsf{Var}[\pi_{K,
 \section{Analysis of variance reduced ULA}
 \label{sec:ula_analysis}
 In this section we perform the convergence analysis of the ULA algorithm. For the sake of clarity and notational simplicity we restrict our attention to the constant time step, that is, we take $\gamma=\gamma_1=\gamma_2=\ldots.$
-We shall use the notations $\mathbb N=\{1,2,\ldots\}$ and $\mathbb N_0=\mathbb N\cup\{0\}$.
+\tcr{We shall use the notations $\nset=\{1,2,\ldots\}$ and $\nset_0=\mathbb N\cup\{0\}$.} \eric{these notations are used before; it is best to put all the notations in a short paragraph just after the introduction}
 By $H_k$, $k\in\mathbb N_0$,
 we denote the normalized Hermite polynomial on $\mathbb R$, that is,
 $$
@@ -458,30 +465,25 @@ For an estimator $\rho(f)\in\{\pi_n^N(f),\pi_{K,n}^N(f)\}$
 of $\pi(f)$ (see \eqref{eq:29032018a2} and \eqref{eq:29032018a3}), we shall be interested in the Mean Squared Error (MSE),
 which can be decomposed as the sum of the squared  bias
 and the  variance:
-\begin{eqnarray}\label{eq:29032018a4}
-\mathrm{MSE}\left[\rho(f)\right]
-&=&\mathsf{E}\left[(\rho(f)-\pi(f))^2\right]
-\\
-\nonumber
-&=&\left(\mathsf{E}[\rho(f)]-\pi(f)\right)^2
-+\mathsf{Var}[\rho(f)].
-\end{eqnarray}
-Our analysis will be done under the following two assumptions.
-
+\begin{equation}
+\label{eq:29032018a4}
+\mathrm{MSE}\left[\rho(f)\right] = \PE\left[\left\{\rho(f)-\pi(f)\right\}^2\right]
+=\left\{\PE[\rho(f)]-\pi(f)\right\}^2 +\PVar[\rho(f)].
+\end{equation}
+Our analysis is carried out under the following two assumptions:
 \begin{description}
-\item[(H1)][\textbf{Lipschitz continuity}] Assume that $\nabla U$ is Lipschitz, that is, there exists $L_U\geq 0$ such that
+\item[(H1)][\textbf{Lipschitz continuity}] The potential $U$ is differentiable and $\nabla U$ is Lipschitz, that is, there exists $L_U < \infty$ such that
 \begin{eqnarray*}
-|\nabla U(x)-\nabla U(y)|\leq L_U|x-y|, \quad x,y\in \mathbb{R}^d.
+|\nabla U(x)-\nabla U(y)|\leq L_U|x-y|, \quad x,y\in \rset^d.
 \end{eqnarray*}
 \item[(H2)][\textbf{Convexity outside a ball}] There exist $K_U>0,$ $M_U>0$ and $m_U>0$ such that for any $x\not\in B_{K_U}(0)$  it holds
-\begin{eqnarray*}
-\langle D^2U(x),x\rangle \geq \frac{m_U}{2}\|x\|^2.
-\end{eqnarray*}
+\begin{equation*}
+\ps{D^2U(x)}{x} \geq (m_U/2)\|x\|^2.
+\end{equation*}
 \end{description}
 First we analyse the biases of the estimators
 $\pi_n^N(f)$ and $\pi_{K,n}^N(f).$
-\subsection{Squared bias}
-Due to the martingale transform structure
+\paragraph{Squared bias:} Due to the martingale transform structure
 of $M_{K,n}^N(f)$,
 we have
 \[
@@ -491,88 +493,95 @@ Hence both estimators
 $\pi_n^N(f)$ and $\pi_{K,n}^N(f)$ have the same conditional bias.
 Notice that this remains true also when we substitute
 the coefficients $a_{p,l,\mathbf{k}}$ in~\eqref{eq:29032018a5}
-with some independent approximations $\widehat a_{p,l,\mathbf{k}}.$ For a bounded Borel function~$f$,
+with some independent approximations $\widehat a_{p,l,\mathbf{k}}.$ 
+
+Denote by $\pi($ denotes the probability measure on $\mathbb R^d$
+with density $\pi$ of~\eqref{eq:stationary_distr};
+for $\gamma>0$, define the Markov kernel $Q_\gamma$ associated to one-step of the ULA algorithm by
+\[
+\kerULA_{\gamma}(x,A)=\int_{A} \frac{1}{(4 \pi \gamma)^{d/2}} \text{ exp} \left\{ -\frac{1}{4\gamma} \left\| y - x + \gamma \mu(x)\right\|^2\right\} \rmd y.
+\]
+\eric{what is the notation convention here; I do not like much $\mathcal{Q}$ but $Q$ is already define and it is perhaps not a great idea to supersede the previous notation}
+For a bounded Borel function~$f$,
 we can estimate the conditional bias
-similarly to the beginning of ~\cite[Section~4]{durmus:moulines:2017}:
-\begin{align}
-\left(\mathsf{E}[\pi_{K,n}^N(f)]-\pi(f)\right)^2
-&=\left(\mathsf{E}[\pi_{n}^N(f)]-\pi(f)\right)^2
-\label{eq:06042018a2}\\
-&\le
+similarly to~\cite[Section~4]{durmus:moulines:2017}:
+\begin{equation}
+\label{eq:06042018a2}
+\left\{\mathsf{E}[\pi_{K,n}^N(f)]-\pi(f)\right\}^2
+=\left(\mathsf{E}[\pi_{n}^N(f)]-\pi(f)\right)^2
+\le
 \frac{\mathrm{osc}(f)^2}{n}\sum_{p=N+1}^{N+n}
-\|\delta_x Q_\gamma^{p}-\pi(\cdot)\|_{TV}^2,
-\notag
-\end{align}
+\tvnorm{\delta_x \kerULA_\gamma^{p}-\pi(\cdot)}^2,
+\end{equation}
 where
 $\mathrm{osc}(f):=\sup_{x\in\mathbb R^d}f(x)-\inf_{x\in\mathbb R^d}f(x)$,
-$\|\mu-\nu\|_{\TV}$ denotes the total variation distance
+$\tvnorm{\mu-\nu}$ denotes the total variation distance
 between probability measures $\mu$ and $\nu$, that is,
-$$
-\|\mu-\nu\|_{TV}=\sup_{A\in\mathcal B(\mathbb R^d)}
-|\mu(A)-\nu(A)|,
-$$
-$\pi(\cdot)$ denotes the probability measure on $\mathbb R^d$
-with density $\pi$ of~\eqref{eq:stationary_distr};
-for $\gamma>0$, the Markov kernel $Q_\gamma$
-is defined by
-$$
-\mathcal{Q}_\gamma(x,A)=\int_{A} \frac{1}{(4 \pi \gamma)^{d/2}} \text{ exp} \left\{ -\frac{1}{4\gamma} \left\| y - x + \gamma \mu(x)\right\|^2\right\}dy.
-$$
+\[
+\tvnorm{\mu-\nu}=\sup_{A\in\mathcal B(\mathbb R^d)}
+|\mu(A)-\nu(A)| \eqsp.
+\]
 Different specific upper bounds for the squared bias
 can be deduced from~\eqref{eq:06042018a2}
 using results of Section~3 in~\cite{durmus:moulines:2017}
-on bounds in the total variation distance. It is known  that under assumptions {\bf (H1)} and {\bf (H2)}  the corresponding Markov chain has a unique stationary distribution $\pi_\gamma$, which is different from $\pi$. Moreover, as shown in Proposition (Appendix) \begin{eqnarray}
+on bounds in the total variation distance. It is known  that under assumptions {\bf (H1)} and {\bf (H2)},   the corresponding Markov chain has a unique stationary distribution $\pi_\gamma$, which is different from $\pi$. Moreover, as shown in Proposition, \tcr{(Appendix)}
+\eric{put a precise reference here} 
+ \begin{equation}
 \label{eq:bias}
-\|\delta_x\mathcal{Q}_{\gamma}^{n}-\pi_\gamma\|_{TV} \leq C_1\rho^{\gamma n}\left(V(x) + \pi_\gamma(V)\right), \quad \|\pi-\pi_\gamma\|_{TV} \leq C_2 \sqrt{\gamma}
-\end{eqnarray}
+\tvnorm{\delta_x\kerULA_{\gamma}^{n}-\pi_\gamma} \leq C_1\rho^{\gamma n}\left(V(x) + \pi_\gamma(V)\right), \quad \tvnorm{\pi-\pi_\gamma} \leq C_2 \sqrt{\gamma}
+\end{equation}
 for  $V(x) = 1 + \|x\|^2,$ some $\rho\in (0,1)$ and  constants $C_1,$ $C_2>0$ independent of $\gamma$  and $n.$
-\subsection{Variance}
-An upper bound for the variance of the classical estimator~\eqref{eq:29032018a2}
+\paragraph{Variance:} An upper bound for the variance of the classical estimator~\eqref{eq:29032018a2}
 under {\bf (H1)} and {\bf (H2)} is derived in Section.  In particular, for any bounded function $f,$
-\begin{eqnarray}
+\begin{equation}
 \label{eq:var-mc}
-\mathsf{Var}[\pi_n^N(f)]\lesssim \frac{1}{n\gamma},
-\end{eqnarray}
+\PVar[\pi_n^N(f)]\lesssim (n\gamma)^{-1} \eqsp,
+\end{equation}
 where $\lesssim$ stands for inequality up to a constant depending on constants $L_U,$ $m_U,$  $M_U$ and $\|f\|_\infty.$
 One of the main results of this paper is the following  upper bound for the variance of $\pi_{K,n}^{N}(f).$
+\erici{the notation $\partial^{\mathbf{k}}$ should be defined here}
 \begin{thm}\label{th:mr}
 Assume {\bf (H1)} and {\bf (H2)}.
 Suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K\geq 2$ times continuously differentiable
 and it holds
-\begin{eqnarray}
+\begin{equation}
 \label{eq:smooth-mu}
-|\partial^{\mathbf{k}} f(x)|\le  B_f, \quad |\partial^{\mathbf{k}} \mu (x)|\leq B_\mu, \quad
+|\partial^{\mathbf{k}} f(x)|\le  B_f, \quad |\partial^{\mathbf{k}} U (x)|\leq B_\mu, \quad
 x\in\mathbb R^d
-\end{eqnarray}
+\end{equation}
+\eric{I have replaced $\mu$ by $U$; in this section we use mostly $U$ and not $\mu$; we could use $\mu$ but in such case it would be better to recall that $\mu= \nabla U/2$}
+\eric{Is it required to assume that the gradient is bounded ? It contradicts assumption (H2) which assumes a quadratic growth at infinity - coercivity of the operator ?}
 for all \(\mathbf{k}\) with \(0<\|\mathbf{k}\|\leq  K.\)  Then it holds
 \begin{eqnarray}
 \label{eq:var-bound}
-\mathsf{Var}\left[\pi_{K,n}^{N}(f)\right]\lesssim \frac{\gamma^{K-2}}{n},
+\PVar\left(\pi_{K,n}^{N}(f)\right)\lesssim n^{-1} \gamma^{K-2} \eqsp,
 \end{eqnarray}
-where \(\lesssim\) stands for inequality up to a constant not depending  on $\gamma,$ \(n\) and \(N.\)
+where \tcr{\(\lesssim\) stands for inequality up to a constant not depending  on $\gamma,$ \(n\) and \(N.\)}
+\eric{this is defined less precisely just above}
 \end{thm}
 Let us sketch the main steps of the proof. First using integration by parts we prove that
 \begin{eqnarray}
 \label{eq:Ask-part}
 A_{s,\mathbf{k}}(x)=\gamma^{|\mathbf{k}'|/2}\frac{\sqrt{(\mathbf{k}-\mathbf{k}')!}}{\sqrt{\mathbf{k}!}}\mathsf{E}\left[ \partial_{Z_1}^{\mathbf{k}'} F(x,Z_1,\ldots,Z_s) \mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_{1})\right]
 \end{eqnarray}
-where $F_s(X_0,Z_1,\ldots,Z_s)=\frac{1}{s}\sum_{r=0}^s f(X_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
+where $F_s(X_0,Z_1,\ldots,Z_s)=s^{-1}\sum_{r=0}^s f(X_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
 stands for a weak partial derivative of the functional $F_s$ that also can be viewed as discretised version of Malliavin derivative. From \eqref{eq:Ask-part}, we derive
 \begin{eqnarray*}
 \sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1} A^2_{s,\mathbf{k}}(x)\leq \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
 \left(\frac{\gamma}{2}\right)^{|I|K}
-\mathsf{Var}_x\left(\frac{1}{s}\sum_{p=1}^{s}\partial_{y_{1}}^{\mathbf{K}_I}f\left(X_{p}\right)
+\PVar_x\left( s^{-1} \sum\nolimits_{p=1}^{s}\partial_{y_{1}}^{\mathbf{K}_I}f\left(X_{p}\right)
 \right),
 \end{eqnarray*}
 where the sum runs over all nonempty subsets $I$ of the set $\{1,\ldots,d\}$ and
 \[
-\mathbf{\mathbf{K}}_{I}=(K1_{\{1\in I\}},\ldots,K1_{\{d\in I\}}).
+\mathbf{\mathbf{K}}_{I}=K(\indi{I}(1),\ldots, \indi{I}(d)).
 \]
  Finally we show via  the Poincare inequality that under smoothness assumption \eqref{eq:smooth-mu} it holds
-\begin{eqnarray*}
-\mathsf{Var}_x\left(\frac{1}{s}\sum_{p=1}^{s}\partial_{y_{1}}^{\mathbf{K}_I}f\left(X_{p}\right)
+ \eric{Since we do note state was $W_s$ is, it is a bit difficult to guess why we are using a Poincare inequality there}
+\begin{equation*}
+\PVar_x\left(s^{-1} \sum\nolimits_{p=1}^{s}\partial_{y_{1}}^{\mathbf{K}_I}f\left(X_{p}\right)
 \right)\leq W_s(x)
-\end{eqnarray*}
+\end{equation*}
 for all $x$ and some family of functions $(W_s)_{s\geq 1}$ such that  the sum $\sum_{s=1}^n \mathsf{E}[W_s(X_{N+n-s-1})]$ is bounded uniformly in $n\in \mathbb{N}.$
 \section{Proofs}
 \label{sec:proofs}
