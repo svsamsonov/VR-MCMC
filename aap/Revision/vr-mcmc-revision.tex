@@ -171,7 +171,7 @@ Fix a sequence of positive time steps \((\gamma_p)_{p\geq 1}.\) Given a Borel fu
 consider a non-homogeneous
 discrete-time Markov chain $(X_{p})_{p\geq0}$ defined by
 \begin{equation}\label{eq:chain}
-X_{p+1}=X_{p}-\gamma_{p+1}\mu(X_{p})+\sqrt{\gamma_{p+1}}Z_{p+1},\end{equation}
+X_{p+1}=X_{p}-\gamma_{p+1}\mu(X_{p})+\sqrt{2\gamma_{p+1}}Z_{p+1},\end{equation}
 where $\left(Z_{p}\right)_{p\geq1}$ is an i.i.d.\ sequence of $d$-dimensional
 standard Gaussian random vectors. If
 ${\mu=\frac{\nabla U}{2}}$
@@ -233,7 +233,7 @@ Y_{p}&=X_p-\gamma_{p+1}\mu(X_p)+\sqrt{\gamma_{p+1}}Z_{p+1},
 \end{align*}
 where \((U_{p})_{p\geq 1}\) is an i.i.d. sequence of uniformly distributed on \([0,1]\) random variables independent of \((Z_p)_{p\geq 1}.\) Thus we recover \eqref{eq:chain_gen} with  \(\xi_p=(U_p,Z_p)\in \mathbb{R}^{d+1}\) and
 \begin{eqnarray*}
-\Phi_p(x,(u,z)^\top)=x+\mathbbm{1}\bigl(u\leq \alpha(x,x-\gamma_{p}\mu(x)+\sqrt{\gamma_{p}}z)\bigr)(-\gamma_{p}\mu(x)+\sqrt{\gamma_{p}}z).
+\Phi_p(x,(u,z)^\top)=x+\mathbbm{1}\bigl(u\leq \alpha(x,x-\gamma_{p}\mu(x)+\sqrt{2\gamma_{p}}z)\bigr)(-\gamma_{p}\mu(x)+\sqrt{2\gamma_{p}}z).
 \end{eqnarray*}
 \end{example}
 \begin{example}
