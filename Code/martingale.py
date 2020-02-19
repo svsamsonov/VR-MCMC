@@ -109,7 +109,8 @@ def test_traj(r_seed,max_deg):
             a_cur = np.zeros(...,dtype=float)
             for m in range(len(coefs_poly[0])):
                 poly_vspom = np.zeros((max_deg_regr+1)*d,dtype=float)
-                poly_indices = split_index(k,
+                poly_indices = split_index(m,d,max_deg_regr)
+                print(poly_indices)
                 for u in range(m+1):
                     deg = u % d
                     poly_vspom[u] = ((x-gamma*Cur_pot.gradpotential(x))**(m-deg))*((np.sqrt(2*gamma))**deg)*sp.special.binom(m,deg)
