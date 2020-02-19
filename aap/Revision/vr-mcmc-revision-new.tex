@@ -720,19 +720,24 @@ Applying the estimate
 \frac{\mathbf{m}_{I}!}{\left(\mathbf{m}_{I}+\mathbf{K}_{I}\right)!}\leq (1/2)^{|I| K},
 \end{eqnarray*}
 we get
-\begin{eqnarray*}
-\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}A^2_{s,\mathbf{k}}(x)&\leq &
+\begin{align}
+\label{eq:sumA}
+\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}A^2_{s,\mathbf{k}}(x)
+&\leq 
 \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset} (\gamma/2)^{|I|K}
 \\
-&& \times\sum_{\mathbf{m}_{I}\in\mathbb{N}_{I}^{d}} \sum_{\mathbf{m}_{I^c}\in \mathbb{N}^d_{0,I^c},\,\|\mathbf{m}_{I^c}\|\leq K} Q(\mathbf{\mathbf{K}}_{I},\mathbf{m}_{I}+\mathbf{m}_{I^c})
+\nonumber
+& \times\sum_{\mathbf{m}_{I}\in\mathbb{N}_{I}^{d}} \sum_{\mathbf{m}_{I^c}\in \mathbb{N}^d_{0,I^c},\,\|\mathbf{m}_{I^c}\|\leq K} Q(\mathbf{\mathbf{K}}_{I},\mathbf{m}_{I}+\mathbf{m}_{I^c})
 \\
-&\leq &
+\nonumber
+&\leq 
 \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset} (\gamma/2)^{|I|K} \sum_{\mathbf{m}\in\mathbb{N}_0^{d}} Q(\mathbf{\mathbf{K}}_{I},\mathbf{m}).
-\end{eqnarray*}
-Now using the consequence
-$\sum_{\mathbf{m}\in \mathbb{N}^d_0} \langle\xi,\mathbf{H}_\mathbf{m}(Z_1)\rangle^2\le\langle\xi,\xi\rangle$
-of the Parseval's identity,
-we derive
+\end{align}
+The Parseval identity implies that for any function $\varphi: \rset^d \to \rset$ satisfying $\PE[\varphi^2(Z_1)] < \infty$,
+\[
+\sum_{\mathbf{m}\in \nset^d_0} \{\PE[\varphi(Z_1) \mathbf{H}_\mathbf{m}(Z_1)] \}^2 \le \PE[\{\varphi(Z_1)\}^2]
+\]
+Using this identity in \eqref{eq:sumA} implies 
 \begin{eqnarray*}
 \sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}A^2_{s,\mathbf{k}}(x)
 &\leq & \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
@@ -747,7 +752,9 @@ Next we show that under the conditions  of Theorem~\ref{th:mr}
 \end{eqnarray*}
 for all $x$ and some family of functions $(W_s)_{s\geq 1}$ such that  the sum $\sum_{s=1}^n \mathsf{E}[W_s(X_{N+n-s-1})]$ is bounded uniformly in $n\in \mathbb{N}.$
 
- For the sake of simplicity we present the proof only in one-dimensional case. First we need to prove several auxiliary results.
+To keep the notational burden at a reasonable level, we present the proof only in one-dimensional case. 
+Multidimensional extension is straightforward but requires involved notations. 
+First we need to prove several auxiliary results.
 \begin{lem}\label{lem:06062018a1}
 Let $(x_p)_{p\in\mathbb N_0}$
 and $(\epsilon_p)_{p\in\mathbb N}$
