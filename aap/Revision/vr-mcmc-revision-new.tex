@@ -400,9 +400,10 @@ Q_{p,l}(x)=\mathsf{E}\left[\left.Q_{p,l+1}(X_{l+1})\right|X_{l}=x\right].
 %=\mathsf{E}[Q_{p,l+1}(\Phi_{l+1}(x,\xi))]
 \end{eqnarray}
 In the case $\Phi_l=\Phi$ for all $l\geq 1,$ we have
-\begin{eqnarray*}
+\begin{equation}
+\label{eq:definition-bar-a}
 \bar a_{r,k}(x)=\mathsf{E}\left[\phi_k\left(\xi\right)Q_{r}\left(\Phi(x,\xi)\right)\right]
-\end{eqnarray*}
+\end{equation}
 with  \(Q_{r}(x)=\mathsf{E}\left[\left.f(X_{r})\right|X_{0}=x\right],\) $r\in \mathbb{N}.$
 \end{prop}
 \par
@@ -421,19 +422,21 @@ M_{K,n}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{k=1}^{K}\sum_{l=1}^{p} 
 \label{eq:29032018a5}
 \end{eqnarray}
 where
-\[
-A_{s,k}(x)=\frac{1}{s}\sum_{r=0}^{s}\bar a_{r,k}(x).
-\]
+\begin{equation}
+\label{eq:definition-A-s,k}
+A_{s,k}(x)=\frac{1}{s}\sum_{r=1}^{s}\bar a_{r,k}(x).
+\end{equation}
 Since \(X_{l-1}\) is independent of \(\xi_{l}\) and \tcr{\(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq 1,\)} \eric{I do not understand this}  the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
 The representation \eqref{eq:coeff_mart} suggests that the variance of  the  variance-reduced estimator
 \begin{equation}
 \label{eq:29032018a3}
 \pi_{K,n}^N(f)=\pi_n^N(f)-M_{K,n}^N(f)
 \end{equation}
-should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_k'(\xi_l)]=0$ if $k \ne k'$, we obtain
-\[
-\mathsf{Var}[\pi_{K,n}^N(f)]\leq\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\mathsf{E}[A^2_{n-l,k}(X_{N+l-1})]
-\]
+should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_{k'}(\xi_l)]=0$ if $k \ne k'$, we obtain
+\begin{equation}
+\label{eq:expression-variance}
+\PVar[\pi_{K,n}^N(f)]\leq\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X_{N+l-1})]
+\end{equation}
 and $\mathsf{Var}[\pi_{K,n}^N(f)]$ is small provided that the coefficients $A_{s,k}$ decay fast enough as $k\to \infty.$
 In the next section   we provide a detailed   analysis of  $\mathsf{Var}[\pi_{K,n}^N(f)]$  for the  ULA  algorithm (see Example~\ref{exam:langevin-algorithm}).
 \section{Analysis of variance reduced ULA}
@@ -553,14 +556,14 @@ with respect to the components of~$y_j$:
 :=\partial^{k_d}_{y_j^d}
 \ldots
 \partial^{k_1}_{y_j^1}
-h(y_1,\ldots,z_m),
+h(y_1,\ldots,y_m),
 \quad y_j=(y_j^1,\ldots,y_j^d).
 \]
 In the particular case $m=1$ we can drop
 the subscript $y_1$ in that notation.
 \begin{thm}\label{th:mr}
 Assume {\bf (H1)} and {\bf (H2)}.
-Suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K\geq 2$ times continuously differentiable
+Suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K \times d \geq 2$ times continuously differentiable
 and for all $x\in\mathbb R^d$ and  \(\mathbf{k}\) satisfying \(0<\|\mathbf{k}\|\leq  K,\)
 \begin{equation}
 \label{eq:smooth-mu}
@@ -629,16 +632,17 @@ Finally, for a multi-index $\mathbf{k}=(k_i)\in\mathbb N_0^d$, we use the notati
 \(\mathbf{k} ! :=k_1!\cdot\ldots\cdot k_d !\)
 
 \begin{lem}\label{eq:a_repr}
-Fix some \(\mathbf{k},\mathbf{k}'\in \mathbb{N}_0^d\) with \(\mathbf{k}'\le \mathbf{k}\) componentwise.  Then the following representation holds
+For any \(\mathbf{k},\mathbf{k}'\in \mathbb{N}_0^d\) such that \(\mathbf{k}'\le \mathbf{k}\) componentwise and $\| \mathbf{k}' \| \leq K$, the following representation holds
 \[
 \bar a_{p,\mathbf{k}}(x)=\left(\gamma^{|\mathbf{k}'|}\frac{(\mathbf{k}-\mathbf{k}') !}{\mathbf{k}!}\right)^{1/2}
 \PE\left[
-\partial_{1}^{\mathbf{k}'}f(X^x_p)\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_l)\right] \eqsp.
+\partial_{1}^{\mathbf{k}'}f(X^x_p)\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_1)\right] \eqsp,
 \]
+where $\bar a_{p,\mathbf{k}}$ is defined in \eqref{eq:definition-bar-a}.
 \end{lem}
 
 \begin{proof}
-Let $\boldsymbol{\varphi}(z)=\frac{1}{(2\pi)^{d/2}} \exp\{-|z|^2/2\}$,
+Let $\boldsymbol{\varphi}(z)=(2\pi)^{-d/2} \exp(-|z|^2/2)$,
 $z\in\mathbb R^d$, denote the density of a $d$-dimensional
 standard Gaussian random vector.
 We first remark that, for the normalized Hermite polynomial $\mathbf H_{\mathbf k}$ on $\mathbb R^d$,
@@ -655,21 +659,21 @@ This enables to use the integration by parts in vector form as follows
 \int_{\mathbb R^d}\ldots\int_{\mathbb R^d}
 f\circ G_{p}(x,\sqrt{\gamma}z_{1},\ldots,\sqrt{\gamma}z_{p})
 \mathbf{H}_{\mathbf{k}}(z_{1})\boldsymbol{\varphi}(z_1)
-\prod_{j=2}^p\boldsymbol{\varphi}(z_j)\, dz_{1}\ldots dz_{p}
+\prod_{j=2}^p\boldsymbol{\varphi}(z_j)\, \rmd z_{1}\ldots \rmd z_{p}
 \\
 & =
 \frac{1}{\sqrt{\mathbf k!}}
 \int_{\mathbb R^d}\ldots\int_{\mathbb R^d}
 f\circ G_{p}(x,\sqrt{\gamma}z_{1},\ldots,\sqrt{\gamma}z_{p})
 (-1)^{|\mathbf{k}|}\partial^{\mathbf{k}} \boldsymbol{\varphi}(z_1)
-\prod_{j=2}^p\boldsymbol{\varphi}(z_j)\, dz_{1}\ldots dz_{p}
+\prod_{j=2}^p\boldsymbol{\varphi}(z_j)\, \rmd z_{1}\ldots  \rmd z_{p}
 \\
 & =
 \frac{\gamma^{|\mathbf k'|/2}}{\sqrt{\mathbf k!}}
 \int_{\mathbb R^d}\ldots\int_{\mathbb R^d}
 \partial_{1}^{\mathbf k'}[f\circ G_{p}](x,\sqrt{\gamma}z_{1},\ldots,\sqrt{\gamma}z_{p})
 (-1)^{|\mathbf{k}-\mathbf k'|}\partial^{\mathbf{k}-\mathbf k'} \boldsymbol{\varphi}(z_1)
-\prod_{j=2}^p\boldsymbol{\varphi}(z_j)\, dz_{1}\ldots dz_{p}
+\prod_{j=2}^p\boldsymbol{\varphi}(z_j)\, \rmd z_{1}\ldots \rmd z_{p}
 \\
  & =\gamma^{|\mathbf{k}'|/2}\frac{\sqrt{(\mathbf{k}-\mathbf{k}')!}}{\sqrt{\mathbf{k}!}}\mathsf{E}\left[\partial_{y_{1}}^{\mathbf{k}'}[f\circ G_{p}](x,\sqrt{\gamma}Z_{1},\ldots,\sqrt{\gamma}Z_{p})\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_{1})\right].
 \end{align*}
@@ -678,35 +682,33 @@ The last expression yields the result.
 
 For multi-indices $\mathbf k,\mathbf k'\in\mathbb N_0^d$
 with $\mathbf k'\le\mathbf k$ componentwise
-and $\mathbf k'\ne\mathbf k$,
-we get applying first Lemma~\ref{eq:a_repr}
+and $\mathbf k'\ne\mathbf k$, $\| k' \| \leq K$, 
+we get applying first Lemma~\ref{eq:a_repr},
 \begin{equation*}
 A_{s,\mathbf{k}}(x)
 =\left(\gamma^{|\mathbf{k}'|}\frac{(\mathbf{k}-\mathbf{k}')!}{\mathbf{k}!}\right)^{1/2}
 \,
-\mathsf{E}_x\left[
-\frac{1}{s}\sum_{r=1}^{s}(\partial_{1}^{\mathbf{k}'} f(X_r)-\mathsf{E}_x\partial_{1}^{\mathbf{k}'}f(X_r))\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_1)\right]
+\PE\left[
+s^{-1} \sum\nolimits_{r=1}^{s}\{\partial_{1}^{\mathbf{k}'} f(X^x_r)-\PE[\partial_{1}^{\mathbf{k}'}f(X^x_r)]\}\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_1)\right]
 \end{equation*}
-
+where $A_{s,\mathbf{k}}$ is defined in \eqref{eq:definition-A-s,k}.
 Assume that $\mu$ and $f$ are $K\times d$ times continuously differentiable.
 Then, given $\mathbf k\in\mathbb N_0^d$,
 by taking $\mathbf k'= \mathbf k'(\mathbf k)
-=(K1_{\{k_1>K\}},\ldots,K1_{\{k_d>K\}})$, we get
-\begin{align}
+=K(\indiacc{k_1>K}\,\ldots, \indiacc{k_d>K})$, we get
+\begin{multline}
 \label{eq:sum_abar}
-\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}A^2_{s,\mathbf{k}}(x) & =\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}\left(\gamma^{|\mathbf{k}'|}\frac{(\mathbf{k}-\mathbf{k}')!}{\mathbf{k}!}\right)Q_s(\mathbf{k}',\mathbf{k}-\mathbf{k}')\\
-\nonumber
- & =\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}\gamma^{|I|K}\sum_{\mathbf{m}_{I}\in\mathbb{N}_{I}^{d}}\frac{\mathbf{m}_{I}!}{\left(\mathbf{m}_{I}+\mathbf{K}_{I}\right)!}
- \\
- \nonumber
- & \hspace{1em}\times\sum_{\mathbf{m}_{I^c}\in \mathbb{N}^d_{0,I^c},\,\|\mathbf{m}_{I^c}\|\leq K}Q_s(\mathbf{\mathbf{K}}_{I},\mathbf{m}_{I}+\mathbf{m}_{I^c}),
-\end{align}
+\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}A^2_{s,\mathbf{k}}(x)  
+=\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}\left(\gamma^{|\mathbf{k}'|}\frac{(\mathbf{k}-\mathbf{k}')!}{\mathbf{k}!}\right)Q_s(\mathbf{k}',\mathbf{k}-\mathbf{k}')\\
+= \left\{ \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}\gamma^{|I|K}\sum_{\mathbf{m}_{I}\in\mathbb{N}_{I}^{d}}\frac{\mathbf{m}_{I}!}{\left(\mathbf{m}_{I}+\mathbf{K}_{I}\right)!} \right\}
+\left\{ \sum_{\mathbf{m}_{I^c}\in \mathbb{N}^d_{0,I^c},\,\|\mathbf{m}_{I^c}\|\leq K}Q_s(\mathbf{\mathbf{K}}_{I},\mathbf{m}_{I}+\mathbf{m}_{I^c}) \right\},
+\end{multline}
 where for any two multi-indices \(\mathbf{r},\) \(\mathbf{q}\) from \(\mathbb{N}_0^d\)
-\begin{eqnarray*}
+\begin{equation*}
 Q_s(\mathbf{r},\mathbf{q})
 =
-\left(\mathsf{E}_x\left[\frac{1}{s}\sum_{p=1}^{s}\left(\partial_{y_{1}}^{\mathbf r}f\left(X_{p}\right)-\mathsf{E}_x\left[\partial_{y_{1}}^{\mathbf r}f\left(X_{p}\right)\right]\right)\mathbf{H}_{\mathbf{q}}(Z_{1})\right]\right)^{2}.
-\end{eqnarray*}
+\left\{\PE\left[\frac{1}{s}\sum_{p=1}^{s}\left\{\partial_{1}^{\mathbf r}f\left(X^x_{p}\right)-\PE\left[\partial_{1}^{\mathbf r}f\left(X^x_{p}\right)\right]\right\}\mathbf{H}_{\mathbf{q}}(Z_{1})\right]\right\}^{2}.
+\end{equation*}
 In \eqref{eq:sum_abar} the first sum runs over all nonempty subsets $I$ of the set $\{1,\ldots,d\}.$
 For any subset $I,$ $\mathbb{N}_{I}^{d}$ stands for a set
 of multi-indices $\mathbf{m}_{I}$ with elements $m_{i}=0,$ $i\not\in I,$
@@ -720,12 +722,12 @@ Applying the estimate
 we get
 \begin{eqnarray*}
 \sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}A^2_{s,\mathbf{k}}(x)&\leq &
-\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset} (\gamma_{l}/2)^{|I|K}
+\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset} (\gamma/2)^{|I|K}
 \\
 && \times\sum_{\mathbf{m}_{I}\in\mathbb{N}_{I}^{d}} \sum_{\mathbf{m}_{I^c}\in \mathbb{N}^d_{0,I^c},\,\|\mathbf{m}_{I^c}\|\leq K} Q(\mathbf{\mathbf{K}}_{I},\mathbf{m}_{I}+\mathbf{m}_{I^c})
 \\
 &\leq &
-\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset} (\gamma_{l}/2)^{|I|K} \sum_{\mathbf{m}\in\mathbb{N}_0^{d}} Q(\mathbf{\mathbf{K}}_{I},\mathbf{m}).
+\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset} (\gamma/2)^{|I|K} \sum_{\mathbf{m}\in\mathbb{N}_0^{d}} Q(\mathbf{\mathbf{K}}_{I},\mathbf{m}).
 \end{eqnarray*}
 Now using the consequence
 $\sum_{\mathbf{m}\in \mathbb{N}^d_0} \langle\xi,\mathbf{H}_\mathbf{m}(Z_1)\rangle^2\le\langle\xi,\xi\rangle$
@@ -734,13 +736,13 @@ we derive
 \begin{eqnarray*}
 \sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}A^2_{s,\mathbf{k}}(x)
 &\leq & \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
-\left(\frac{\gamma_{l}}{2}\right)^{|I|K}
-\mathsf{Var}_x\left(\frac{1}{s}\sum_{p=1}^{s}\partial_{1}^{\mathbf{K}_I}f\left(X_{p}\right)
+\left(\frac{\gamma}{2}\right)^{|I|K}
+\PVar\left(s^{-1}\sum\nolimits_{p=1}^{s}\partial_{1}^{\mathbf{K}_I}f\left(X^x_{p}\right)
 \right)
 \end{eqnarray*}
 Next we show that under the conditions  of Theorem~\ref{th:mr}
 \begin{eqnarray*}
-\mathsf{Var}_x\left(\frac{1}{s}\sum_{p=1}^{s}\partial_{1}^{\mathbf{K}_I}f\left(X_{p}\right)
+\PVar\left(s^{-1}\sum\nolimits_{p=1}^{s}\partial_{1}^{\mathbf{K}_I}f\left(X^x_{p}\right)
 \right)\leq W_s(x)
 \end{eqnarray*}
 for all $x$ and some family of functions $(W_s)_{s\geq 1}$ such that  the sum $\sum_{s=1}^n \mathsf{E}[W_s(X_{N+n-s-1})]$ is bounded uniformly in $n\in \mathbb{N}.$
