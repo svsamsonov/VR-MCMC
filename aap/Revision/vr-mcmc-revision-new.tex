@@ -649,22 +649,17 @@ is a one-dimensional polynomial (in \(x\)) of degree at most \(s\) with analytic
 \label{eq:Qcircr}
 \widehat{Q}_r = \argmin_{\psi \in \Psi} \sum_{s = 1}^{T} \sum_{l = N + 1}^{N+n-r} \left| f(X_{l+r}^{(s)}) - \psi(X_l^{(s)})\right|^2
 \end{eqnarray}
-for \(1 \leq r \leq n-1,\), $\Psi$ being the class of polynomials $\Psi = \{\psi(x) | \psi(x) = \sum_{\|\mathbf{s}\|\leq m} \alpha_{\mathbf{s}} x^{\mathbf{s}} \}$ and $\widehat{Q}_0(x) = f(x)$ by definition. Due to Lemma~\ref{a_decay},
+for \(1 \leq r \leq n-1,\) $\Psi$ being the class of polynomials $\Psi = \{\psi(x) | \psi(x) = \sum_{\|\mathbf{s}\|\leq m} \alpha_{\mathbf{s}} x^{\mathbf{s}} \}$ and $\widehat{Q}_0(x) = f(x)$ by definition. Due to Lemma~\ref{a_decay},
 \sergey{we need to put some lemma about the truncation point here, I will do it}
-it is enough to estimate $Q_{r}$ for $r < n_{\mathrm{trunc}}$ for some truncation level \(n_{\mathrm{trunc}}\) depending on \(d\) and \(\gamma.\) It allows us to use a smaller amount of training trajectories to approximate $Q_{r}$.
-
+it is enough to estimate $Q_{r}$ for $r < n_{\mathrm{trunc}}$ for some truncation level \(n_{\mathrm{trunc}}\) depending on \(d\) and \(\gamma.\) It allows us to use a smaller amount of training trajectories to approximate $Q_{r}(x)$.
 
 Finally  we construct a truncated version of the estimator from \ref{}:
 \[
-\widehat\pi_{K,n,n_{\mathrm{trunc}}}^N(f) = \widehat\pi_n^N(f) -  \widehat M_{K,n, n_{\mathrm{trunc}}}^{N}(f),
+\pi_{K,n,n_{\mathrm{trunc}}}^N(f) = \pi_n^N(f) -  \widehat M_{K,n, n_{\mathrm{trunc}}}^{N}(f),
 \]
 where
 \begin{eqnarray*}
-\widehat M_{K,n,n_{\mathrm{trunc}}}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{k=1}^{K}\sum_{l=N+1}^{p} \bar a_{p-l,k}(X_{l-1})\phi_k(\xi_{l})\right]
-\end{eqnarray*}
-and
-\begin{eqnarray*}
-\widehat a_{p-l,\mathbf{k}} (x) &=&\CPE{\mathbf{H}_\mathbf{k}(x) \widehat{Q}^\circ_{p-l}(x - \gamma_l \mu(x) + \sqrt{\gamma_l}\xi)}{\TrainSet \vee \mathcal{G}_N}.
+\widehat M_{K,n,n_{\mathrm{trunc}}}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{0 < \|\mathbf{k}\| < K}\sum_{l=N+1}^{p} \widehat a_{p-l,\mathbf{k}}(X_{l-1})\phi_k(\xi_{l})\mathbbm{1}\{ | p-l | < n_{\mathrm{trunc}}\right]
 \end{eqnarray*}
 
 \subsection{Gaussian mixtures}
