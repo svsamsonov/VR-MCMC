@@ -353,21 +353,19 @@ which means that
 \label{eq:parseval}
 \lim_{n \rightarrow \infty}\mathsf{E}[|f(X^y_{q,q+1}) - \mathsf{E} f(X^y_{q,q+1}) - \sum\limits_{k=1}^{n}\mathsf{E}[f(X^y_{q,q+1})\phi_{k}(\xi_{q+1})]\phi_k(\xi_{q+1})|^2] = 0
 \end{equation}
-Let us define sequence $\psi_{q+1,n}(y) = \mathsf{E}[|f(X^y_{q,q+1}) - \mathsf{E} f(X^y_{q,q+1})|^2] - \sum\limits_{k=1}^{n}\mathsf{E}^2[f(X^y_{q,q+1})\phi_k(\xi_{q+1})]$. Note that $\psi_{q+1,n}(y)$ coincides with the left side of \ref{eq:parseval}, and due to Parseval identity $\Psi_{q+1,n}(y) \rightarrow 0, n \rightarrow \infty$ for any $y \in \rset^d$. Note that $\psi_n(y) < \mathsf{E}[|f(X^y_{q,q+1}) - \mathsf{E} f(X^y_{q,q+1})|^2] \leq \frac{\|f\|^2_{\infty}}{4}$. Hence, by Lebesgue dominated convergence theorem, $\mathsf{E}\psi_n(X_q^x)^2 \rightarrow 0$ and since $\mathsf{E}[f(X^y_{q,q+1})\phi_{k}(\xi_{q+1})]$ is a version of conditional expectation $\mathsf{E}[f(X^x_{q+1}|X^x_q = y]$, it holds in \(L^2(\mathsf{P})\)
+Let us define sequence of functions
+\[
+\psi_{q+1,n}(y) = \mathsf{E}[|f(X^y_{q,q+1}) - \mathsf{E} f(X^y_{q,q+1})|^2] - \sum\limits_{k=1}^{n}\mathsf{E}^2[f(X^y_{q,q+1})\phi_k(\xi_{q+1})].
+\]
+which coincide with the left side of \ref{eq:parseval}. Due to Parseval identity $\Psi_{q+1,n}(y) \rightarrow 0, n \rightarrow \infty$ for any $y \in \rset^d$ and $\psi_n(y) < \mathsf{E}[|f(X^y_{q,q+1}) - \mathsf{E} f(X^y_{q,q+1})|^2] \leq \frac{\|f\|^2_{\infty}}{4}$. Hence, by Lebesgue dominated convergence theorem, $\mathsf{E}\psi^2_n(X_q^x) \rightarrow 0$ and since $\mathsf{E}[f(X^y_{q,q+1})]$ is a version of the conditional expectation $\mathsf{E}[f(X^x_{q+1}|X^x_q = y]$, it holds in \(L^2(\mathsf{P})\) that
 \begin{equation}
 \label{eq:1-step-decomp}
-f(X^x_{q+1}) = \mathsf{E}[f(X^x_{q+1})|\mathcal{G}_k] + \sum\limits_{k=1}^{\infty}a_{q+1,q+1,k}(X^x_{q})\phi_{k}(\xi_{q+1})
+f(X^x_{q+1}) = \mathsf{E}[f(X^x_{q+1})|X^x_{q+1}] + \sum\limits_{k=1}^{\infty}a_{q+1,q+1,k}(X^x_{q})\phi_{k}(\xi_{q+1})
 \end{equation}
 where
 \[
 a_{q+1,q+1,k}(y) = \mathsf{E}\left[f(X^y_{q,q+1})\phi_k\left(\xi_{q+1}\right)\right]
 \]
-
-
-
-
-
-
 %we get by
 %conditioning on $\mathcal{G}_{q}$,
 %\[
@@ -387,12 +385,11 @@ a_{q+1,q+1,k}(y) = \mathsf{E}\left[f(X^y_{q,q+1})\phi_k\left(\xi_{q+1}\right)\ri
 %\[
 %a_{q+1,q+1,k}(y) = \mathsf{E}\left[f(X^y_{q,q+1})\phi_k\left(\xi_{q+1}\right)\right]
 %\]
-
-We thus arrive at
-\begin{align}
-\label{berm:sig_X}
-f(X^x_{q+1})=\mathsf{E}\left[\left.f(X^x_{q+1})\right|X^x_{q}\right]+\sum_{k\geq1}a_{q+1,q+1,k}(X^x_{q})\phi_{k}(\xi_{q+1}),
-\end{align}
+%We thus arrive at
+%\begin{align}
+%\label{berm:sig_X}
+%f(X^x_{q+1})=\mathsf{E}\left[\left.f(X^x_{q+1})\right|X^x_{q}\right]+\sum_{k\geq1}a_{q+1,q+1,k}(X^x_{q})\phi_{k}(\xi_{q+1}),
+%\end{align}
 which is the required statement in the case $j=q$.
 Now assume $j<q$.
 The random variable
@@ -412,7 +409,7 @@ where for $y \in \rset^d$,
 \[
 a_{q+1,l,k}(y) = \mathsf{E}\left[f(X^y_{l-1,q+1})\phi_{k}(\xi_{l})\right]
 \]
-Formulas \eqref{berm:sig_X}
+Formulas \eqref{eq:1-step-decomp}
 and~\eqref{eq:28082017a1} conclude the induction step for $p = q+1$ and hence the proof.
 \end{proof}
 
