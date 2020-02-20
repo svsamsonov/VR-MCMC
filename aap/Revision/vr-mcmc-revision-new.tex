@@ -441,15 +441,11 @@ where
 \label{eq:definition-A-s,k}
 A_{s,k}(x)=\frac{1}{s}\sum_{r=1}^{s}\bar a_{r,k}(x).
 \end{equation}
-<<<<<<< .mine
-Since \(X_{l-1}\) is independent of \(\xi_{l}\) and \(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq 0,\)   the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
-
-
-=======
-Since \(X_{l-1}\) is independent of \(\xi_{l}\) and \tcr{\(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq 0\)}, we obtain 
-\[\mathsf{E}[A_{N+n-l,k}(X_{l-1})\phi_{k}\left(\xi_{l}\right)] = \mathsf{E}[A_{N+n-l,k}(X_{l-1})\mathsf{E}[\left.\phi_{k}\left(\xi_{l}\right)\right|\mathcal{G}_{l-1}]] = 0\]
-\eric{I do not understand this} and hence the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
->>>>>>> .theirs
+Since \(X_{l-1}\) is independent of \(\xi_{l}\) and \tcr{\(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq 0\)}, we obtain
+\[
+\PE[A_{N+n-l,k}(X_{l-1})\phi_{k}\left(\xi_{l}\right)] = \mathsf{E}[A_{N+n-l,k}(X_{l-1})\CPE{\phi_{k}\left(\xi_{l}\right)}{\mathcal{G}_{l-1}]} = 0
+\]
+and hence the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
 The representation \eqref{eq:coeff_mart} suggests that the variance of  the  variance-reduced estimator
 \begin{equation}
 \label{eq:29032018a3}
@@ -641,7 +637,7 @@ Then using the identity
 \[
 \xi^j = j! \sum_{r = 0}^{\lfloor j/2 \rfloor} \frac{1}{2^r  r! \sqrt{(j-2r)!}} H_{j-2r}(\xi),\quad \xi \in \mathbb{R},
 \]
-we obtain closed-form expression for the estimates $\widehat a_{r,k}(x)$ of functions $\bar a_{r,k}(x)$ from \ref{eq:definition-bar-a}. Namely, for all $x \in \mathbb{R}^d$, 
+we obtain closed-form expression for the estimates $\widehat a_{r,k}(x)$ of functions $\bar a_{r,k}(x)$ from \ref{eq:definition-bar-a}. Namely, for all $x \in \mathbb{R}^d$,
 \begin{eqnarray*}
 \widehat a_{r,\mathbf{k}} (x) &=&\CPE{\mathbf{H}_\mathbf{k}(x) \widehat{Q}_{r}(x - \gamma \mu(x) + \sqrt{\gamma}\xi)}{\TrainSet \vee \mathcal{G}_N}
 = \sum_{\|\mathbf{s}\|\leq m} \beta_{\mathbf{s}} \prod_{i=1}^d P_{i,k_i,s_i}(x),
