@@ -158,6 +158,25 @@ In this paper we focus on the  Langevin type algorithms which got much attention
 \par
 The paper is organized as follows.  In Section~\ref{sec:setup} we set up the problem and introduce some notations. Section~\ref{seq:mart_repr} contains a novel martingale representation and shows how this representation can be used for variance reduction. In Section~\ref{sec:ula_analysis} we analyze the performance of the proposed variance reduction algorithm in the case of Unadjusted Langevin Algorithm (ULA). Section~\ref{sec:coeff} studies the complexity of the variance reduced ULA. Finally, numerical examples are presented in Section~\ref{sec:num}.
 
+\paragraph{Notations. }\label{par:notations}
+We use the notations $\nset=\{1,2,\ldots\}$ and $\nset_0=\mathbb N\cup\{0\}$. We denote $\boldsymbol{\varphi}(z)=(2\pi)^{-d/2} \exp\{-|z|^2/2\}$, $z\in\mathbb R^d$ probability density function of the $d-$dimensional standard normal distribution. For $x \in \rset^d$ and $r>0$ let $B_r(x) = \{y \in \rset^d | \|y - x\| < r\}$ where $\|\cdot\|$ is a standard Euclidean norm. For the twice differentiable function $g: \rset^d \rightarrow \rset$ we denote by $D^2g$ its Hessian at point $x$. For $m\in\mathbb N$, a smooth function
+$h\colon\mathbb R^{d\times m}\to\mathbb R$
+with arguments being denoted
+$(y_1,\ldots,y_m)$, $y_i\in\mathbb R^d$, $i=1,\ldots,m$,
+a multi-index $\mathbf k=(k_i)\in\mathbb N_0^d$,
+and $j\in\{1,\ldots,m\}$,
+we use the notation $\partial^{\mathbf k}_{y_j} h$ for the multiple derivative of $h$
+with respect to the components of~$y_j$:
+\[
+\partial^{\mathbf k}_{j} h(y_1,\ldots,y_m)
+:=\partial^{k_d}_{y_j^d}
+\ldots
+\partial^{k_1}_{y_j^1}
+h(y_1,\ldots,y_m),
+\quad y_j=(y_j^1,\ldots,y_j^d).
+\]
+In the particular case $m=1$ we drop the subscript $y_1$ in that notation.
+
 \section{Setup}\label{sec:setup}
 Let  \(\mathcal{X}\) be a domain in \( \mathbb{R}^d.\)  Our aim is to numerically compute  expectations of the form
 \[
@@ -167,7 +186,7 @@ where \(f:\) \(\mathcal{X}\longrightarrow \mathbb{R}\) and \(\pi\) is a probabil
 If  the dimension of the space \(\mathcal{X}\) is large and \(\pi(f)\) can not be computed analytically, one can apply Monte Carlo methods. However, in many practical situations  direct sampling from \(\pi\) is impossible and this precludes the use of plain Monte Carlo methods in this case. One popular alternative to Monte Carlo  is Markov Chain Monte Carlo (MCMC), where one is looking for a discrete time  (possibly non-homogeneous) Markov chain   \((X_p)_{p\geq 0}\) such that \(\pi\) is its unique invariant measure. In this paper we study a class of MCMC algorithms with \((X_p)_{p\geq 0}\) satisfying the  the following recurrence relation:
 \begin{equation}
 \label{eq:chain_gen}
-X_{p}=\Phi_{p}(X_{p-1},\xi_{p}),\quad p=1,2,\ldots ,\quad X_{0}=x_0,
+X_{p}=\Phi_{p}(X_{p-1},\xi_{p}),\quad p=1,2,\ldots ,\quad X_{0}=x,
 \end{equation}
 for some i.i.d.  random vectors \(\xi_p\in \mathbb{R}^m\) with distribution \(P_{\xi}\)
 and some Borel-measurable
@@ -189,7 +208,7 @@ for some continuously differentiable function $U,$ then Markov chain~\eqref{eq:c
 \begin{equation}\label{eq:stationary_distr}
 \pi(x)= \mathrm{const}\,\rme^{-\frac{U(x)}{2}}, \quad \mathrm{const}= \left. 1 \middle /{\int_{\mathbb{R}^{d}} \rme^{-\frac{U(x)}{2}}\, \rmd x,} \right.
 \end{equation}
-provided that \(\int_{\mathbb{R}^{d}} \rme^{-U(x)}\,\rmd x\) is finite. This method is usually referred to as
+provided that \(\int_{\mathbb{R}^{d}} \rme^{-\frac{U(x)}{2}}\,\rmd x\) is finite. This method is usually referred to as
 Unadjusted Langevin Algorithm (ULA).
 In fact the Markov chain~\eqref{eq:chain}
 arises as the Euler-Maruyama discretization
@@ -256,9 +275,8 @@ where \(W\) is a standard \(\mathbb{R}^m\)-valued Brownian motion, \(b:\) \(\mat
 The process \((X_t)_{t\geq 0}\) is a Markov
 process and let \(L\) denote its infinitesimal generator defined by
 \begin{equation*}
-Lg=b^\top \nabla g+\frac{1}{2}\operatorname{Tr}(\sigma^\top D^2g\sigma)
+Lg=b^\top \nabla g+\frac{1}{2}\sigma^\top D^2g\sigma
 \end{equation*}
-\eric{do we need a trace here ? I think also that $D^2$ is not defined }
 for any \(g\in C^2(\mathbb{R}^d).\)
 If there exists a continuously twice differentiable Lyapunov function \(V:\) \(\mathbb{R}^d\to \mathbb{R}_{+}\) such that
 \begin{eqnarray*}
@@ -287,31 +305,30 @@ In this section we give a general discrete-time martingale representation for  M
 \end{equation*}
 with \(\xi \sim P_{\xi}.\)
 Notice that this implies that the random variables
-$\phi_k(\xi)$, $k\ge1$, are centered. As an example, we can take  multivariate Hermite polynomials for the ULA algorithm and a tensor product of Shifted Legendre polynomials for "uniform part" and Hermite polynomials for "Gaussian part"  of the random variable $\xi = (u, z)^T$ in MALA, as the Shifted Legendre polynomials are orthogonal with respect to the Lebesgue measure on \([0,1].\) We shall use the notations $\nset=\{1,2,\ldots\}$ and $\nset_0=\mathbb N\cup\{0\}$. We denote by $(\mathcal{G}_p)_{p\in \mathbb{Z}_+}$  the filtration generated by independent random variables $(\xi_p)_{p \in \nset}$ with the convention $\mathcal{G}_0=\mathrm{triv}$. For $l \le p$ and $x \in \rset^d$, put for $x,y \in \rset^d$ functions $\Phi_k(x,y)=x-\gamma_k\mu(x)+y$. Then we can define
+$\phi_k(\xi)$, $k\ge1$, are centered. As an example, we can take  multivariate Hermite polynomials for the ULA algorithm and a tensor product of Shifted Legendre polynomials for "uniform part" and Hermite polynomials for "Gaussian part"  of the random variable $\xi = (u, z)^T$ in MALA, as the Shifted Legendre polynomials are orthogonal with respect to the Lebesgue measure on \([0,1].\)  Let $\left(\Omega,\mathcal{F},\mathsf{P}\right)$ be a probability space, $(\xi_p)_{p \in \nset}$ be i.i.d. $d_{\xi}-$dimensional random vectors. We denote by $(\mathcal{G}_p)_{p \in \nset_0}$  the filtration generated by $(\xi_p)_{p \in \nset}$ with the convention $\mathcal{G}_0=\mathrm{triv}$. For  $x \in \rset^d$ and $y \in \rset^{d_\xi}$ let $\Phi_k(x,y)$ be a function mapping $\rset^{d+d_{\xi}}$ to $\rset^d$. Then we can define for $l \le p$
 \begin{equation}
 \label{eq:ula_new}
-X^x_{l,p}=G_{l,p}(x,\sqrt{\gamma_l}\xi_{l},\ldots,\sqrt{\gamma_p}\xi_{p}),
+X^x_{l,p}=G_{l,p}(x,\xi_{l},\ldots,\xi_{p}),
 \end{equation}
-with the function \(G_{l,p}:\) \(\mathbb{R}^{d\times(p-l+2)}\to \mathbb{R}^{d}\) defined as
+with the function \(G_{l,p}:\) \(\rset^{d + d_{\xi}\times(p-l+1)}\to \rset^{d}\) defined as
 \begin{equation}
 \label{eq:definition-G-p-l}
-G_{l,p}(x,y_l,\ldots,y_p):=\Phi_p(\cdot,y_{p})\circ\Phi_{p-1}(\cdot,y_{p-1})\circ\ldots\circ\Phi_{l}(x,y_{l})
+G_{l,p}(x,y_l,\ldots,y_p):=\Phi_p(\cdot,y_{p})\circ\Phi_{p-1}(\cdot,y_{p-1})\circ\dots\circ\Phi_{l}(x,y_{l})
 \end{equation}
-Note that $\left(X^x_{0,p}\right)_{p \in \nset_0}$ is a Markov chain of the form \eqref{eq:chain_gen}, starting at $X_0 = x$. For simplicity we write $X^x_{p}$ and $G_{p}$ instead of $X^x_{0,p}$ and $G_{0,p}$. As a consequence, for a function $f\colon \rset^d \to \rset$ we have
-$$
-f\left(X^x_{p}\right) =%f\circ G_{p}(x,\sqrt{\gamma}Z_{1},\ldots,\sqrt{\gamma}Z_{p}).
-f\circ G_{p}(x,\sqrt{\gamma_1}\xi_{1},\ldots,\sqrt{\gamma_p}\xi_{p})
-$$
-%\erici{It would be perhaps interesting to state the conditions satisfied by the functions $(\Phi_l)_{l \geq 1}$ here}
+Note that $\left(X^x_{0,p}\right)_{p \in \nset_0}$ is a Markov chain with values in $\rset^d$ of the form \eqref{eq:chain_gen}, starting at $X_0 = x$. We write $X^x_{p}$ and $G_{p}$ as a shorthand notation for $X^x_{0,p}$ and $G_{0,p}$, respectively. 
+
+%For a function $f\colon \rset^d \to \rset$ we define
+%$$
+%f\left(X^x_{p}\right) =%f\circ G_{p}(x,\sqrt{\gamma}Z_{1},\ldots,\sqrt{\gamma}Z_{p}).
+%f\circ G_{p}(x,\xi_{1},\ldots,\xi_{p})
+%$$
 \begin{thm}\label{prop:29032018a1}
-Let \((X^x_{p})_{p\geq 0}\) be a Markov chain of the form \eqref{eq:ula_new}  and $f$ be a Borel function $\rset^{d}\to\mathbb R$ such that
-$\mathsf{E}\left[\left |f(X^x_{p})\right|^{2}\right]<\infty$. Then, for $p>j$, the following representation holds in \(L^2(P)\)
-\eric{I would write \tcr{$L^2(\mathsf{P})$} to be coherent with the notation $\mathsf{E}$ and we need to define what is the underlying probability space}
+Let \((X^x_{p})_{p\geq 0}\) be a Markov chain of the form \eqref{eq:ula_new}. Then, for $p>j$ and for all Borel functions $f: \rset^{d}\to \rset$ such that $\mathsf{E}\left[\left |f(X^x_{p})\right|^{2}\right]<\infty$, the following representation holds in \(L^2(\mathsf{P})\)
 \begin{eqnarray}
 \label{eq:mart_repr}
 f(X^x_{p})=\mathsf{E}\left[\left.f(X^x_{p})\right|\mathcal G_{j}\right]+\sum_{k=1}^{\infty}\sum_{l=j+1}^{p}a_{p,l,k}(X^x_{l-1})\phi_k\left(\xi_{l}\right),
 \end{eqnarray}
-where
+where for $y \in \rset^d$
 \begin{eqnarray}
 \label{eq:coeff_mart}
 %a_{p,l,k}(x)=\mathsf{E}\left[\left.f(X_{p})\phi_k\left(\xi_{l}\right)\right|X_{l-1}=x\right], \quad p\geq l, \quad k\in \mathbb{N}.
@@ -321,37 +338,31 @@ a_{p,l,k}(y)=\mathsf{E}\left[f(X^y_{l-1,p})\phi_k\left(\xi_{l}\right)\right], \q
 
 \begin{proof}%[Proof of Theorem~\ref{prop:29032018a1}]
 The expansion obviously holds for $p=1$ and $j=0$.
-Indeed, since $\left(\phi_{k}\right)_{k \geq 0}$ is a complete orthonormal system in \(L^2(\mathbb{R}^d, P_{\xi})\), we have for arbitary $x \in \rset^d$,
-\eric{it is clear, but we must say in which sense this equality should be understood}
+Indeed, since $\left(\phi_{k}\right)_{k \geq 0}$ is a complete orthonormal system in \(L^2(\mathbb{R}^d, P_{\xi})\), it holds in \(L^2(\mathsf{P})\) that
 \[
 f(X^x_{1})=\PE[f(X^x_{1})]+\sum_{k\geq1}a_{1,1,k}(x)\phi_{k}(\xi_{1})
 \]
-with $a_{1,1,k}(x)=\PE[f(X_{1}^x)\phi_{k}(\xi_{1})]$,
-provided $\PE[|f(X_{1})|^{2}]<\infty.$
-\tcr{Recall that $\mathcal{G}_l=\sigma(\xi_{1},\ldots,\xi_{l}),$
-$l=1,2,\ldots, $
-and $\mathcal{G}_0=\mathrm{triv}$.}
-\eric{do we need this, this is recalled ten lines above}
+with $a_{1,1,k}(x)=\PE[f(X_{1}^x)\phi_{k}(\xi_{1})]$.
 Suppose that (\ref{eq:mart_repr})
 holds for $p=q$, all $j<q$, and all Borel-measurable functions
-$f$ with $\mathsf{E}\left[|f(X_{q})|^2\right]<\infty$.
+$f$ with $\mathsf{E}\left[|f(X^x_{q})|^2\right]<\infty$.
 Let us prove it for $p=q+1$.
-Given $f$ with $\mathsf{E}\left[|f(X_{p})|^2\right]<\infty$,
+Given $f$ with $\mathsf{E}\left[|f(X^x_{p})|^2\right]<\infty$,
 due to the orthonormality and completeness
 of the system $\left(\phi_{k}\right)$, we get by
 conditioning on $\mathcal{G}_{q}$,
 \[
-f(X_{p})=\mathsf{E}\left[\left.f(X_{p})\right|{\mathcal{G}}_q\right]+\sum_{k\geq1}\alpha_{p,q+1,k}\phi_{k}(\xi_{q+1}),
+f(X^x_{p})=\mathsf{E}\left[\left.f(X^x_{p})\right|{\mathcal{G}}_q\right]+\sum_{k\geq1}\alpha_{p,q+1,k}\phi_{k}(\xi_{q+1}),
 \]
 where
 \begin{equation*}
 \alpha_{p,q+1,k}
-=\mathsf{E}\left[\left.f(X_{p})\phi_{k}(\xi_{q+1})\right|\mathcal G_q\right].
+=\mathsf{E}\left[\left.f(X^x_{p})\phi_{k}(\xi_{q+1})\right|\mathcal G_q\right].
 \end{equation*}
-By the Markov property of $(X_{l})$,
+By the Markov property of $(X^x_{l})$,
 we have
-$\mathsf{E}[f(X_{p})|\mathcal{G}_q]
-=\mathsf{E}[f(X_{p})|X_{q}]$.
+$\mathsf{E}[f(X^x_{p})|\mathcal{G}_q]
+=\mathsf{E}[f(X^x_{p})|X^x_{q}]$.
 Furthermore, a calculation involving
 intermediate conditioning on $\mathcal G_{q+1}$
 and the recurrence relation
@@ -391,11 +402,11 @@ and~\eqref{eq:28082017a1} conclude the proof.
 \begin{cor}
 If  all the kernels $\Phi_l,$ $l\geq 1,$ are equal,  then  the representation \eqref{eq:mart_repr} takes the form
 \begin{eqnarray*}
-f(X_{p})=\mathsf{E}\left[\left.f(X_{p})\right|\mathcal G_{j}\right]+\sum_{k=1}^{\infty}\sum_{l=j+1}^{p}\bar a_{p-l,k}(X_{l-1})\phi_k\left(\xi_{l}\right)
+f(X^x_{p})=\mathsf{E}\left[\left.f(X^x_{p})\right|\mathcal G_{j}\right]+\sum_{k=1}^{\infty}\sum_{l=j+1}^{p}\bar a_{p-l,k}(X^x_{l-1})\phi_k\left(\xi_{l}\right)
 \end{eqnarray*}
 with
 \begin{eqnarray*}
-\bar a_{r,k}(x)=\mathsf{E}\left[f(X^x_{r})\phi_k\left(\xi_{1}\right)\right], \quad r, k\in \mathbb{N}.
+\bar a_{r,k}(y)=\mathsf{E}\left[f(X^y_{r})\phi_k\left(\xi_{1}\right)\right], \quad r, k\in \mathbb{N}.
 \end{eqnarray*}
 \end{cor}
 
@@ -526,7 +537,7 @@ for $\gamma>0$, define the Markov kernel $Q_\gamma$ associated to one-step of th
 \kerULA_{\gamma}(x,A)=\int_{A} \frac{1}{(2 \pi \gamma)^{d/2}} \text{ exp} \left\{ -\frac{1}{2\gamma} \left\| y - x + \gamma \mu(x)\right\|^2\right\} \rmd y.
 \]
 \sergey{Changed notation here, put variance of the noise equal to $\gamma$}
-\eric{what is the notation convention here; I do not like much $\mathcal{Q}$ but $Q$ is already define and it is perhaps not a great idea to supersede the previous notation}
+%\eric{what is the notation convention here; I do not like much $\mathcal{Q}$ but $Q$ is already define and it is perhaps not a great idea to supersede the previous notation}
 For a bounded Borel function~$f$,
 we can estimate the conditional bias
 similarly to~\cite[Section~4]{durmus:moulines:2017}:
@@ -564,25 +575,7 @@ under {\bf (H1)} and {\bf (H2)} is derived in Section.  In particular, for any b
 \end{equation}
 where $\lesssim$ stands for inequality up to a constant depending on constants $L_U,$ $m_U,$  $M_U$ and $\|f\|_\infty.$
 One of the main results of this paper is the following  upper bound for the variance of $\pi_{K,n}^{N}(f).$
-We start by introducing some notations.
-For $m\in\mathbb N$, a smooth function
-$h\colon\mathbb R^{d\times m}\to\mathbb R$
-with arguments being denoted
-$(y_1,\ldots,y_m)$, $y_i\in\mathbb R^d$, $i=1,\ldots,m$,
-a multi-index $\mathbf k=(k_i)\in\mathbb N_0^d$,
-and $j\in\{1,\ldots,m\}$,
-we use the notation $\partial^{\mathbf k}_{y_j} h$ for the multiple derivative of $h$
-with respect to the components of~$y_j$:
-\[
-\partial^{\mathbf k}_{j} h(y_1,\ldots,y_m)
-:=\partial^{k_d}_{y_j^d}
-\ldots
-\partial^{k_1}_{y_j^1}
-h(y_1,\ldots,y_m),
-\quad y_j=(y_j^1,\ldots,y_j^d).
-\]
-In the particular case $m=1$ we can drop
-the subscript $y_1$ in that notation.
+
 \begin{thm}\label{th:mr}
 Assume {\bf (H1)} and {\bf (H2)}.
 Suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K \times d \geq 2$ times continuously differentiable
@@ -598,7 +591,7 @@ Then it holds
 \end{eqnarray}
 %where \tcr{\(\lesssim\) stands for inequality up to a constant not depending  on $\gamma,$ \(n\) and \(N.\)}
 \sergey{removed repeating explanation of $\lesssim$}
-\eric{this is defined less precisely just above}
+%\eric{this is defined less precisely just above}
 \end{thm}
 Let us sketch the main steps of the proof. First using integration by parts we prove that
 \begin{eqnarray}
