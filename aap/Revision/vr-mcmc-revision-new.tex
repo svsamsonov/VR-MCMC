@@ -357,10 +357,10 @@ Let us define sequence of functions
 \[
 \psi_{q+1,n}(y) = \mathsf{E}[|f(X^y_{q,q+1}) - \mathsf{E} f(X^y_{q,q+1})|^2] - \sum\limits_{k=1}^{n}\mathsf{E}^2[f(X^y_{q,q+1})\phi_k(\xi_{q+1})].
 \]
-which coincide with the left side of \ref{eq:parseval}. Due to Parseval identity $\Psi_{q+1,n}(y) \rightarrow 0, n \rightarrow \infty$ for any $y \in \rset^d$ and $\psi_n(y) < \mathsf{E}[|f(X^y_{q,q+1}) - \mathsf{E} f(X^y_{q,q+1})|^2] \leq \frac{\|f\|^2_{\infty}}{4}$. Hence, by Lebesgue dominated convergence theorem, $\mathsf{E}\psi^2_n(X_q^x) \rightarrow 0$ and since $\mathsf{E}[f(X^y_{q,q+1})]$ is a version of the conditional expectation $\mathsf{E}[f(X^x_{q+1}|X^x_q = y]$, it holds in \(L^2(\mathsf{P})\) that
+which coincide with the left side of \ref{eq:parseval}. Due to Parseval identity $\Psi_{q+1,n}(y) \rightarrow 0, n \rightarrow \infty$ for any $y \in \rset^d$ and $\psi_n(y) < \mathsf{E}[|f(X^y_{q,q+1}) - \mathsf{E} f(X^y_{q,q+1})|^2] \leq \frac{\|f\|^2_{\infty}}{4}$. Hence, by Lebesgue dominated convergence theorem, $\mathsf{E}\psi^2_n(X_q^x) \rightarrow 0$ and since $\mathsf{E}[f(X^{X^x_q}_{q,q+1})|X^x_{q}] = \mathsf{E}[f(X^{x}_{q+1})|X^x_{q}]$, it holds in \(L^2(\mathsf{P})\) that
 \begin{equation}
 \label{eq:1-step-decomp}
-f(X^x_{q+1}) = \mathsf{E}[f(X^x_{q+1})|X^x_{q+1}] + \sum\limits_{k=1}^{\infty}a_{q+1,q+1,k}(X^x_{q})\phi_{k}(\xi_{q+1})
+f(X^x_{q+1}) = \mathsf{E}[f(X^x_{q+1})|X^x_{q}] + \sum\limits_{k=1}^{\infty}a_{q+1,q+1,k}(X^x_{q})\phi_{k}(\xi_{q+1})
 \end{equation}
 where
 \[
