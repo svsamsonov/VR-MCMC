@@ -347,56 +347,54 @@ Suppose that (\ref{eq:mart_repr})
 holds for $p=q$, all $j<q$, and all Borel-measurable functions
 $f$ with $\mathsf{E}\left[|f(X^x_{q})|^2\right]<\infty$.
 Let us prove it for $p=q+1$.
-Given $f$ with $\mathsf{E}\left[|f(X^x_{p})|^2\right]<\infty$,
+Given $f$ with $\mathsf{E}\left[|f(X^x_{q+1})|^2\right]<\infty$,
 due to the orthonormality and completeness
 of the system $\left(\phi_{k}\right)$, we get by
 conditioning on $\mathcal{G}_{q}$,
 \[
-f(X^x_{p})=\mathsf{E}\left[\left.f(X^x_{p})\right|{\mathcal{G}}_q\right]+\sum_{k\geq1}\alpha_{p,q+1,k}\phi_{k}(\xi_{q+1}),
+f(X^x_{q+1})=\mathsf{E}\left[\left.f(X^x_{q+1})\right|{\mathcal{G}}_q\right]+\sum_{k\geq1}\alpha_{q+1,q+1,k}\phi_{k}(\xi_{q+1}),
 \]
 where
 \begin{equation*}
-\alpha_{p,q+1,k}
-=\mathsf{E}\left[\left.f(X^x_{p})\phi_{k}(\xi_{q+1})\right|\mathcal G_q\right].
+\alpha_{q+1,q+1,k}
+=\mathsf{E}\left[\left.f(X^x_{q+1})\phi_{k}(\xi_{q+1})\right|\mathcal G_q\right].
 \end{equation*}
-By the Markov property of $(X^x_{l})$,
-we have
-$\mathsf{E}[f(X^x_{p})|\mathcal{G}_q]
-=\mathsf{E}[f(X^x_{p})|X^x_{q}]$.
-Furthermore, a calculation involving
-intermediate conditioning on $\mathcal G_{q+1}$
-and the recurrence relation
-$X_{q+1}=\Phi_{q+1}(X_{q},\xi_{q+1})$
-verifies that
+By the Markov property of $(X^x_{l})$, it holds $\mathsf{E}[f(X^x_{q+1})|\mathcal{G}_q] = \mathsf{E}[f(X^x_{q+1})| X_q^x]$. Using Markov property together with conditioning on $\mathcal{G}_{q+1}$, we obtain
 \[
-\alpha_{p,q+1,k}=\mathsf{E}\left[\left.f(X_{p})\phi_{k}(\xi_{q+1})\right|X_{q}\right]
-=a_{p,q+1,k}(X_{q})
+\alpha_{q+1,q+1,k}=\mathsf{E}\left[\left.f(X^x_{q+1})\phi_{k}(\xi_{q+1})\right|X^x_{q}\right]
+=a_{q+1,q+1,k}(X^x_{q})
 \]
-for suitably chosen
-Borel-measurable functions $a_{p,q+1,k}$.
+where for $y \in \rset^d$
+\[
+a_{q+1,q+1,k}(y) = \mathsf{E}\left[f(X^y_{q,q+1})\phi_k\left(\xi_{q+1}\right)\right]
+\]
+
 We thus arrive at
 \begin{align}
 \label{berm:sig_X}
-f(X_{p})=\mathsf{E}\left[\left.f(X_{p})\right|X_{q}\right]+\sum_{k\geq1}a_{p,q+1,k}(X_{q})\phi_{k}(\xi_{q+1}),
+f(X^x_{q+1})=\mathsf{E}\left[\left.f(X^x_{q+1})\right|X^x_{q}\right]+\sum_{k\geq1}a_{q+1,q+1,k}(X^x_{q})\phi_{k}(\xi_{q+1}),
 \end{align}
 which is the required statement in the case $j=q$.
 Now assume $j<q$.
 The random variable
-$\mathsf{E}\left[\left.f(X_{p})\right|X_{q}\right]$
+$\mathsf{E}\left[\left.f(X^x_{q+1})\right|X^x_{q}\right]$
 is square integrable and has the form
-$g(X_{q})$,
+$g(X^x_{q})$,
 hence the induction hypothesis applies, and we get
 \begin{equation}\label{eq:28082017a1}
-\mathsf{E}\left[\left.f(X_{p})\right|X_{q}\right]=\mathsf{E}\left[\left.f(X_{p})\right|X_{j}\right]+\sum_{k\geq1}\sum_{l=j+1}^{q}a_{p,l,k}(X_{l-1})\phi_{k}(\xi_{l})
+\mathsf{E}\left[\left.f(X^x_{q+1})\right|X^x_{q}\right]=\mathsf{E}\left[\left.f(X^x_{q+1})\right|X^x_{j}\right]+\sum_{k\geq1}\sum_{l=j+1}^{q}a_{q+1,l,k}(X^x_{l-1})\phi_{k}(\xi_{l})
 \end{equation}
 with
 \begin{align*}
-a_{p,l,k}(X_{l-1}) &= \mathsf{E}\left[\left.\mathsf{E}\left[\left.f(X_{p})\right|\mathcal{G}_{q}\right]\phi_{k}(\xi_{l})\right|\mathcal{G}_{l-1}\right]
-= \mathsf{E}\left[\left.f(X_{p})\phi_{k}(\xi_{l})\right|\mathcal{G}_{l-1}\right]\\
-&=\mathsf{E}\left[\left.f(X_{p})\phi_{k}(\xi_{l})\right|X_{l-1}\right].
+a_{q+1,l,k}(X^x_{l-1}) &= \mathsf{E}\left[\left.\mathsf{E}\left[\left.f(X^x_{q+1})\right|\mathcal{G}_{q}\right]\phi_{k}(\xi_{l})\right|\mathcal{G}_{l-1}\right]
+ = \mathsf{E}\left[\left.f(X^x_{q+1})\phi_{k}(\xi_{l})\right|X^x_{l-1}\right].
 \end{align*}
+where for $y \in \rset^d$,
+\[
+a_{q+1,l,k}(y) = \mathsf{E}\left[f(X^y_{l-1,q+1})\phi_{k}(\xi_{l})\right]
+\]
 Formulas \eqref{berm:sig_X}
-and~\eqref{eq:28082017a1} conclude the proof.
+and~\eqref{eq:28082017a1} conclude the induction step for $p = q+1$ and hence the proof.
 \end{proof}
 
 \begin{cor}
@@ -404,7 +402,7 @@ If  all the kernels $\Phi_l,$ $l\geq 1,$ are equal,  then  the representation \e
 \begin{eqnarray*}
 f(X^x_{p})=\mathsf{E}\left[\left.f(X^x_{p})\right|\mathcal G_{j}\right]+\sum_{k=1}^{\infty}\sum_{l=j+1}^{p}\bar a_{p-l,k}(X^x_{l-1})\phi_k\left(\xi_{l}\right)
 \end{eqnarray*}
-with
+where for $y \in \rset^d$
 \begin{eqnarray*}
 \bar a_{r,k}(y)=\mathsf{E}\left[f(X^y_{r})\phi_k\left(\xi_{1}\right)\right], \quad r, k\in \mathbb{N}.
 \end{eqnarray*}
@@ -434,7 +432,7 @@ with  \(Q_{r}(x)=\mathsf{E}\left[f(X^x_{r})\right],\) $r\in \mathbb{N}.$
 \par
 Next we show how  the representation \eqref{eq:mart_repr} can be used to  reduce the variance of MCMC algorithms.  Consider the case of time homogeneous transition kernels and introduce a weighted average estimator $\pi_{n}^{N}(f)$ of the form
 \begin{equation}\label{eq:29032018a2}
-\pi_{n}^{N}(f)=\frac{1}{n}\sum_{p=N+1}^{N+n} f(X_{p}),
+\pi_{n}^{N}(f)=\frac{1}{n}\sum_{p=N+1}^{N+n} f(X^x_{p}),
 \end{equation}
 where $N\in\mathbb N_0$ is the length of the burn-in period and $n\in\mathbb N$
 the number of effective samples.
