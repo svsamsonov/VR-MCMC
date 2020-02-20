@@ -455,9 +455,9 @@ the number of effective samples.
 Given $N$ and $n$ as above, for $K\in\mathbb N$, denote
 \begin{eqnarray}
 \nonumber
-M_{K,n}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{k=1}^{K}\sum_{l=N+1}^{p} \bar a_{p-l,k}(X_{l-1})\phi_k(\xi_{l})\right]
+M_{K,n}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{k=1}^{K}\sum_{l=N+1}^{p} \bar a_{p-l,k}(X^x_{l-1})\phi_k(\xi_{l})\right]
 \\
-&=& \sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left(1+\frac{N-l}{n}\right)A_{N+n-l,k}(X_{l-1})\phi_{k}\left(\xi_{l}\right),
+&=& \sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left(1+\frac{N-l}{n}\right)A_{N+n-l,k}(X^x_{l-1})\phi_{k}\left(\xi_{l}\right),
 \label{eq:29032018a5}
 \end{eqnarray}
 where
@@ -465,9 +465,9 @@ where
 \label{eq:definition-A-s,k}
 A_{s,k}(x)=\frac{1}{s}\sum_{r=1}^{s}\bar a_{r,k}(x).
 \end{equation}
-Since \(X_{l-1}\) is independent of \(\xi_{l}\) and \tcr{\(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq 0\)}, we obtain
+Since \(X^x_{l-1}\) is independent of \(\xi_{l}\) and \tcr{\(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq 0\)}, we obtain
 \[
-\PE[A_{N+n-l,k}(X_{l-1})\phi_{k}\left(\xi_{l}\right)] = \mathsf{E}[A_{N+n-l,k}(X_{l-1})\CPE{\phi_{k}\left(\xi_{l}\right)}{\mathcal{G}_{l-1}]} = 0
+\PE[A_{N+n-l,k}(X^x_{l-1})\phi_{k}\left(\xi_{l}\right)] = \mathsf{E}[A_{N+n-l,k}(X^x_{l-1})\CPE{\phi_{k}\left(\xi_{l}\right)}{\mathcal{G}_{l-1}]} = 0
 \]
 and hence the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
 The representation \eqref{eq:coeff_mart} suggests that the variance of  the  variance-reduced estimator
@@ -478,7 +478,7 @@ The representation \eqref{eq:coeff_mart} suggests that the variance of  the  var
 should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_{k'}(\xi_l)]=0$ if $k \ne k'$, we obtain
 \begin{equation}
 \label{eq:expression-variance}
-\PVar[\pi_{K,n}^N(f)]\leq\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X_{N+l-1})]
+\PVar[\pi_{K,n}^N(f)]\leq\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X^x_{N+l-1})]
 \end{equation}
 and $\mathsf{Var}[\pi_{K,n}^N(f)]$ is small provided that the coefficients $A_{s,k}$ decay fast enough as $k\to \infty.$
 In the next section   we provide a detailed   analysis of  $\mathsf{Var}[\pi_{K,n}^N(f)]$  for the  ULA  algorithm (see Example~\ref{exam:langevin-algorithm}).
