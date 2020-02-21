@@ -315,39 +315,36 @@ with the function \(G_{l,p}:\) \(\rset^{d + d_{\xi}\times(p-l+1)}\to \rset^{d}\)
 \label{eq:definition-G-p-l}
 G_{l,p}(x,y_l,\ldots,y_p):=\Phi_p(\cdot,y_{p})\circ\Phi_{p-1}(\cdot,y_{p-1})\circ\dots\circ\Phi_{l}(x,y_{l})
 \end{equation}
-Note that $\left(X^x_{0,p}\right)_{p \in \nset_0}$ is a Markov chain with values in $\rset^d$ of the form \eqref{eq:chain_gen}, starting at $X_0 = x$. We write $X^x_{p}$ and $G_{p}$ as a shorthand notation for $X^x_{0,p}$ and $G_{0,p}$, respectively.
+Note that $\left(X^x_{0,p}\right)_{p \in \nset_0}$ is a Markov chain with values in $\rset^d$ of the form \eqref{eq:chain_gen}, starting at $X_0 = x$. We write $X^x_{p}$ and $G_{p}$ as a shorthand notation for $X^x_{0,p}$ and $G_{0,p}$, respectively. Let us also define by $\mathcal{F}_2^p$ class of Borel functions $f: \rset^d \to \rset$ such that for any $1 \leq l \leq q \leq p$ and $y \in \rset^d$, $\mathsf{E}\left[\left |f(X^y_{l,q})\right|^{2}\right]<\infty$. Note that for $q \leq p$ it holds $\mathcal{F}_2^p \subseteq \mathcal{F}_2^q$.
 
 \begin{thm}\label{prop:29032018a1}
-Let \((X^x_{p})_{p\geq 0}\) be a Markov chain of the form \eqref{eq:ula_new}. Then, for $p>j$ and for all Borel functions $f: \rset^{d}\to \rset$ such that $\mathsf{E}\left[\left |f(X^x_{p})\right|^{2}\right]<\infty$, the following representation holds in \(L^2(\mathsf{P})\)
+For all $p \in \nset,$ $q \leq p$, $j < q \leq p$, $f \in \mathcal{F}_2^p$ and $x \in \rset^d$ the following representation holds in \(L^2(\mathsf{P})\)
 \begin{eqnarray}
 \label{eq:mart_repr}
-f(X^x_{p})=\mathsf{E}\left[\left.f(X^x_{p})\right|\mathcal G_{j}\right]+\sum_{k=1}^{\infty}\sum_{l=j+1}^{p}a_{p,l,k}(X^x_{l-1})\phi_k\left(\xi_{l}\right),
+f(X^x_{q})=\mathsf{E}\left[\left.f(X^x_{q})\right|\mathcal G_{j}\right]+\sum_{k=1}^{\infty}\sum_{l=j+1}^{q}a_{q,l,k}(X^x_{l-1})\phi_k\left(\xi_{l}\right),
 \end{eqnarray}
-where for all $y \in \rset^d$,
+where \((X^x_{p})_{p\geq 0}\) is given in \eqref{eq:ula_new} and for all $y \in \rset^d$
 \begin{eqnarray}
 \label{eq:coeff_mart}
 %a_{p,l,k}(x)=\mathsf{E}\left[\left.f(X_{p})\phi_k\left(\xi_{l}\right)\right|X_{l-1}=x\right], \quad p\geq l, \quad k\in \mathbb{N}.
-a_{p,l,k}(y)=\mathsf{E}\left[f(X^y_{l-1,p})\phi_k\left(\xi_{l}\right)\right], \quad p\geq l, \quad k\in \mathbb{N}
+a_{q,l,k}(y)=\mathsf{E}\left[f(X^y_{l-1,q})\phi_k\left(\xi_{l}\right)\right], \quad q\geq l, \quad k\in \mathbb{N}
 \end{eqnarray}
 \end{thm}
 
 \begin{proof}%[Proof of Theorem~\ref{prop:29032018a1}]
-The expansion obviously holds for $p=1$ and $j=0$.
+The expansion obviously holds for $p = q=1$ and $j=0$.
 Indeed, since $\left(\phi_{k}\right)_{k \geq 0}$ is a complete orthonormal system in \(L^2(\mathbb{R}^d, P_{\xi})\), it holds in \(L^2(\mathsf{P})\) that
 \[
 f(X^x_{1})=\PE[f(X^x_{1})]+\sum_{k\geq1}a_{1,1,k}(x)\phi_{k}(\xi_{1})
 \]
-with $a_{1,1,k}(x)=\PE[f(X_{1}^x)\phi_{k}(\xi_{1})]$.
-Assume now that (\ref{eq:mart_repr})
-holds for $p=q$, all $j<q$, and Borel-measurable functions
-$f$ with $\mathsf{E}\left[|f(X^x_{q})|^2\right]<\infty$.
-Let us prove that the induction assumption holds for $p=q+1$.
-For any function $f$ such that $\mathsf{E}\left[|f(X^x_{q+1})|^2\right]<\infty$,
+for any $f \in \mathcal{F}_2^p$  with $a_{1,1,k}(x)=\PE[f(X_{1}^x)\phi_{k}(\xi_{1})]$.
+Assume now that (\ref{eq:mart_repr}) holds for some $m < p$, any $q \leq m$, $j < q \leq m$ and $f$ from $\mathcal{F}_2^p$. Let us prove that the induction assumption holds for $q=m+1$ and all $j < q$.
+For any function $f$ from $\mathcal{F}_2^p$,
 the orthonormality and completeness
 of the system $\left(\phi_{k}\right)_{k=0}^\infty$ implies that for any $y \in \rset^d$, 
-$\lim_{n \rightarrow \infty}\Psi_{n,q,1}(y)= 0$ with $\Psi_{n,q,1}(y)= \PE[|f(X^y_{q,1}) - f_{n,q,1}(y)|^2]$ and
+$\lim_{n \rightarrow \infty}\Psi_{n,m+1,1}(y)= 0$ with $\Psi_{n,m+1,1}(y)= \PE[|f(X^y_{m,m+1}) - f_{n,m+1,1}(y)|^2]$ and
 \[
-f_{n,q,1}(y) = \PE[f(X^y_{q,q+1})] +  \sum\limits_{k=1}^{n}\PE[f(X^y_{q,q+1})\phi_{k}(\xi_{q+1})]\phi_k(\xi_{q+1}).
+f_{n,m+1,1}(y) = \PE[f(X^y_{m,m+1})] +  \sum\limits_{k=1}^{n}\PE[f(X^y_{m,m+1})\phi_{k}(\xi_{m+1})]\phi_k(\xi_{m+1}).
 \]
 $\psi_n(y) < \mathsf{E}[|f(X^y_{q,q+1}) - \mathsf{E} f(X^y_{q,q+1})|^2] \leq \frac{\|f\|^2_{\infty}}{4}$. Hence, by Lebesgue dominated convergence theorem, $\mathsf{E}\psi^2_n(X_q^x) \rightarrow 0$ and since $\mathsf{E}[f(X^{X^x_q}_{q,q+1})|X^x_{q}] = \mathsf{E}[f(X^{x}_{q+1})|X^x_{q}]$, it holds in \(L^2(\mathsf{P})\) that
 \begin{equation}
