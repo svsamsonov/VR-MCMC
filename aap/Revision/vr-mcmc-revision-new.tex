@@ -315,7 +315,7 @@ with the function \(G_{l,p}:\) \(\rset^{d + d_{\xi}\times(p-l+1)}\to \rset^{d}\)
 \label{eq:definition-G-p-l}
 G_{l,p}(x,y_l,\ldots,y_p):=\Phi_p(\cdot,y_{p})\circ\Phi_{p-1}(\cdot,y_{p-1})\circ\dots\circ\Phi_{l}(x,y_{l})
 \end{equation}
-Note that $\left(X^x_{0,p}\right)_{p \in \nset_0}$ is a Markov chain with values in $\rset^d$ of the form \eqref{eq:chain_gen}, starting at $X_0 = x$. We write $X^x_{p}$ and $G_{p}$ as a shorthand notation for $X^x_{0,p}$ and $G_{0,p}$, respectively. 
+Note that $\left(X^x_{0,p}\right)_{p \in \nset_0}$ is a Markov chain with values in $\rset^d$ of the form \eqref{eq:chain_gen}, starting at $X_0 = x$. We write $X^x_{p}$ and $G_{p}$ as a shorthand notation for $X^x_{0,p}$ and $G_{0,p}$, respectively.
 
 \begin{thm}\label{prop:29032018a1}
 Let \((X^x_{p})_{p\geq 0}\) be a Markov chain of the form \eqref{eq:ula_new}. Then, for $p>j$ and for all Borel functions $f: \rset^{d}\to \rset$ such that $\mathsf{E}\left[\left |f(X^x_{p})\right|^{2}\right]<\infty$, the following representation holds in \(L^2(\mathsf{P})\)
@@ -323,7 +323,7 @@ Let \((X^x_{p})_{p\geq 0}\) be a Markov chain of the form \eqref{eq:ula_new}. Th
 \label{eq:mart_repr}
 f(X^x_{p})=\mathsf{E}\left[\left.f(X^x_{p})\right|\mathcal G_{j}\right]+\sum_{k=1}^{\infty}\sum_{l=j+1}^{p}a_{p,l,k}(X^x_{l-1})\phi_k\left(\xi_{l}\right),
 \end{eqnarray}
-where for $y \in \rset^d$
+where for all $y \in \rset^d$,
 \begin{eqnarray}
 \label{eq:coeff_mart}
 %a_{p,l,k}(x)=\mathsf{E}\left[\left.f(X_{p})\phi_k\left(\xi_{l}\right)\right|X_{l-1}=x\right], \quad p\geq l, \quad k\in \mathbb{N}.
@@ -342,22 +342,14 @@ Assume now that (\ref{eq:mart_repr})
 holds for $p=q$, all $j<q$, and Borel-measurable functions
 $f$ with $\mathsf{E}\left[|f(X^x_{q})|^2\right]<\infty$.
 Let us prove that the induction assumption holds for $p=q+1$.
-Given $f$ with $\mathsf{E}\left[|f(X^x_{q+1})|^2\right]<\infty$,
-due to the orthonormality and completeness
-of the system $\left(\phi_{k}\right)$, we get that for any $y \in \rset^d$ it holds in \(L^2(\mathsf{P})\) 
+For any function $f$ such that $\mathsf{E}\left[|f(X^x_{q+1})|^2\right]<\infty$,
+the orthonormality and completeness
+of the system $\left(\phi_{k}\right)_{k=0}^\infty$ implies that for any $y \in \rset^d$, 
+$\lim_{n \rightarrow \infty}\Psi_{n,q,1}(y)= 0$ with $\Psi_{n,q,1}(y)= \PE[|f(X^y_{q,1}) - f_{n,q,1}(y)|^2]$ and
 \[
-f(X^y_{q,q+1}) = \mathsf{E} f(X^y_{q,q+1}) + \sum\limits_{k=1}^{\infty}\mathsf{E}[f(X^y_{q,q+1})\phi_{k}(\xi_{q+1})]\phi_k(\xi_{q+1})
+f_{n,q,1}(y) = \PE[f(X^y_{q,q+1})] +  \sum\limits_{k=1}^{n}\PE[f(X^y_{q,q+1})\phi_{k}(\xi_{q+1})]\phi_k(\xi_{q+1}).
 \]
-which means that
-\begin{equation}
-\label{eq:parseval}
-\lim_{n \rightarrow \infty}\mathsf{E}[|f(X^y_{q,q+1}) - \mathsf{E} f(X^y_{q,q+1}) - \sum\limits_{k=1}^{n}\mathsf{E}[f(X^y_{q,q+1})\phi_{k}(\xi_{q+1})]\phi_k(\xi_{q+1})|^2] = 0
-\end{equation}
-Let us define sequence of functions
-\[
-\psi_{q+1,n}(y) = \mathsf{E}[|f(X^y_{q,q+1}) - \mathsf{E} f(X^y_{q,q+1})|^2] - \sum\limits_{k=1}^{n}\mathsf{E}^2[f(X^y_{q,q+1})\phi_k(\xi_{q+1})].
-\]
-which coincide with the left side of \ref{eq:parseval}. Due to Parseval identity $\Psi_{q+1,n}(y) \rightarrow 0, n \rightarrow \infty$ for any $y \in \rset^d$ and $\psi_n(y) < \mathsf{E}[|f(X^y_{q,q+1}) - \mathsf{E} f(X^y_{q,q+1})|^2] \leq \frac{\|f\|^2_{\infty}}{4}$. Hence, by Lebesgue dominated convergence theorem, $\mathsf{E}\psi^2_n(X_q^x) \rightarrow 0$ and since $\mathsf{E}[f(X^{X^x_q}_{q,q+1})|X^x_{q}] = \mathsf{E}[f(X^{x}_{q+1})|X^x_{q}]$, it holds in \(L^2(\mathsf{P})\) that
+$\psi_n(y) < \mathsf{E}[|f(X^y_{q,q+1}) - \mathsf{E} f(X^y_{q,q+1})|^2] \leq \frac{\|f\|^2_{\infty}}{4}$. Hence, by Lebesgue dominated convergence theorem, $\mathsf{E}\psi^2_n(X_q^x) \rightarrow 0$ and since $\mathsf{E}[f(X^{X^x_q}_{q,q+1})|X^x_{q}] = \mathsf{E}[f(X^{x}_{q+1})|X^x_{q}]$, it holds in \(L^2(\mathsf{P})\) that
 \begin{equation}
 \label{eq:1-step-decomp}
 f(X^x_{q+1}) = \mathsf{E}[f(X^x_{q+1})|X^x_{q}] + \sum\limits_{k=1}^{\infty}a_{q+1,q+1,k}(X^x_{q})\phi_{k}(\xi_{q+1})
