@@ -388,21 +388,22 @@ a_{m+1,m+1,k}(y) = \PE \left[f(X^y_{m,m+1})\phi_k\left(\xi_{m+1}\right)\right]
 which is the required statement in the case $q = m+1$ and $j=m$.
 Now assume that $j<m$.
 The random variable
-$\mathsf{E}\left[\left.f(X^x_{m+1})\right|X^x_{m}\right]$
-is square integrable and has the form
-$g(X^x_{m})$,
-hence the induction hypothesis applies, and we get
+$\PE \left[\left.f(X^x_{m+1})\right| \mathcal{G}_m \right]$ has the form $g(X^x_{m})$ and is square integrable since 
+\[
+\PE \left[ \PE \left[\left.f(X^x_{m+1})\right| \mathcal{G}_m \right]^2 \right] \leq \PE \left[ \PE \left[\left.f^2(X^x_{m+1})\right| \mathcal{G}_m \right] \right] = \PE \left[f^2(X^x_{m+1})\right] < \infty
+\]
+Hence the induction hypothesis applies, and we get
 \begin{equation}\label{eq:28082017a1}
-\mathsf{E}\left[\left.f(X^x_{q+1})\right|X^x_{q}\right]=\mathsf{E}\left[\left.f(X^x_{q+1})\right|X^x_{j}\right]+\sum_{k\geq1}\sum_{l=j+1}^{q}a_{q+1,l,k}(X^x_{l-1})\phi_{k}(\xi_{l})
+\mathsf{E}\left[\left.f(X^x_{m+1})\right| \mathcal{G}_m \right]=\mathsf{E}\left[\left.f(X^x_{m+1})\right| \mathcal{G}_j \right]+\sum_{k\geq1}\sum_{l=j+1}^{m}a_{m+1,l,k}(X^x_{l-1})\phi_{k}(\xi_{l})
 \end{equation}
 with
 \begin{align*}
-a_{q+1,l,k}(X^x_{l-1}) &= \mathsf{E}\left[\left.\mathsf{E}\left[\left.f(X^x_{q+1})\right|\mathcal{G}_{q}\right]\phi_{k}(\xi_{l})\right|\mathcal{G}_{l-1}\right]
- = \mathsf{E}\left[\left.f(X^x_{q+1})\phi_{k}(\xi_{l})\right|X^x_{l-1}\right].
+a_{m+1,l,k}(X^x_{l-1}) &= \mathsf{E}\left[\left.\mathsf{E}\left[\left.f(X^x_{m+1})\right|\mathcal{G}_{m}\right]\phi_{k}(\xi_{l})\right|\mathcal{G}_{l-1}\right]
+ = \mathsf{E}\left[\left.f(X^x_{m+1})\phi_{k}(\xi_{l})\right|X^x_{l-1}\right].
 \end{align*}
 where for $y \in \rset^d$,
 \[
-a_{q+1,l,k}(y) = \mathsf{E}\left[f(X^y_{l-1,q+1})\phi_{k}(\xi_{l})\right]
+a_{m+1,l,k}(y) = \mathsf{E}\left[f(X^y_{l-1,m+1})\phi_{k}(\xi_{l})\right]
 \]
 Formulas \eqref{eq:1-step-decomp}
 and~\eqref{eq:28082017a1} conclude the induction step for $p = q+1$ and hence the proof.
