@@ -406,13 +406,13 @@ where for $y \in \rset^d$,
 a_{m+1,l,k}(y) = \mathsf{E}\left[f(X^y_{l-1,m+1})\phi_{k}(\xi_{l})\right]
 \]
 Formulas \eqref{eq:1-step-decomp}
-and~\eqref{eq:28082017a1} conclude the induction step for $p = q+1$ and hence the proof.
+and~\eqref{eq:28082017a1} conclude the induction step for $q = m+1$ and all $j < q$ and hence the proof.
 \end{proof}
 
 \begin{cor}
-If  all the kernels $\Phi_l,$ $l\geq 1,$ are equal,  then  the representation \eqref{eq:mart_repr} takes the form
+If  all the kernels $\Phi_l,$ $l\geq 1,$ in \eqref{eq:ula_new} are equal,  then  the representation \eqref{eq:mart_repr} for all $p \in \nset,$ $q \leq p$, $j < q \leq p$, $f \in \mathcal{F}_2^p$ and $x \in \rset^d$ takes the form
 \begin{eqnarray*}
-f(X^x_{p})=\mathsf{E}\left[\left.f(X^x_{p})\right|\mathcal G_{j}\right]+\sum_{k=1}^{\infty}\sum_{l=j+1}^{p}\bar a_{p-l,k}(X^x_{l-1})\phi_k\left(\xi_{l}\right)
+f(X^x_{q})=\mathsf{E}\left[\left.f(X^x_{q})\right|\mathcal G_{j}\right]+\sum_{k=1}^{\infty}\sum_{l=j+1}^{q}\bar a_{q-l,k}(X^x_{l-1})\phi_k\left(\xi_{l}\right)
 \end{eqnarray*}
 where for $y \in \rset^d$
 \begin{eqnarray*}
@@ -422,16 +422,16 @@ where for $y \in \rset^d$
 
 From  numerical point of view another representation of the coefficients \(a_{p,l,k}\)  turns out to be more useful.
 \begin{prop}
-The coefficients \(a_{p,l,k}\) in \eqref{eq:coeff_mart}  can be alternatively represented as
+The coefficients \(a_{q,l,k}\) in \eqref{eq:coeff_mart}  can be alternatively represented as
 \begin{eqnarray*}
-a_{p,l,k}(x)=\mathsf{E}\left[\phi_k\left(\xi\right)Q_{p,l}\left(\Phi_l(x,\xi)\right)\right]
+a_{q,l,k}(x)=\mathsf{E}\left[\phi_k\left(\xi\right)Q_{q,l}\left(\Phi_l(x,\xi)\right)\right]
 \end{eqnarray*}
-with \(Q_{p,l}(x)=\mathsf{E}\left[f(X^x_{l,p})\right],\) \(p\geq l.\)
+with \(Q_{q,l}(x)=\mathsf{E}\left[f(X^x_{l,q})\right],\) \(p\geq l.\)
 %where   a r.v. \(\xi\) independent of \(\mathcal{G}_{l-1}.\)
-The functions \((Q_{p,l})_{l=0}^p\)  can be computed by the backward recurrence: $Q_{p,p}(x)=f(x)$ and for $l \in \{0,\ldots,p-1\}$
+The functions \((Q_{q,l})_{l=0}^p\)  can be computed by the backward recurrence: $Q_{q,q}(x)=f(x)$ and for $l \in \{0,\ldots,q-1\}$
 \begin{eqnarray}
 \label{eq:qpl}
-Q_{p,l}(x)=\mathsf{E}\left[Q_{p,l+1}(X^x_{l+1})\right].
+Q_{q,l}(x)=\mathsf{E}\left[Q_{q,l+1}(X^x_{l+1})\right].
 %=\mathsf{E}[Q_{p,l+1}(\Phi_{l+1}(x,\xi))]
 \end{eqnarray}
 In the case $\Phi_l=\Phi$ for all $l\geq 1,$ we have
@@ -453,7 +453,7 @@ Given $N$ and $n$ as above, for $K\in\mathbb N$, denote
 \nonumber
 M_{K,n}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{k=1}^{K}\sum_{l=N+1}^{p} \bar a_{p-l,k}(X^x_{l-1})\phi_k(\xi_{l})\right]
 \\
-&=& \sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left(1+\frac{N-l}{n}\right)A_{N+n-l,k}(X^x_{l-1})\phi_{k}\left(\xi_{l}\right),
+&=& \sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left(1+\frac{N-l+1}{n}\right)A_{N+n-l,k}(X^x_{l-1})\phi_{k}\left(\xi_{l}\right),
 \label{eq:29032018a5}
 \end{eqnarray}
 where
