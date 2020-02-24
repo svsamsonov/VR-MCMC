@@ -1,5 +1,6 @@
 import numpy as np
 import numpy.polynomial as P
+import scipy as sp
 from sklearn.preprocessing import PolynomialFeatures
 from samplers import ULA
 from potentials import GaussPotential,GaussMixture,GausMixtureIdent,GausMixtureSame
@@ -25,14 +26,14 @@ def split_index(k,d,max_deg):
         k = k // (max_deg + 1)
     return k_vec
 
-def Hermite_val(k_vec,x_vec):
+def hermite_val(k_vec,x_vec):
     P = 1.0
     d = x_vec.shape[0]
     for i in range(d):
         P = P * H(k_vec[i],x_vec[i])
     return P
 
-def Eval_Hermite(k,x_vec,max_deg):
+def eval_hermite(k,x_vec,max_deg):
     """
     Evaluates Hermite polynomials at component x_vec by multi-index obtained from single integer k;
     Args:
@@ -42,7 +43,7 @@ def Eval_Hermite(k,x_vec,max_deg):
     """
     k_vec = split_index(k,len(x_vec),max_deg)
     #now we initialised k_vec
-    return Hermite_val(k_vec,x_vec)
+    return hermite_val(k_vec,x_vec)
 
 def approx_q(X_train,Y_train,N_traj_train,lag,max_deg):
     """
@@ -94,7 +95,7 @@ def get_indices_poly(ind,K_max,S_max):
 
 def init_basis_polynomials(K_max,S_max,st_norm_moments,gamma):
     """
-    Represents E[H_k(\xi)*(x-\gamma \mu(x) + \sqrt{2\gamma}\xi)^s] as a polynomial of variable $y$, where y = x - \gamma \mu(x)
+    Represents E[H_k(xi)*(x-gamma mu(x) + sqrt{2gamma}xi)^s] as a polynomial of variable $y$, where y = x - gamma*mu(x)
     Args:
         K_max - maximal degree of Hermite polynomial;
         S_max - maximal degree of regressor polynomial;
@@ -115,47 +116,77 @@ def init_basis_polynomials(K_max,S_max,st_norm_moments,gamma):
             Poly_coefs_regression[k,s,:] = c
     return Poly_coefs_regression
 
-def compute_a_val(y,coefs,k):
+def init_moments(order):
     """
-    compute values of a scalar product of a given polynomial with  
+    Compute moments of standard normal distribution
     """
+    moments_stand_norm = np.zeros(2*order+1,dtype = float)
+    moments_stand_norm[0] = 1.0
+    moments_stand_norm[1] = 0.0
+    for i in range(len(moments_stand_norm)-2):
+        moments_stand_norm[i+2] = sp.special.factorial2(i+1, exact=False)
+    #eliminate odd
+    moments_stand_norm[1::2] = 0
+    return moments_stand_norm
+    
+def get_representations(k,s,d,K_max):
+    """
+    Factorizes k and s into a d-vector of different dimensions
+    Args:
+        k - hermite polynomial number;
+        s - number of basis functions;
+        d - dimension
+    """
+    k_vec = np.zeros(d,dtype = int)
+    s_vec = np.zeros(d,dtype = int)
+    #initialize k_vec
+    for ind in range(d):
+        k_vec[-(ind+1)] = k % (K_max + 1)
+        k = k // (K_max + 1)
+    #initialize s_vec
+    if d == 2:
+        vec_table = np.array([[0,0],[1,0],[0,1],[2,0],[1,1],[0,2]])
+        s_vec = vec_table[s,:]
+    else:
+        raise "not implemented error in get_representations::s_vec"
+    return k_vec,s_vec
 
-def test_traj(r_seed,K_max):
+def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_test,d):
     """
     """
-    X_test,Noise = ULA(r_seed,Potential,step, N, n, d, return_noise = True)
+    X_test,Noise = ULA(r_seed,Potential,step, N_burn, N_test, d, return_noise = True)
+    Noise = Noise.T
+    test_stat_vanilla = np.zeros(N_test,dtype = float)
+    test_stat_vr = np.zeros_like(test_stat_vanilla)
     #compute number of basis polynomials
-    num_basis_funcs = (K_max+1)**d
-    print("number of basis functions = ",num_basis_funcs)
+    num_basis_funcs = (K_max+1)**d + 1
+    #print("number of basis functions = ",num_basis_funcs)
     #compute polynomials of noise variables Z_l
-    poly_vals = np.zeros((num_basis_funcs,N_test),dtype = float)
+    poly_vals = np.zeros((num_basis_funcs+1,N_test),dtype = float)
     for k in range(num_basis_funcs):
-        poly_vals[k,:] = Eval_hermite(k,Noise,max_deg)
+        poly_vals[k,:] = eval_hermite(k,Noise,K_max)
     #initialize function
-    f_vals_vanilla = set_func(X_test)
+    f_vals_vanilla = np.sum(X_test,axis=1)
     cvfs = np.zeros_like(f_vals_vanilla)
+    st_norm_moments = init_moments(K_max+S_max+1)
     table_coefs = init_basis_polynomials(K_max,S_max,st_norm_moments,step)
     for i in range(1,len(cvfs)):
         #start computing a_{p-l} coefficients
         num_lags = min(lag,i)
-        a_vals = np.zeros((num_lags,num_basis_funcs),dtype = float)#control variates
+        a_vals = np.zeros((num_lags,num_basis_funcs+1),dtype = float)#control variates
         for func_order in range(num_lags):#for a fixed lag Q function
             #compute \hat{a} with fixed lag
-            x = X_test[i-1-nfunc]
-            x_next = x - gamma*Cur_pot.gradpotential(x)
+            x = X_test[i-1-func_order]
+            x_next = x - step*Potential.gradpotential(x)
             for k in range(1,num_basis_funcs+1):
-                a_cur = np.ones(..., dtype = float)
+                a_cur = np.ones(coefs_poly_regr.shape[1], dtype = float)
                 for s in range(len(a_cur)):
-                    k_vect,s_vect = get_representation(k,s)
-                    for dim_ind in range(len(k_vect)):
-                        a_cur[s] = a_cur[s]*P.polynomial.polyval(x_next,table_coefs[x_next,k_vect[dim_ind],s_vect[dim_ind],:])
-                a_vals[-(npol+1),k] = np.dot(a_cur,coefs_poly[npol,:])
+                    k_vect,s_vect = get_representations(k,s,d,K_max)
+                    for dim_ind in range(d):
+                        a_cur[s] = a_cur[s]*P.polynomial.polyval(x_next[dim_ind],table_coefs[k_vect[dim_ind],s_vect[dim_ind],:])
+                a_vals[-(func_order+1),k] = np.dot(a_cur,coefs_poly_regr[func_order,:])
             #OK, now I have coefficients of the polynomial, and I need to integrate it w.r.t. Gaussian measure
-        #print(a_vals.shape)
-        #print(a_vals)
-        cvfs[i] = np.sum(a_vals*(poly_vals[:,i-num_poly+1:i+1].T))
-        if (i%100 == 0):
-            print("100 observations proceeded")
+        cvfs[i] = np.sum(a_vals*(poly_vals[:,i-num_lags+1:i+1].T))
         #save results
-        test_stat_vanilla[ind,i] = np.mean(f_vals_vanilla[1:(i+1)])
-        test_stat_vr[ind,i] = test_stat_vanilla[ind,i] - np.sum(cvfs[:i])/i
+        test_stat_vanilla[i] = np.mean(f_vals_vanilla[1:(i+1)])
+        test_stat_vr[i] = test_stat_vanilla[i] - np.sum(cvfs[:i])/i
