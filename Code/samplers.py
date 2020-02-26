@@ -12,7 +12,84 @@ def MC_sampler(intseed,Potential,N_test,d):
     traj,traj_grad = Potential.sample(intseed,N_test)
     return traj,traj_grad
 
-def ULA(r_seed,Potential,step, N, n, d, return_noise = False):
+def ULA(r_seed,Potential,step, N, n, d, burn_type = "SGLD",main_type = "SGLDFP"):
+    """ MCMC ULA
+    Args:
+        Potential - one of objects from potentials.py
+        step: stepsize of the algorithm
+        N: burn-in period
+        n: number of samples after the burn-in
+        d: dimensionality of the problem
+        burn_type: type of gradient updates during burn-in period;
+                    allowed values: "full","SGLD","SGLDFP","SAGA"
+        main_type: type of gradient updates during main loop;
+                    allowed values: "full", "SGLD", "SGLDFP", "SAGA"    
+    Returns:
+        traj: a numpy array of size (n, d), where the trajectory is stored
+        traj_grad: numpy array of size (n, d), where the gradients of the 
+            potential U along the trajectory are stored
+    """
+    np.random.seed(r_seed)
+    #select method for gradient updates during burn-in
+    if burn_type == "full":
+        grad_burn = Potential.gradpotential
+    elif burn_type == "SGLD":
+        grad_burn = Potential.stoch_grad
+    elif burn_type == "SGLDFP":
+        grad_burn = Potential.stoch_grad_fixed_point
+    #elif burn_type == "SAGA":
+        #grad_burn = Potential.stoch_grad_SAGA
+    else:
+        raise "Not implemented error: invalid value in ULA sampler, in burn_type"
+    #select method for gradient updates during main loop   
+    traj = np.zeros((n, d))
+    traj_grad = np.zeros((n, d))
+    x = np.random.normal(scale=5.0, size=d) # initial value X_0
+    for k in np.arange(N): # burn-in period
+        grad_burn_val = grad_burn(x)
+        x = x + step * grad_burn_val +\
+            np.sqrt(2*step)*np.random.normal(size=d)
+    #burn-in ended
+    if main_type == "SAGA":#compute SAGA updates here
+        grads_SAGA = Potential.update_gradients(np.arange(Potential.p),x)
+        g_sum = np.sum(grads_SAGA,axis=0)
+        for k in np.arange(n):#main loop
+            batch_inds = np.random.choice(Potential.p,Potential.batch_size)
+            #update gradient at batch points
+            vec_g_upd = Potential.update_gradients(batch_inds,x)
+            #update difference
+            delta_g = np.sum(vec_g_upd,axis=0) - np.sum(grads_SAGA[batch_inds,:],axis=0)
+            grad = Potential.gradlogprior(x) + Potential.ratio * delta_g + g_sum
+            traj_grad[k,] = grad
+            traj[k,] = x
+            #SAGA step
+            x = x + step*grad + np.sqrt(2*step)*np.random.normal(size=d) 
+            g_sum += delta_g
+            grads_SAGA[batch_inds,:] = copy.deepcopy(vec_g_upd)
+        return traj,traj_grad
+    else:#all other gradient schemes may be computed in the similar manner via unique interface
+        if main_type == "full":
+            grad_main = Potential.gradpotential
+        elif main_type == "SGLD":
+            grad_main = Potential.stoch_grad
+        elif main_type == "SGLDFP":
+            grad_main = Potential.stoch_grad_fixed_point
+        else:
+            raise "Not implemented error: invalid value in ULA sampler, in main_type" 
+        if (main_type != "full"):#we need to re-calculate gradient
+            for k in np.arange(n): # samples
+                traj[k,]=x
+                traj_grad[k,] = grad_main(x)
+                x = x + step * grad_main(x) + np.sqrt(2*step)*np.random.normal(size=d) 
+        else:#in case of full gradient we do not need to re-calculate gradients on each step
+            for k in np.arange(n): # samples
+                grad = grad_main(x)
+                traj[k,]=x
+                traj_grad[k,]=grad
+                x = x + step * grad + np.sqrt(2*step)*np.random.normal(size=d)
+        return traj,traj_grad 
+
+def ULA_light(r_seed,Potential,step, N, n, d, return_noise = False):
     """ MCMC ULA
     Args:
         Potential - one of objects from potentials.py

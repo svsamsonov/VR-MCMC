@@ -2,7 +2,7 @@ import numpy as np
 import numpy.polynomial as P
 import scipy as sp
 from sklearn.preprocessing import PolynomialFeatures
-from samplers import ULA
+from samplers import ULA_light
 from potentials import GaussPotential,GaussMixture,GausMixtureIdent,GausMixtureSame
 import copy
 
@@ -76,6 +76,7 @@ def approx_q(X_train,Y_train,N_traj_train,lag,max_deg):
         #should use polyfeatures here
         poly = PolynomialFeatures(max_deg)
         X_features = poly.fit_transform(x_all)
+        print(X_features.shape)
         lstsq_results = np.linalg.lstsq(X_features,y_all,rcond = None)
         coefs = copy.deepcopy(lstsq_results[0])
         coefs.resize((1,X_features.shape[1]))           
@@ -144,8 +145,11 @@ def get_representations(k,s,d,K_max):
         k_vec[-(ind+1)] = k % (K_max + 1)
         k = k // (K_max + 1)
     #initialize s_vec
-    if d == 2:
-        vec_table = np.array([[0,0],[1,0],[0,1],[2,0],[1,1],[0,2]])
+    if d == 1:
+        vec_table = np.array([[0],[1],[2],[3],[4],[5]])
+        s_vec = vec_table[s,:]
+    elif d == 2:
+        vec_table = np.array([[0,0],[1,0],[0,1],[2,0],[1,1],[0,2],[3,0],[2,1],[1,2],[0,3]])
         s_vec = vec_table[s,:]
     else:
         raise "not implemented error in get_representations::s_vec"
@@ -154,31 +158,34 @@ def get_representations(k,s,d,K_max):
 def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_test,d):
     """
     """
-    X_test,Noise = ULA(r_seed,Potential,step, N_burn, N_test, d, return_noise = True)
+    X_test,Noise = ULA_light(r_seed,Potential,step, N_burn, N_test, d, return_noise = True)
     Noise = Noise.T
     test_stat_vanilla = np.zeros(N_test,dtype = float)
     test_stat_vr = np.zeros_like(test_stat_vanilla)
     #compute number of basis polynomials
-    num_basis_funcs = (K_max+1)**d + 1
+    num_basis_funcs = (K_max+1)**d
     #print("number of basis functions = ",num_basis_funcs)
     #compute polynomials of noise variables Z_l
-    poly_vals = np.zeros((num_basis_funcs+1,N_test),dtype = float)
-    for k in range(num_basis_funcs):
+    poly_vals = np.zeros((num_basis_funcs,N_test),dtype = float)
+    for k in range(len(poly_vals)):
         poly_vals[k,:] = eval_hermite(k,Noise,K_max)
+    #print(poly_vals.shape)
     #initialize function
     f_vals_vanilla = np.sum(X_test,axis=1)
+    #f_vals_vanilla = X_test[:,0]
     cvfs = np.zeros_like(f_vals_vanilla)
     st_norm_moments = init_moments(K_max+S_max+1)
     table_coefs = init_basis_polynomials(K_max,S_max,st_norm_moments,step)
+    #print(table_coefs.shape)
     for i in range(1,len(cvfs)):
         #start computing a_{p-l} coefficients
         num_lags = min(lag,i)
-        a_vals = np.zeros((num_lags,num_basis_funcs+1),dtype = float)#control variates
+        a_vals = np.zeros((num_lags,num_basis_funcs),dtype = float)#control variates
         for func_order in range(num_lags):#for a fixed lag Q function
             #compute \hat{a} with fixed lag
             x = X_test[i-1-func_order]
-            x_next = x - step*Potential.gradpotential(x)
-            for k in range(1,num_basis_funcs+1):
+            x_next = x + step*Potential.gradpotential(x)
+            for k in range(1,num_basis_funcs):
                 a_cur = np.ones(coefs_poly_regr.shape[1], dtype = float)
                 for s in range(len(a_cur)):
                     k_vect,s_vect = get_representations(k,s,d,K_max)
@@ -190,3 +197,4 @@ def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_tes
         #save results
         test_stat_vanilla[i] = np.mean(f_vals_vanilla[1:(i+1)])
         test_stat_vr[i] = test_stat_vanilla[i] - np.sum(cvfs[:i])/i
+    return test_stat_vanilla, test_stat_vr
