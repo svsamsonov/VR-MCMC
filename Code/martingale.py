@@ -13,7 +13,9 @@ def H(k, x):
         return x
     if k==2:
         return (x**2 - 1)/np.sqrt(2)
-    h = hermitenorm(k)(x) /  np.sqrt(math.factorial(k))
+    c = np.zeros(k+1,dtype = float)
+    c[k] = 1.0
+    h = P.hermite_e.hermeval(x,c) / np.sqrt(sp.special.factorial(k)) 
     return h
 
 def split_index(k,d,max_deg):
@@ -171,8 +173,8 @@ def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_tes
         poly_vals[k,:] = eval_hermite(k,Noise,K_max)
     #print(poly_vals.shape)
     #initialize function
-    f_vals_vanilla = np.sum(X_test,axis=1)
-    #f_vals_vanilla = X_test[:,0]
+    #f_vals_vanilla = np.sum(X_test,axis=1)
+    f_vals_vanilla = X_test[:,0]
     cvfs = np.zeros_like(f_vals_vanilla)
     st_norm_moments = init_moments(K_max+S_max+1)
     table_coefs = init_basis_polynomials(K_max,S_max,st_norm_moments,step)
