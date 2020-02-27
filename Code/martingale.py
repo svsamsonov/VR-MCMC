@@ -5,6 +5,7 @@ from sklearn.preprocessing import PolynomialFeatures
 from samplers import ULA_light
 from potentials import GaussPotential,GaussMixture,GausMixtureIdent,GausMixtureSame
 import copy
+from baselines import set_function
 
 def H(k, x):
     if k==0:
@@ -154,10 +155,13 @@ def get_representations(k,s,d,K_max):
         vec_table = np.array([[0,0],[1,0],[0,1],[2,0],[1,1],[0,2],[3,0],[2,1],[1,2],[0,3]])
         s_vec = vec_table[s,:]
     else:
-        raise "not implemented error in get_representations::s_vec"
+        vec_table = np.zeros((d+1,d),dtype = int)
+        for ind in range(1,len(vec_table)):
+            vec_table[ind,ind-1] = 1
+        s_vec = vec_table[s,:]
     return k_vec,s_vec
 
-def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_test,d):
+def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_test,d,f_type,inds_arr,params):
     """
     """
     X_test,Noise = ULA_light(r_seed,Potential,step, N_burn, N_test, d, return_noise = True)
@@ -174,7 +178,9 @@ def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_tes
     #print(poly_vals.shape)
     #initialize function
     #f_vals_vanilla = np.sum(X_test,axis=1)
-    f_vals_vanilla = X_test[:,0]
+    #f_vals_vanilla = X_test[:,0]
+    f_vals_vanilla = set_function(f_type,np.expand_dims(X_test, axis=0),inds_arr,params)
+    f_vals_vanilla = f_vals_vanilla[0,:,0]
     cvfs = np.zeros_like(f_vals_vanilla)
     st_norm_moments = init_moments(K_max+S_max+1)
     table_coefs = init_basis_polynomials(K_max,S_max,st_norm_moments,step)
