@@ -132,6 +132,12 @@ def init_moments(order):
     #eliminate odd
     moments_stand_norm[1::2] = 0
     return moments_stand_norm
+
+def generate_combines(k,l):
+    """
+    function that returns array of combinations of given cardinality
+    """
+    return 0
     
 def get_representations(k,s,d,K_max):
     """
@@ -154,6 +160,12 @@ def get_representations(k,s,d,K_max):
     elif d == 2:
         vec_table = np.array([[0,0],[1,0],[0,1],[2,0],[1,1],[0,2],[3,0],[2,1],[1,2],[0,3]])
         s_vec = vec_table[s,:]
+    elif d == 4:
+        vec_table = np.array([[0,0,0,0],[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1],
+                              [2,0,0,0],[1,1,0,0],[1,0,1,0],[1,0,0,1],
+                              [0,2,0,0],[0,1,1,0],[0,1,0,1],
+                              [0,0,2,0],[0,0,1,1],
+                              [0,0,0,2]])                      
     else:
         vec_table = np.zeros((d+1,d),dtype = int)
         for ind in range(1,len(vec_table)):
