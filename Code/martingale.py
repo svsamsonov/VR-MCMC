@@ -173,10 +173,11 @@ def get_representations(k,s,d,K_max):
         s_vec = vec_table[s,:]
     return k_vec,s_vec
 
-def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_test,d,f_type,inds_arr,params):
+def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_test,d,f_type,inds_arr,params,x0,fixed_start):
     """
     """
-    X_test,Noise = ULA_light(r_seed,Potential,step, N_burn, N_test, d, return_noise = True)
+    X_test,Noise = ULA_light(r_seed,Potential,step, N_burn, N_test, d, return_noise = True, x0 = x0, fixed_start = fixed_start)
+    print(X_test[0])
     Noise = Noise.T
     test_stat_vanilla = np.zeros(N_test,dtype = float)
     test_stat_vr = np.zeros_like(test_stat_vanilla)
