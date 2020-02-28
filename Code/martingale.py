@@ -165,12 +165,20 @@ def get_representations(k,s,d,K_max):
                               [2,0,0,0],[1,1,0,0],[1,0,1,0],[1,0,0,1],
                               [0,2,0,0],[0,1,1,0],[0,1,0,1],
                               [0,0,2,0],[0,0,1,1],
-                              [0,0,0,2]])                      
+                              [0,0,0,2]])
     else:
         vec_table = np.zeros((d+1,d),dtype = int)
         for ind in range(1,len(vec_table)):
             vec_table[ind,ind-1] = 1
         s_vec = vec_table[s,:]
+    """
+    elif d == 4:
+        vec_table = np.array([[0,0,0,0],[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1],
+                              [2,0,0,0],[1,1,0,0],[1,0,1,0],[1,0,0,1],
+                              [0,2,0,0],[0,1,1,0],[0,1,0,1],
+                              [0,0,2,0],[0,0,1,1],
+                              [0,0,0,2]]) 
+    """
     return k_vec,s_vec
 
 def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_test,d,f_type,inds_arr,params,x0,fixed_start):
@@ -217,5 +225,5 @@ def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_tes
         cvfs[i] = np.sum(a_vals*(poly_vals[:,i-num_lags+1:i+1].T))
         #save results
         test_stat_vanilla[i] = np.mean(f_vals_vanilla[1:(i+1)])
-        test_stat_vr[i] = test_stat_vanilla[i] - np.sum(cvfs[:i])/i
+        test_stat_vr[i] = test_stat_vanilla[i] - np.sum(cvfs[1:(i+1)])/i
     return test_stat_vanilla, test_stat_vr
