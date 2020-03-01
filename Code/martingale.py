@@ -166,6 +166,7 @@ def get_representations(k,s,d,K_max):
                               [0,2,0,0],[0,1,1,0],[0,1,0,1],
                               [0,0,2,0],[0,0,1,1],
                               [0,0,0,2]])
+        s_vec = vec_table[s,:]
     else:
         vec_table = np.zeros((d+1,d),dtype = int)
         for ind in range(1,len(vec_table)):
@@ -218,10 +219,13 @@ def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_tes
                 a_cur = np.ones(coefs_poly_regr.shape[1], dtype = float)
                 for s in range(len(a_cur)):
                     k_vect,s_vect = get_representations(k,s,d,K_max)
+                    #print("K = ",k_vect)
+                    #print("S = ",s_vect)
                     for dim_ind in range(d):
                         a_cur[s] = a_cur[s]*P.polynomial.polyval(x_next[dim_ind],table_coefs[k_vect[dim_ind],s_vect[dim_ind],:])
                 a_vals[-(func_order+1),k] = np.dot(a_cur,coefs_poly_regr[func_order,:])
             #OK, now I have coefficients of the polynomial, and I need to integrate it w.r.t. Gaussian measure
+        #print("sum of coefficients",np.sum(np.abs(a_vals)))
         cvfs[i] = np.sum(a_vals*(poly_vals[:,i-num_lags+1:i+1].T))
         #save results
         test_stat_vanilla[i] = np.mean(f_vals_vanilla[1:(i+1)])
