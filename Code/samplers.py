@@ -89,7 +89,7 @@ def ULA(r_seed,Potential,step, N, n, d, burn_type = "SGLD",main_type = "SGLDFP")
                 x = x + step * grad + np.sqrt(2*step)*np.random.normal(size=d)
         return traj,traj_grad 
 
-def ULA_light(r_seed,Potential,step, N, n, d, return_noise = False):
+def ULA_light(r_seed,Potential,step, N, n, d, return_noise = False, x0 = None, fixed_start = False):
     """ MCMC ULA
     Args:
         Potential - one of objects from potentials.py
@@ -116,8 +116,11 @@ def ULA_light(r_seed,Potential,step, N, n, d, return_noise = False):
         x = x + step * grad_burn_val +\
             np.sqrt(2*step)*np.random.normal(size=d)
     #burn-in ended
+    if fixed_start: #start all test trajectories from the same point
+        x = x0
+    traj[0,] = x0
     grad_main = Potential.gradpotential
-    for k in np.arange(n): # samples
+    for k in np.arange(1,n): # samples
         grad = grad_main(x)
         #traj[k,]=x
         #traj_grad[k,]=grad
