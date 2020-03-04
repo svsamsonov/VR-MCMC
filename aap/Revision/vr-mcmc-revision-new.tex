@@ -652,7 +652,7 @@ where
  \[
  \pi(x) = \frac{1}{2\sqrt{(2\pi)^{d}|\Sigma|}} \left( \rme^{-\frac{(x-\mu)^T\Sigma^{-1}(x-\mu)}{2}} + \rme^{-\frac{(x+\mu)^T\Sigma^{-1}(x+\mu)}{2}}\right)
  \]
-where $\rho \in (0,1), \mu \in \rset^d, \Sigma \in \rset^{d \times d}$. The function $U(x)$ and its gradient are given by
+where $\rho \in (0,1), \mu \in \rset^d, \Sigma \in \rset^{d \times d}$ and $|\Sigma|$ is its determinant. The function $U(x)$ and its gradient are given by
 \[
 U(x) = \frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu) - \ln{\left(1 + \rme^{-2\mu^\top \Sigma^{-1}x}\right)}, \quad
 \]
@@ -1154,33 +1154,36 @@ we get
 \]
 where we denote
 \[
-\zeta_{l,j}(u)=\mathsf{E}\left[e^{-u\sum_{k=l}^{j}\gamma\mu'(X_{k-1})}\right],\quad u>0.
+\zeta_{l,j}(u)=\mathsf{E}\left[e^{-u\gamma\sum_{k=l}^{j}\mu'(X_{k-1})}\right],\quad u>0.
 \]
 From Theorem~\ref{thm:ula_const_size} in Appendix~\ref{sec:appendix}, it follows that
 \[
-\mathsf{E}\left[e^{-u\gamma\left(\sum_{k=l}^{j}[\mu'(X_{k-1})-\pi_\gamma(\mu')]\right)}\right]\leq e^{u^2\varkappa (j-l-1)\gamma^{2}}
+\mathsf{E}\left[e^{-u\gamma\left(\sum_{k=l}^{j}[\mu'(X_{k-1})-\pi_\gamma(\mu')]\right)}\right]\leq e^{u^2\varkappa (j-l+1)\gamma^{2}}
 \]
 with constant $\varkappa = ...$, where we used the fact that $\mu^{\prime}(x)$ is bounded. Then we have
 \[
-\mathsf{E}\left[e^{-s\sum_{k=l}^{j}\gamma_{k}\mu'(X_{k-1})}\right]\leq e^{s^2\varkappa \gamma^2(j-l-1)}e^{-s\gamma (j-l-1)\pi_\gamma(\mu')}.
+\mathsf{E}\left[e^{-s\gamma\sum_{k=l}^{j}\mu'(X_{k-1})}\right]\leq e^{s^2\varkappa \gamma^2(j-l+1)}e^{-s\gamma (j-l+1)\pi_\gamma(\mu')}.
 \]
-\denis{Please finish}
-Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R})$, we have
+Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R})$ and $\pi^{\prime}(x) = -\frac{1}{2}\pi(x)\mu(x)$, we have
 \[
-\pi(\mu')=\int\mu'(x)\pi(x)\,dx=-\int\mu(x)\pi'(x)\,dx=2\int\mu^{2}(x)\pi(x)\,dx>0
+\pi(\mu')=\int\mu'(x)\pi(x)\,dx=-\int\mu(x)\pi'(x)\,dx=\frac{1}{2}\int\mu^{2}(x)\pi(x)\,dx>0
 \]
-yielding the final bound
+Note also that \(\pi_\gamma(\mu^{\prime}) \geq \pi_\gamma(\mu^{\prime}) - C_1\sqrt{\gamma}\)
+yielding the bound
 \[
-\zeta_{l,j}(s) \leq e^{s^2\kappa (j-l-1) \gamma^2}e^{-2s\gamma(j-l-1)\alpha}
+\zeta_{l,j}(s) \leq e^{s^2\kappa (j-l+1) \gamma^2}e^{-s\gamma(j-l+1)\alpha}
 \]
-where $ \alpha = \int \mu^2(x)\pi(x)\,dx$.
-Finally
+where $ \alpha = \frac{1}{2}\int \mu^2(x)\pi(x)\,dx - C_1\sqrt{\gamma} > 0$ for sufficiently small $\gamma$. Hence we obtain
 \begin{align*}
-\mathsf{E}\left[\sum_{j=1}^{q}\prod_{k=1}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right]  \lesssim
+\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4) \leq \sum_{p=j+1}^{q+1}e^{4\kappa(p-j)\gamma^2}e^{-2\gamma(p-j)\alpha} < \frac{e^{4\kappa\gamma^2 - 2\gamma\alpha}}{1-e^{4\kappa\gamma^2 - 2\gamma\alpha}}
 \end{align*}
-Plugging into bound for conditional variance,
+and thus the final bound follows:
 \begin{align*}
-\mathsf{Var}\left[\sum_{p=l}^{q}\gamma_{p+1}\partial_{y_{l}}^{K}f\left(X_{p}\right)\Big|X_{l-1}\right] \leq
+\mathsf{E}\left[\sum_{j=1}^{q}\prod_{k=1}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right]  \leq \frac{e^{6\kappa\gamma^2 - 3\gamma\alpha}}{\left(1-e^{4\kappa\gamma^2 - 2\gamma\alpha}\right)\left(1-e^{2\kappa\gamma^2 - \gamma\alpha}\right)}
+\end{align*}
+Plugging into variance bound,
+\begin{align*}
+\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right] \leq
 \frac{A_{K}^{2}e^{2\kappa \Gamma^*}}{4\alpha^2(1-\gamma_1 B_\mu)^3}
 \end{align*}
 \par
