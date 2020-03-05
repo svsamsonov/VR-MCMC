@@ -1179,15 +1179,14 @@ where $ \alpha = \frac{1}{2}\int \mu^2(x)\pi(x)\,dx - C_1\sqrt{\gamma} > 0$ for 
 \end{align*}
 and thus the final bound follows:
 \begin{align*}
-\mathsf{E}\left[\sum_{j=1}^{q}\prod_{k=1}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right]  \leq \frac{e^{6\kappa\gamma^2 - 3\gamma\alpha}}{\left(1-e^{4\kappa\gamma^2 - 2\gamma\alpha}\right)\left(1-e^{2\kappa\gamma^2 - \gamma\alpha}\right)}
+\mathsf{E}\left[\sum_{j=1}^{q}\prod_{k=1}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right]  \leq \frac{e^{10\kappa\gamma^2 - 5\gamma\alpha}}{\left(1-e^{4\kappa\gamma^2 - 2\gamma\alpha}\right)^2\left(1-e^{2\kappa\gamma^2 - \gamma\alpha}\right)}
 \end{align*}
 Plugging into variance bound,
 \begin{align*}
 \mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right] \leq
-\frac{A_{K}^{2}e^{2\kappa \Gamma^*}}{4\alpha^2(1-\gamma_1 B_\mu)^3}
+\frac{\gamma^3 A_{K}^{2} e^{10\kappa\gamma^2 - 5\gamma\alpha}}{\left(1-e^{4\kappa\gamma^2 - 2\gamma\alpha}\right)^2\left(1-e^{2\kappa\gamma^2 - \gamma\alpha}\right)(1-\gamma B_\mu)^3} \leq B_K
 \end{align*}
-\par
-The proof is completed.
+for $\gamma$ small enough with $B_K$ not depending on $p,q$. The proof is completed.
 \end{proof}
 
 
