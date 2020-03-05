@@ -500,20 +500,21 @@ and the  variance:
 \end{equation}
 Our analysis is carried out under the following two assumptions:
 \begin{description}
-\item[(H1)][\textbf{Lipschitz continuity}] The potential $U$ is differentiable and $\nabla U$ is Lipschitz, that is, there exists $L_U < \infty$ such that
+\item[(H1)][\textbf{Lipschitz continuity}] The potential $U$ is differentiable and $\nabla U$ is Lipschitz, that is, there exists $L < \infty$ such that
 \begin{eqnarray*}
-|\nabla U(x)-\nabla U(y)|\leq L_U|x-y|, \quad x,y\in \rset^d.
+\| \nabla U(x)-\nabla U(y) \| \leq L \|x-y\|, \quad x,y\in \rset^d.
 \end{eqnarray*}
-\item[(H2)][\textbf{Convexity outside a ball}] There exist $K_U>0,$ $M_U>0$ and $m_U>0$ such that for any $x\not\in B_{K_U}(0)$  it holds
+\item[(H2)][\textbf{Convexity outside a ball}] There exist $K>0$ and $m>0$ such that for any $x\not\in B_{K}(0)$  it holds
 \begin{equation*}
-\ps{D^2U(x)}{x} \geq (m_U/2)\|x\|^2.
+\ps{D^2U(x)}{x} \geq m\|x\|^2.
 \end{equation*}
 \end{description}
 Let $\pi$ be the probability measure on $\rset^d$ with density $\pi(x)$ of the form \eqref{eq:stationary_distr};
 for $\gamma>0$, define the Markov kernel $Q_\gamma$ associated to one step of the ULA algorithm by
-\[
+\begin{equation}
+\label{eq:ula_kernel}
 \kerULA_{\gamma}(x,A)=\int_{A} \frac{1}{(2 \pi \gamma)^{d/2}} \text{ exp} \left\{ -\frac{1}{2\gamma} \left\| y - x + \gamma \mu(x)\right\|^2\right\} \rmd y
-\]
+\end{equation}
 for any $A \in \mathcal{B}(\rset^d)$. Note that for a homogeneous Markov chain $\left(X^x_{p}\right)_{p \in \nset_0}$ of the form \eqref{eq:chain} with constant step size $\gamma$, $\mathsf{P}(X_n^x \in A) = \kerULA^n_{\gamma}(x,A)$. 
 
 \paragraph{Squared bias:} Due to the martingale transform structure
@@ -532,7 +533,7 @@ Let $f$ be a bounded Borel function and $(X^x_{p})_{p \in \nset_0}$ be a Markov 
 \label{eq:sq_bias}
 \left( \mathsf{E}[\rho(f)]-\pi(f)\right)^2 \lesssim \mathrm{osc}(f)^2 \left[\gamma + \frac{1}{n}\left(V(x) + \pi_{\gamma}(V)\right)\right]
 \end{equation}
-where $\lesssim$ means less up to a constant not depending on $n$ and $\gamma$.
+for $V(x) = 1 + \|x\|^2$, where $\lesssim$ means less up to a constant not depending on $n$ and $\gamma$.
 \end{lem}
 
 \begin{proof} We can estimate the conditional bias similarly to~\cite[Section~3]{durmus:moulines:2017}:
@@ -549,7 +550,7 @@ Under assumptions {\bf (H1)} and {\bf (H2)}, the corresponding Markov chain has 
 \label{eq:bias}
 \tvnorm{\pi - \pi_\gamma} < C_1\sqrt{\gamma}, \quad \tvnorm{\delta_x\kerULA_{\gamma}^{n}-\pi_\gamma} \leq C_2\rho^{\gamma n}\left(V(x) + \pi_\gamma(V)\right)
 \end{equation}
-for  $V(x) = 1 + \|x\|^2,$ some $\rho\in (0,1)$ and constants $C_1,C_2>0$ independent of $\gamma$  and $n$. Combining \ref{eq:bias} with the triangle inequality, we obtain \ref{eq:sq_bias}.
+for  $V(x) = 1 + \|x\|^2,$ some $\rho\in (0,1)$ and constants $C_1,C_2>0$ independent of $\gamma$  and $n$. Combining \eqref{eq:bias} with the triangle inequality, we obtain \eqref{eq:sq_bias}.
 \end{proof}
 
 \paragraph{Variance:} An upper bound for the variance of the classical estimator~\eqref{eq:29032018a2}
@@ -1192,53 +1193,54 @@ for $\gamma$ small enough with $B_K$ not depending on $p,q$. The proof is comple
 
 \appendix
 \section{Bounds for moments of  ULA}\label{sec:appendix}
+First let us notice that conditions {\bf (H1)} and {\bf (H2)} imply (\cite[Lemma~16]{brosse2018diffusion}) that for some $K_2 > 0$ it holds
+\begin{equation}
+\label{eq:H3}
+\ps{\nabla U(x)}{x} \geq \frac{m}{2}\|x\|^2, \quad \|x\| \geq K_2
+\end{equation}
 
-We shall show that conditions {\bf (H1)} and {\bf (H2)} are sufficient to show that ULA kernel $Q_\gamma$ satisfies the so-called drift condition:
+Now we shall show that conditions {\bf (H1)} and {\bf (H2)} are sufficient to show that ULA kernel $Q_\gamma$ satisfies the so-called drift condition:
 \begin{definition}
 \label{def:drift}
 We say that the Markov kernel $Q_{\gamma}$ satisfies Foster-Lyapunov drift condition if there exist a measurable function $V: X \rightarrow [1; +\infty)$, real numbers $\lambda \in (0,1)$ and $C > 0$ such that for any $x \in X$,
-\begin{eqnarray*}
+\begin{equation}
+\label{eq:lyapunov}
 Q_{\gamma}V(x) \leq \lambda^{\gamma} V(x) + \gamma C
-\end{eqnarray*}
+\end{equation}
 \end{definition}
-
 
 \begin{lem}
 \label{lem:drift}
- Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$. Then the kernel $Q_\gamma$ from \ref{eq:kernel} satisfies drift condition \ref{def:drift} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L^2}$ with drift function $V(x) = 1 + \|x\|^2$, constants $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = \frac{25K_1^2}{8} + 2d + m$ with $K_1$ from \ref{eq:H3}, $m$ from {\bf (H2)}.
+ Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$. Then the kernel $Q_\gamma$ from \eqref{eq:ula_kernel} satisfies drift condition \eqref{eq:lyapunov} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L}$ with drift function $V(x) = 1 + \|x\|^2$,   $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = \frac{25K_2^2}{8} + d + m$ with $K_2$ from \eqref{eq:H3}, $m_U$ from {\bf (H2)}.
 \end{lem}
 
-\begin{proof} Consider $V(x) = 1 + \|x\|^2$, then
+\begin{proof} Let $V(x) = 1 + \|x\|^2$, then
 $$
-Q_{\gamma}V(x) = \int\limits_{\rset^d}V(y)Q_{\gamma}(x,dy) = \int\limits_{\rset^d}(1+\|y\|^2)\frac{1}{(4\pi\gamma)^{\frac{d}{2}}}\exp{\left(-\frac{\|y-x+\gamma\nabla U(x)\|^2}{4\gamma}\right)}\,dy =
-$$
-
-$$
-=1 + \frac{1}{(4\pi\gamma)^{\frac{d}{2}}}\int\limits_{\mathbb{R}^d}\|z + x - \gamma \nabla U(x)\|^2 \exp{\left(-\frac{\|z\|^2}{4\gamma}\right)}\,dz
-$$
-Let us first consider the case $x \notin B(0,K_1)$. Note that
-$$
-\|z+x-\gamma \nabla U(x)\|^2 = \|z\|^2 + 2 \langle z, x - \gamma \nabla U(x) \rangle + \gamma^2 \|x - \gamma \nabla U(x)\|^2
-$$
-and the linear term vanishes after integration, moreover, for $Z \sim \mathcal{N}(0,2\gamma I_d)$, it holds $\mathbb{E}\|Z\|^2 = 2\gamma d$. It remains to notice that due to {\bf H1} and {\bf H2} (which implies \ref{eq:H3}),
-$$
-\|x - \gamma \nabla U(x) \|^2 = \|x\|^2 - 2\gamma \langle \nabla U(x), x\rangle + \gamma^2 \|\nabla U(x)\|^2 \leq
+Q_{\gamma}V(x) = \int\limits_{\rset^d}V(y)Q_{\gamma}(x,dy) = \int\limits_{\rset^d}\frac{(1+\|y\|^2)}{(2\pi\gamma)^{\frac{d}{2}}}\exp{\left(-\frac{\|y-x+\gamma\nabla U(x)\|^2}{2\gamma}\right)}\,dy =
 $$
 
 $$
- \leq (1-\gamma m)\|x\|^2 + 2\gamma^2 L^2 \|x\|^2
+=1 + \frac{1}{(2\pi\gamma)^{\frac{d}{2}}}\int\limits_{\mathbb{R}^d}\|z + x - \gamma \nabla U(x)\|^2 \exp{\left(-\frac{\|z\|^2}{2\gamma}\right)}\,dz
 $$
-Thus, plugging everything into expression for $R_{\gamma}V$ and using $\gamma < \frac{m}{4L}$, we obtain
+Let us first consider the case $x \notin B(0,K_2)$. Note that
 $$
-R_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + 2\gamma d + (\gamma m - 2\gamma^2 L^2) \leq \exp^{-\frac{\gamma m}{2}}V(x) + \gamma (2d + m)
+\|z+x-\gamma \nabla U(x)\|^2 = \|z\|^2 + 2 \langle z, x - \gamma \nabla U(x) \rangle + \|x - \gamma \nabla U(x)\|^2
 $$
-Now let $x \in B(0,K_1)$. Then simply using $\|x-\gamma \nabla U(x)\|^2 \leq 2(1+L\gamma)^2\|x\|^2$, we obtain
+and the linear term vanishes after integration, moreover, for $Z \sim \mathcal{N}(0,\gamma I_d)$, it holds $\mathbb{E}\|Z\|^2 = \gamma d$. It remains to notice that due to \eqref{eq:H3},
+\[
+\|x - \gamma \nabla U(x) \|^2 = \|x\|^2 - 2\gamma \langle \nabla U(x), x\rangle + \gamma^2 \|\nabla U(x)\|^2 \leq \left(1 - \gamma m + 2\gamma^2 L^2\right)\|x\|^2
+\]
+Since $\gamma < \frac{m}{4L}$, we obtain
 $$
-R_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma\left((m - 2\gamma L^2)(1+\|x\|^2) + 2d + 2(1+L\gamma)^2\|x\|^2\right) \leq
+Q_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma d + (\gamma m - 2\gamma^2 L^2) \leq \exp^{-\frac{\gamma m}{2}}V(x) + \gamma (d + m)
+$$
+Now let $x \in B(0,K_2)$. Then simply using $\|x-\gamma \nabla U(x)\|^2 \leq 2(1+L\gamma)^2\|x\|^2$, we obtain
+$$
+Q_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma\left((m - 2\gamma L^2)(1+\|x\|^2) + d + 2(1+L\gamma)^2\|x\|^2\right) \leq
 $$
 
 $$
-\leq \exp^{-\frac{\gamma m}{2}}V(x) + \gamma(\frac{25K_1^2}{8} + 2d + m)
+\leq \exp^{-\frac{\gamma m}{2}}V(x) + \gamma(\frac{25K_2^2}{8} + d + m)
 $$
 \end{proof}
 
