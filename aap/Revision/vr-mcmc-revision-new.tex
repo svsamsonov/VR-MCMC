@@ -439,19 +439,14 @@ Given $N$ and $n$ as above, for $K\in\mathbb N$, denote
 \nonumber
 M_{K,n}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{k=1}^{K}\sum_{l=N+1}^{p} \bar a_{p-l,k}(X^x_{l-1})\phi_k(\xi_{l})\right]
 \\
-&=& \sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left(1+\frac{N-l}{n}\right)A_{N+n-l,k}(X^x_{l-1})\phi_{k}\left(\xi_{l}\right),
+&=& \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left[\sum_{p=0}^{N+n-l}\bar{a}_{p,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\right].
 \label{eq:29032018a5}
 \end{eqnarray}
-where
-\begin{equation}
-\label{eq:definition-A-s,k}
-A_{s,k}(x)=\frac{1}{s}\sum_{r=1}^{s}\bar a_{r,k}(x).
-\end{equation}
 Since \(X^x_{l-1}\) is independent of \(\xi_{l}\) and \(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq 0\), we obtain
 \[
-\PE[A_{N+n-l,k}(X^x_{l-1})\phi_{k}\left(\xi_{l}\right)] = \mathsf{E}[A_{N+n-l,k}(X^x_{l-1})\CPE{\phi_{k}\left(\xi_{l}\right)}{\mathcal{G}_{l-1}]} = 0
+\PE[g(X^x_{l-1})\phi_{k}\left(\xi_{l}\right)] = \mathsf{E}[g(X^x_{l-1})\CPE{\phi_{k}\left(\xi_{l}\right)}{\mathcal{G}_{l-1}]} = 0
 \]
-and hence the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
+for any measurable function $g$  and hence the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
 The representation \eqref{eq:coeff_mart} suggests that the variance of  the  variance-reduced estimator
 \begin{equation}
 \label{eq:29032018a3}
@@ -460,8 +455,13 @@ The representation \eqref{eq:coeff_mart} suggests that the variance of  the  var
 should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_{k'}(\xi_l)]=0$ if $k \ne k'$, we obtain
 \begin{equation}
 \label{eq:expression-variance}
-\PVar[\pi_{K,n}^N(f)]\leq\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X^x_{N+l-1})]
+\PVar_x[\pi_{K,n}^N(f)]\leq\sum_{k=K+1}^{\infty}\frac{1}{n^2}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X^x_{N+l-1})],
 \end{equation}
+where 
+\begin{eqnarray}
+\label{eq:definition-A-s,k}
+A_{q,k}(y)=\sum_{r=0}^q \bar{a}_{r,k}(y),\quad q\in \mathbb{N}
+\end{eqnarray}
 and $\mathsf{Var}[\pi_{K,n}^N(f)]$ is small provided that the coefficients $A_{s,k}$ decay fast enough as $k\to \infty.$
 In the next section   we provide a detailed   analysis of  $\mathsf{Var}[\pi_{K,n}^N(f)]$  for the  ULA  algorithm (see Example~\ref{exam:langevin-algorithm}).
 \section{Analysis of variance reduced ULA}
@@ -484,7 +484,7 @@ $|\mathbf{k}|=\sum_{i=1}^d k_i$ for $\mathbf{k}=(k_i)\in\mathbb N_0^d$,
 and we set $\mathcal G_p=\sigma(Z_1,\ldots,Z_p)$, $p\in\mathbb N$, and $\mathcal G_0=\mathrm{triv}$.
 Given $N$ and $n$ as above, for $K\in\mathbb N$, denote
 \begin{align}
-M_{K,n}^N(f) & =\sum_{\mathbf k\colon 0<\|\mathbf{k}\|\le K}\sum_{l=1}^{n}\Bigl(1-\frac{l}{n}\Bigr)A_{n-l,\mathbf{k}}(X_{N+l-1})\mathbf{H}_\mathbf{k}(Z_{N+l})
+M_{K,n}^N(f) & =\sum_{\mathbf k\colon 0<\|\mathbf{k}\|\le K}\frac{1}{n}\sum_{l=1}^{n}A_{n-l,\mathbf{k}}(X_{N+l-1})\mathbf{H}_\mathbf{k}(Z_{N+l})
 \label{eq:29032018a5}
 \notag
 \end{align}
@@ -570,11 +570,12 @@ and for all $x\in\mathbb R^d$ and  \(\mathbf{k}\) satisfying \(0<\|\mathbf{k}\|\
 \label{eq:smooth-mu}
 |\partial^{\mathbf{k}} f(x)|\le  B_f, \quad |\partial^{\mathbf{k}} \mu (x)|\leq B_\mu \eqsp.
 \end{equation}
-Then it holds
+Then  it holds
 \begin{eqnarray}
 \label{eq:var-bound}
-\PVar\left(\pi_{K,n}^{N}(f)\right)\lesssim n^{-1} \gamma^{K-2} \eqsp,
+\PVar\left(\pi_{K,n}^{N}(f)\right)\lesssim n^{-1} \gamma^{K-1} \eqsp,
 \end{eqnarray}
+provided $n\gamma^2$ is bounded.
 %where \tcr{\(\lesssim\) stands for inequality up to a constant not depending  on $\gamma,$ \(n\) and \(N.\)}
 \end{thm}
 Let us sketch the main steps of the proof. First using integration by parts we prove that
@@ -582,27 +583,24 @@ Let us sketch the main steps of the proof. First using integration by parts we p
 \label{eq:Ask-part}
 A_{s,\mathbf{k}}(x)=\gamma^{|\mathbf{k}'|/2}\frac{\sqrt{(\mathbf{k}-\mathbf{k}')!}}{\sqrt{\mathbf{k}!}}\mathsf{E}\left[ \partial_{Z_1}^{\mathbf{k}'} F(x,Z_1,\ldots,Z_s) \mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_{1})\right]
 \end{eqnarray}
-where $F_s(x,Z_1,\ldots,Z_s)=s^{-1}\sum_{r=0}^s f(X^x_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
+where $F_s(x,Z_1,\ldots,Z_s)=\sum_{r=0}^s f(X^x_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
 stands for a weak partial derivative of the functional $F_s$ that also can be viewed as discretised version of Malliavin derivative. From \eqref{eq:Ask-part}, we derive
 \begin{eqnarray*}
 \sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1} A^2_{s,\mathbf{k}}(x)\leq \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
 \left(\frac{\gamma}{2}\right)^{|I|K}
-\PVar \left( s^{-1} \sum\nolimits_{p=1}^{s}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X^x_{p}\right)
+\PVar_x \left( \sum_{p=1}^{s}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X_{p}\right)
 \right),
 \end{eqnarray*}
 where the sum runs over all nonempty subsets $I$ of the set $\{1,\ldots,d\}$ and
 \[
 \mathbf{\mathbf{K}}_{I}=K(\indi{I}(1),\ldots, \indi{I}(d)).
 \]
- Finally we show via  the Poincare inequality that under smoothness assumption \eqref{eq:smooth-mu} it holds
- \eric{Since we do not state was $W_s$ is, it is a bit difficult to guess why we are using a Poincare inequality there}
+ Finally, we show  that under our smoothness assumption \eqref{eq:smooth-mu} it holds
 \begin{equation*}
-\PVar \left(s^{-1} \sum\nolimits_{p=1}^{s}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X^x_{p}\right)
-\right)\leq W_s(x)
+\PVar \left(\sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X^x_{p}\right)
+\right)\leq C(1+V(x))
 \end{equation*}
-for all $x$ and some family of functions $(W_s)_{s\geq 1}$ such that  the sum $\sum_{s=1}^n \mathsf{E}[W_s(X_{N+n-s-1})]$ is bounded uniformly in $n\in \mathbb{N}.$
-\eric{Speak about truncation here.}
-
+for some constant $C$ not depending on $q$ and $V(x) = 1 + \|x\|^2$.
 \section{Numerical results}
 \label{sec:num}
 We perform numerical experiments based on ULA algorithm \ref{exam:langevin-algorithm} with constant step size $\gamma$. We construct a polynomial approximation  for each \(Q_r(x)\) in \eqref{eq:definition-bar-a} of the form:
@@ -790,8 +788,7 @@ we get applying first Lemma~\ref{eq:a_repr},
 A_{s,\mathbf{k}}(x)
 =\left(\gamma^{|\mathbf{k}'|}\frac{(\mathbf{k}-\mathbf{k}')!}{\mathbf{k}!}\right)^{1/2}
 \,
-\PE\left[
-s^{-1} \sum\nolimits_{r=1}^{s}\{\partial_{1}^{\mathbf{k}'} f(X^x_r)-\PE[\partial_{1}^{\mathbf{k}'}f(X^x_r)]\}\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_1)\right]
+\PE\left[ \sum\nolimits_{r=1}^{s}\{\partial_{1}^{\mathbf{k}'} f(X^x_r)-\PE[\partial_{1}^{\mathbf{k}'}f(X^x_r)]\}\mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_1)\right]
 \end{equation*}
 where $A_{s,\mathbf{k}}$ is defined in \eqref{eq:definition-A-s,k}.
 Assume that $\mu$ and $f$ are $K\times d$ times continuously differentiable.
@@ -809,7 +806,7 @@ where for any two multi-indices \(\mathbf{r},\) \(\mathbf{q}\) from \(\mathbb{N}
 \begin{equation*}
 Q_s(\mathbf{r},\mathbf{q})
 =
-\left\{\PE\left[\frac{1}{s}\sum_{p=1}^{s}\left\{\partial_{1}^{\mathbf r}f\left(X^x_{p}\right)-\PE\left[\partial_{1}^{\mathbf r}f\left(X^x_{p}\right)\right]\right\}\mathbf{H}_{\mathbf{q}}(Z_{1})\right]\right\}^{2}.
+\left\{\PE\left[\sum_{p=1}^{s}\left\{\partial_{1}^{\mathbf r}f\left(X^x_{p}\right)-\PE\left[\partial_{1}^{\mathbf r}f\left(X^x_{p}\right)\right]\right\}\mathbf{H}_{\mathbf{q}}(Z_{1})\right]\right\}^{2}.
 \end{equation*}
 In \eqref{eq:sum_abar} the first sum runs over all nonempty subsets $I$ of the set $\{1,\ldots,d\}.$
 For any subset $I,$ $\mathbb{N}_{I}^{d}$ stands for a set
@@ -844,19 +841,18 @@ Using this identity in \eqref{eq:sumA} implies
 \sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1}A^2_{s,\mathbf{k}}(x)
 &\leq & \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
 \left(\frac{\gamma}{2}\right)^{|I|K}
-\PVar\left(s^{-1}\sum\nolimits_{p=1}^{s}\partial_{1}^{\mathbf{K}_I}f\left(X^x_{p}\right)
+\PVar\left(\sum_{p=1}^{s}\partial_{1}^{\mathbf{K}_I}f\left(X^x_{p}\right)
 \right)
 \end{eqnarray*}
 Next we show that under the conditions  of Theorem~\ref{th:mr}
 \begin{eqnarray*}
-\PVar\left(s^{-1}\sum\nolimits_{p=1}^{s}\partial_{1}^{\mathbf{K}_I}f\left(X^x_{p}\right)
-\right)\leq W_s(x)
+\PVar\left(\sum_{p=1}^{q}\partial_{1}^{\mathbf{K}_I}f\left(X^x_{p}\right)
+\right)\leq C(1+V(x))
 \end{eqnarray*}
-for all $x$ and some family of functions $(W_s)_{s\geq 1}$ such that  the sum $\sum_{s=1}^n \mathsf{E}[W_s(X_{N+n-s-1})]$ is bounded uniformly in $n\in \mathbb{N}.$
-
+for all $x$ and some constant $C$  not depending on $q.$
 To keep the notational burden at a reasonable level, we present the proof only in one-dimensional case.
 Multidimensional extension is straightforward but requires involved notations.
-First we need to prove several auxiliary results.
+First, we need to prove several auxiliary results.
 \begin{lem}\label{lem:06062018a1}
 Let $(x_p)_{p\in\mathbb N_0}$
 and $(\epsilon_p)_{p\in\mathbb N}$
@@ -897,13 +893,11 @@ x_p\le\left(\ol C_0+\ol C_1
 $$
 which, together with~\eqref{eq:06062018a3}, completes the proof.
 \end{proof}
-
 In what follows, we use the notation
 \begin{equation}
 \label{eq:definition-alpha}
 \alpha_k=1-\gamma \mu'(X_{k-1}),\quad k\in\mathbb N.
 \end{equation}
-
 The assumption \eqref{eq:smooth-mu} implies that  $|\mu'(x)|\leq B_\mu$ for some constant $B_\mu>0$ and all $x\in \mathbb{R}^d$. Without loss of generality we suppose that $\gamma B_\mu<1.$
 \begin{lem}\label{lem:06062018a2}
 Under assumptions of Theorem~\ref{th:mr},
@@ -1048,26 +1042,25 @@ This concludes the proof.
 \label{lem:var_poincare}
 Under assumptions of Theorem~\ref{th:mr}, it holds
 $$
-\mathsf{Var}_x\left[\sum_{p=1}^{s}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right]\le B_K\quad\text{a.s.},
+\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right]\le  \gamma^{-1} C_K (1+V(x)),
 $$
-where $B_K$ is a deterministic bound that does not depend on $l$ and~$q$.
+where $C_K$ is a constant that does not depend on $q$ and $\gamma.$ 
 \end{lem}
-
 \begin{proof}
 The expression
 $\sum_{p=1}^q \partial_{y_1}^K f(X_p)$
 can be viewed as a deterministic function of
-$X_{0},Z_1,Z_{2},\ldots,Z_q$
+$x,Z_1,Z_{2},\ldots,Z_q$
 $$
 \sum_{p=1}^q  \partial_{y_1}^K f(X_p)
-=F(X_{0},Z_1,Z_{2},\ldots,Z_q).
+=F(x,Z_1,Z_{2},\ldots,Z_q).
 $$
 By the (conditional) Gaussian Poincar\'e inequality,
 we have
 $$
 \mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right]
 \le\mathsf E_x\left[
-\|\nabla_Z F(X_{0},Z_1,Z_{2},\ldots,Z_q)\|^2
+\|\nabla_Z F(x,Z_1,Z_{2},\ldots,Z_q)\|^2
 \right],
 $$
 where $\nabla_Z F=(\partial_{Z_1} F,\ldots,\partial_{Z_q} F)$,
@@ -1075,13 +1068,13 @@ and $\|\cdot\|$ denotes the Euclidean norm.
 Notice that \(\partial_{Z_j} F=\sqrt{\gamma}\,\partial_{y_j} F\) and
 hence
 $$
-\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right]\leq\gamma\sum_{j=1}^{q}\mathsf{E}_x\left[\left(\sum_{p=1}^{q}\gamma\partial_{y_{j}}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right)^{2}\right].
+\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right]\leq\gamma^2\sum_{j=1}^{q}\mathsf{E}_x\left[\left(\sum_{p=1}^{q}\partial_{y_{j}}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right)^{2}\right].
 $$
 It is straightforward to check that
 $\partial_{y_j}\partial_{y_1}^K f(X_p)=0$
 whenever $p<j$. Therefore, we get
 \begin{equation}\label{eq:10062018a2}
-\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right]\leq\gamma\sum_{j=1}^{q}\mathsf{E}_x\left[\left(\sum_{p=j}^{q}\gamma \partial_{y_{j}}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right)^{2}\right].
+\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right]\leq\gamma^2\sum_{j=1}^{q}\mathsf{E}_x\left[\left(\sum_{p=j}^{q}\partial_{y_{j}}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right)^{2}\right].
 \end{equation}
 Now fix $p$ and $j$, $p\ge j$, in $\{1,\ldots,q\}$.
 By Fa\`a di Bruno's formula
@@ -1118,11 +1111,11 @@ we proceed as follows
 \begin{align*}
 \mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right]
 &\le
-\gamma^3 A_{K}^{2}\sum_{j=1}^{q}
+\gamma^2 A_{K}^{2}\sum_{j=1}^{q}
 \mathsf{E}\left(\sum_{p=j}^{q}\prod_{k=2}^{p}\alpha_{k}\right)^{2}
 \\
 &\le
-\frac{\gamma^3 A_{K}^{2}}{(1-\gamma B_\mu)^2}
+\frac{\gamma^2 A_{K}^{2}}{(1-\gamma B_\mu)^2}
 \mathsf{E}\sum_{j=1}^{q}
 \left(\sum_{p=j+1}^{q+1}  \prod_{k=2}^{p} \alpha_{k}
 \right)^{2}
@@ -1136,7 +1129,7 @@ we proceed as follows
 %\right)^{2}
 %\\
 &\le
-\frac{\gamma^3 A_{K}^{2}}{(1-\gamma B_\mu)^3}
+\frac{\gamma^2 A_{K}^{2}}{(1-\gamma B_\mu)^3}
 \mathsf{E}\sum_{j=1}^{q}
 \prod_{k=1}^{j} \alpha_{k}
 \left(\sum_{p=j+1}^{q+1}  \prod_{k=j+1}^{p} \alpha_{k}
@@ -1145,25 +1138,25 @@ we proceed as follows
 
 Now, from the H\"older inequality, we obtain (with $\|X\|_p = (\mathsf{E}X^p)^{\frac{1}{p}}$)
 \begin{align*}
-\mathsf{E}\left[\sum_{j=1}^{q}\prod_{k=l}^{j}\alpha_{k}\left( \sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right] & \leq\sum_{j=1}^{q}\left\Vert \prod_{k=1}^{j}\alpha_{k}\right\Vert _{2}\left\Vert \sum_{p=j+1}^{q+1} \prod_{k=j+1}^{p}\alpha_{k}\right\Vert _{4}^{2}\\
+\mathsf{E}_x\left[\sum_{j=1}^{q}\prod_{k=l}^{j}\alpha_{k}\left( \sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right] & \leq\sum_{j=1}^{q}\left\Vert \prod_{k=1}^{j}\alpha_{k}\right\Vert _{2}\left\Vert \sum_{p=j+1}^{q+1} \prod_{k=j+1}^{p}\alpha_{k}\right\Vert _{4}^{2}\\
  & \leq\sum_{j=1}^{q} \left\Vert \prod_{k=1}^{j}\alpha_{k}\right\Vert _{2}\left(\sum_{p=j+1}^{q+1}\left\Vert \prod_{k=j+1}^{p}\alpha_{k}\right\Vert _{4}\right)^{2}.
 \end{align*}
 Now using the fact that $\prod\limits_{k=j+1}^{p}\alpha_{k} \leq \exp\left(-\sum\limits_{k=j+1}^{p}\gamma\mu'(X_{k-1})\right),$
 we get
 \[
-\mathsf{E}\left[\sum_{j=1}^{q}\prod_{k=1}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right]\leq\sum_{j=1}^{q} \zeta^{1/2}_{1,j}(2) \left(\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4)\right)^{2},
+\mathsf{E}_x\left[\sum_{j=1}^{q}\prod_{k=1}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right]\leq\sum_{j=1}^{q} \zeta^{1/2}_{1,j}(2) \left(\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4)\right)^{2},
 \]
 where we denote
 \[
-\zeta_{l,j}(u)=\mathsf{E}\left[e^{-u\gamma\sum_{k=l}^{j}\mu'(X_{k-1})}\right],\quad u>0.
+\zeta_{l,j}(u)=\mathsf{E}_x\left[e^{-u\gamma\sum_{k=l}^{j}\mu'(X_{k-1})}\right],\quad u>0.
 \]
-From Theorem~\ref{thm:ula_const_size} in Appendix~\ref{sec:appendix}, it follows that
+Note that $\mu^{\prime}(x)$ is bounded due  our assumptions and from Theorem~1 in \cite{delyon1999small} and Lemma~\ref{lem:v_ergodicity} in Appendix~\ref{sec:appendix} it follows that
 \[
-\mathsf{E}\left[e^{-u\gamma\left(\sum_{k=l}^{j}[\mu'(X_{k-1})-\pi_\gamma(\mu')]\right)}\right]\leq e^{u^2\varkappa (j-l+1)\gamma^{2}}
+\mathsf{E}_x\left[e^{-u\gamma\left(\sum_{k=l}^{j}[\mu'(X_{k-1})-\pi_\gamma(\mu')]\right)}\right]\leq C(1+V(x)),\quad u\gamma\leq \gamma_0
 \]
-with constant $\varkappa = ...$, where we used the fact that $\mu^{\prime}(x)$ is bounded. Then we have
+for some constants $\gamma_0$ and $C>0$  depending only on $\gamma_0$, provided that $n\gamma^2$ stays bounded. Then we have
 \[
-\mathsf{E}\left[e^{-s\gamma\sum_{k=l}^{j}\mu'(X_{k-1})}\right]\leq e^{s^2\varkappa \gamma^2(j-l+1)}e^{-s\gamma (j-l+1)\pi_\gamma(\mu')}.
+\zeta_{l,j}(u)=\mathsf{E}\left[e^{-s\gamma\sum_{k=l}^{j}\mu'(X_{k-1})}\right]\leq  C(1+V(x))e^{-s\gamma (j-l+1)\pi_\gamma(\mu')}.
 \]
 Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R})$ and $\pi^{\prime}(x) = -\frac{1}{2}\pi(x)\mu(x)$, we have
 \[
@@ -1172,22 +1165,21 @@ Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R})$ and $\pi^{\prime}(x) =
 Note also that \(\pi_\gamma(\mu^{\prime}) \geq \pi_\gamma(\mu^{\prime}) - C_1\sqrt{\gamma}\)
 yielding the bound
 \[
-\zeta_{l,j}(s) \leq e^{s^2\kappa (j-l+1) \gamma^2}e^{-s\gamma(j-l+1)\alpha}
+\zeta_{l,j}(s) \leq  C(1+V(x))e^{-s\gamma(j-l+1)\alpha}
 \]
 where $ \alpha = \frac{1}{2}\int \mu^2(x)\pi(x)\,dx - C_1\sqrt{\gamma} > 0$ for sufficiently small $\gamma$. Hence we obtain
 \begin{align*}
-\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4) \leq \sum_{p=j+1}^{q+1}e^{4\kappa(p-j)\gamma^2}e^{-2\gamma(p-j)\alpha} < \frac{e^{4\kappa\gamma^2 - 2\gamma\alpha}}{1-e^{4\kappa\gamma^2 - 2\gamma\alpha}}
+\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4) \leq (C(1+V(x)))^{1/4}\sum_{p=j+1}^{q+1}e^{-\gamma(p-j)\alpha} \leq  (C(1+V(x)))^{1/4}\frac{1}{1-e^{- \gamma\alpha}}
 \end{align*}
-and thus the final bound follows:
+and
 \begin{align*}
-\mathsf{E}\left[\sum_{j=1}^{q}\prod_{k=1}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right]  \leq \frac{e^{10\kappa\gamma^2 - 5\gamma\alpha}}{\left(1-e^{4\kappa\gamma^2 - 2\gamma\alpha}\right)^2\left(1-e^{2\kappa\gamma^2 - \gamma\alpha}\right)}
+\sum_{j=1}^{q} \zeta^{1/2}_{1,j}(2) \leq (C(1+V(x)))^{1/2}\sum_{j=0}^{q}e^{-\gamma j\alpha} \leq  (C(1+V(x)))^{1/2}\frac{ 1}{1-e^{- \gamma\alpha}}.
 \end{align*}
-Plugging into variance bound,
+Thus the final bound follows:
 \begin{align*}
-\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right] \leq
-\frac{\gamma^3 A_{K}^{2} e^{10\kappa\gamma^2 - 5\gamma\alpha}}{\left(1-e^{4\kappa\gamma^2 - 2\gamma\alpha}\right)^2\left(1-e^{2\kappa\gamma^2 - \gamma\alpha}\right)(1-\gamma B_\mu)^3} \leq B_K
+\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right] \leq \gamma^{-1} C_K (1+V(x))
 \end{align*}
-for $\gamma$ small enough with $B_K$ not depending on $p,q$. The proof is completed.
+for $\gamma$ small enough with $C_K$ not depending on $q$. The proof is completed.
 \end{proof}
 
 
@@ -1250,7 +1242,7 @@ For now let us assume for simplicity that we run ULA with fixed step size $\gamm
 \label{lem:v_ergodicity}
  Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)}. Then for $0 < \gamma < \overline{\gamma}=\frac{m}{4L^2}$, for any $x \in X$ it holds
 $$
-d_V(\delta_xQ_{\boldsymbol{\gamma}}^{1,n},\pi_\gamma) \leq C\rho^n\left(V(x) + \pi_\gamma(V)\right)
+d_V(\delta_xQ_{\gamma}^{1,n},\pi_\gamma) \leq C\rho^n\left(V(x) + \pi_\gamma(V)\right)
 $$
 with $V(x) = 1 + \|x\|^2$ and constants
 $$
