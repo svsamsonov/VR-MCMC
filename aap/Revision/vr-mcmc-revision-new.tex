@@ -554,12 +554,12 @@ for  $V(x) = 1 + \|x\|^2,$ some $\rho\in (0,1)$ and constants $C_1,C_2>0$ indepe
 \end{proof}
 
 \paragraph{Variance:} An upper bound for the variance of the classical estimator~\eqref{eq:29032018a2}
-under {\bf (H1)} and {\bf (H2)} is derived in Section.  In particular, for any bounded function $f,$
+under {\bf (H1)} and {\bf (H2)} is derived in Section ??. \denis{Insert} In particular, for any bounded function $f,$
 \begin{equation}
 \label{eq:var-mc}
 \PVar[\pi_n^N(f)]\lesssim (n\gamma)^{-1} \eqsp,
 \end{equation}
-where $\lesssim$ stands for inequality up to a constant depending on constants $L_U,$ $m_U,$  $M_U$ and $\|f\|_\infty.$
+where $\lesssim$ stands for inequality up to a constant depending on constants $L,$ $m,$  $M$ and $\|f\|_\infty.$
 One of the main results of this paper is the following  upper bound for the variance of $\pi_{K,n}^{N}(f).$
 
 \begin{thm}\label{th:mr}
@@ -581,14 +581,14 @@ provided $n\gamma^2$ is bounded.
 Let us sketch the main steps of the proof. First using integration by parts we prove that
 \begin{eqnarray}
 \label{eq:Ask-part}
-A_{s,\mathbf{k}}(x)=\gamma^{|\mathbf{k}'|/2}\frac{\sqrt{(\mathbf{k}-\mathbf{k}')!}}{\sqrt{\mathbf{k}!}}\mathsf{E}\left[ \partial_{Z_1}^{\mathbf{k}'} F(x,Z_1,\ldots,Z_s) \mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_{1})\right]
+A_{q,\mathbf{k}}(x)=\gamma^{|\mathbf{k}'|/2}\frac{\sqrt{(\mathbf{k}-\mathbf{k}')!}}{\sqrt{\mathbf{k}!}}\mathsf{E}\left[ \partial_{Z_1}^{\mathbf{k}'} F(x,Z_1,\ldots,Z_q) \mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_{1})\right]
 \end{eqnarray}
-where $F_s(x,Z_1,\ldots,Z_s)=\sum_{r=0}^s f(X^x_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
+where $F_q(x,Z_1,\ldots,Z_q)=\sum_{r=0}^q f(X^x_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
 stands for a weak partial derivative of the functional $F_s$ that also can be viewed as discretised version of Malliavin derivative. From \eqref{eq:Ask-part}, we derive
 \begin{eqnarray*}
-\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1} A^2_{s,\mathbf{k}}(x)\leq \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
+\sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1} A^2_{q,\mathbf{k}}(x)\leq \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
 \left(\frac{\gamma}{2}\right)^{|I|K}
-\PVar_x \left( \sum_{p=1}^{s}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X_{p}\right)
+\PVar \left( \sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X_{p}^x\right)
 \right),
 \end{eqnarray*}
 where the sum runs over all nonempty subsets $I$ of the set $\{1,\ldots,d\}$ and
@@ -598,9 +598,9 @@ where the sum runs over all nonempty subsets $I$ of the set $\{1,\ldots,d\}$ and
  Finally, we show  that under our smoothness assumption \eqref{eq:smooth-mu} it holds
 \begin{equation*}
 \PVar \left(\sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X^x_{p}\right)
-\right)\leq C(1+V(x))
+\right)\leq C_{K}\gamma^{-1}(1+V(x)), \quad V(x) = 1 + \|x\|^2
 \end{equation*}
-for some constant $C$ not depending on $q$ and $V(x) = 1 + \|x\|^2$.
+for some constant $C_K$ not depending on $q$ and $\gamma$.
 \section{Numerical results}
 \label{sec:num}
 We perform numerical experiments based on ULA algorithm \ref{exam:langevin-algorithm} with constant step size $\gamma$. We construct a polynomial approximation  for each \(Q_r(x)\) in \eqref{eq:definition-bar-a} of the form:
