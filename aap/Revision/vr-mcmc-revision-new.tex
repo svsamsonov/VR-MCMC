@@ -84,8 +84,8 @@
 \author{\snm{E. Moulines}\thanksref{c, b}\ead[label=e2]{eric.moulines@polytechnique.edu}}
 \and
 \author{\snm{S. Samsonov}\thanksref{b}\ead[label=e3]{svsamsonov@hse.ru}}
-\and
-\author{\snm{N. Shagadatov}\thanksref{b}\ead[label=e4]{nshagadatov@edu.hse.ru}}
+%\and
+%\author{\snm{N. Shagadatov}\thanksref{b}\ead[label=e4]{nshagadatov@edu.hse.ru}}
 
 
 
@@ -455,7 +455,7 @@ The representation \eqref{eq:coeff_mart} suggests that the variance of  the  var
 should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_{k'}(\xi_l)]=0$ if $k \ne k'$, we obtain
 \begin{equation}
 \label{eq:expression-variance}
-\PVar_x[\pi_{K,n}^N(f)]=\sum_{k=K+1}^{\infty}\frac{1}{n^2}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X^x_{N+l-1})],
+\PVar_x[\pi_{K,n}^N(f)]=\frac{1}{n^2}\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X^x_{N+l-1})],
 \end{equation}
 where 
 \begin{eqnarray}
@@ -477,7 +477,7 @@ The regression algorithm proceeds with estimating the  functions \((\bar Q_{l})\
 \widehat{Q}_r = \argmin_{\psi \in \Psi} \sum_{s = 1}^{T} \sum_{l = N + 1}^{N+n-r} \left| f(X_{l+r}^{(s)}) - \psi(X_l^{(s)})\right|^2
 \end{equation}
 for \(r=1,\ldots, n-1,\)
-where \(\Psi\) is a  class of  functions on \(\mathbb{R}^d.\)
+where \(\Psi\) is a  class of  real-valued functions on \(\mathbb{R}^d.\)
 Next  we estimate the coefficients \( \bar a_{l,k}\) using
 the formula
 \begin{equation}
@@ -485,7 +485,7 @@ the formula
 \widehat a_{l,k}(x)=\mathsf{E}\left[\left.\phi_k\left(\xi\right)\widehat Q_{l}\left(\Phi(x,\xi)\right)\right | \TrainSet\right] \,,
 \end{equation}
 where $\xi$ is a random variable independent from $\mathcal{T}$ with law $P_\xi,$
-$\Phi_l$ is defined in \eqref{eq:chain_gen} and the expectation is taken according to known distribution \(P_\xi\). Conditioning on $\TrainSet$ underlines that estimation of $\widehat Q_{l}$ derived from training trajectories. In many cases integration can be done in closed analytical form. For example, in the case of ULA algorithm we have \(P_\xi$ is the multivariate normal distribution $ \mathcal{N}(0,I_d)\) and \(\Phi(x,\xi)=x-\gamma\mu(x)+\sqrt{\gamma}\xi.\) Therefore if we use polynomials to approximate \((\bar Q_{l}),\) then \((\widehat a_{l,k})\) can be even computed in closed form; implementations details are provided in  Section~\ref{sec:num}.
+$\Phi$ is defined in \eqref{eq:chain_gen} and the expectation is taken according to known distribution \(P_\xi\). Conditioning on $\TrainSet$ underlines that estimation of $\widehat Q_{l}$ derived from training trajectories. In many cases integration can be done in closed analytical form. For example, in the case of ULA algorithm we have \(P_\xi$ is the multivariate normal distribution $ \mathcal{N}(0,I_d)\) and \(\Phi(x,\xi)=x-\gamma\mu(x)+\sqrt{\gamma}\xi.\) Therefore if we use polynomials to approximate \((\bar Q_{l}),\) then \((\widehat a_{l,k})\) can be even computed in closed form; implementations details are provided in  Section~\ref{sec:num}.
 Upon estimating  the coefficients \((\widehat a_{l,k})\), one can construct an empirical estimate  of \(M_{K,n}^N(f)\) in the form
 \begin{eqnarray*}
 \widehat M_{K,n}^N(f) =\frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left[\sum_{p=0}^{N+n-l}\widehat{a}_{p,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\right].
@@ -495,7 +495,7 @@ does not introduce any bias. By the Jensen inequality and orthonormality of \((\
 \begin{multline*}
 \mathsf{E}_x\left[\left.\left|\widehat{M}_{K,n}^{N}(f)-M_{K,n}^{N}(f)\right|^{2}\right | \TrainSet \right]
 \\
-\leq \sum_{k=1}^{K}\frac{1}{n^2}\sum_{l=1}^{n}\PE\left[\left.|A_{n-l,k}(X^x_{N+l-1})-\widehat A_{n-l,k}(X^x_{N+l-1})|^2\right | \TrainSet \right].
+\leq \frac{1}{n^2}\sum_{k=1}^{K}\sum_{l=1}^{n}\PE\left[\left.|A_{n-l,k}(X^x_{N+l-1})-\widehat A_{n-l,k}(X^x_{N+l-1})|^2\right | \TrainSet \right].
 \end{multline*}
 
 \section{Analysis of variance reduced ULA}
@@ -1076,23 +1076,23 @@ This concludes the proof.
 \label{lem:var_poincare}
 Under assumptions of Theorem~\ref{th:mr}, it holds
 $$
-\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right]\le  \gamma^{-1} C_K (1+V(x)),
+\mathsf{Var}\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}^x\right)\right]\le  \gamma^{-1} C_K (1+V(x)),
 $$
 where $C_K$ is a constant that does not depend on $q$ and $\gamma.$ 
 \end{lem}
 \begin{proof}
 The expression
-$\sum_{p=1}^q \partial_{y_1}^K f(X_p)$
+$\sum_{p=1}^q \partial_{y_1}^K f(X_p^x)$
 can be viewed as a deterministic function of
 $x,Z_1,Z_{2},\ldots,Z_q$
 $$
-\sum_{p=1}^q  \partial_{y_1}^K f(X_p)
+\sum_{p=1}^q  \partial_{y_1}^K f(X_p^x)
 =F(x,Z_1,Z_{2},\ldots,Z_q).
 $$
 By the (conditional) Gaussian Poincar\'e inequality,
 we have
 $$
-\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right]
+\mathsf{Var}\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}^x\right)\right]
 \le\mathsf E_x\left[
 \|\nabla_Z F(x,Z_1,Z_{2},\ldots,Z_q)\|^2
 \right],
@@ -1102,18 +1102,18 @@ and $\|\cdot\|$ denotes the Euclidean norm.
 Notice that \(\partial_{Z_j} F=\sqrt{\gamma}\,\partial_{y_j} F\) and
 hence
 $$
-\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right]\leq\gamma^2\sum_{j=1}^{q}\mathsf{E}_x\left[\left(\sum_{p=1}^{q}\partial_{y_{j}}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right)^{2}\right].
+\mathsf{Var}\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}^x\right)\right]\leq\gamma^2\sum_{j=1}^{q}\mathsf{E}\left[\left(\sum_{p=1}^{q}\partial_{y_{j}}\partial_{y_{1}}^{K}f\left(X_{p}^x\right)\right)^{2}\right].
 $$
 It is straightforward to check that
-$\partial_{y_j}\partial_{y_1}^K f(X_p)=0$
+$\partial_{y_j}\partial_{y_1}^K f(X_p^x)=0$
 whenever $p<j$. Therefore, we get
 \begin{equation}\label{eq:10062018a2}
-\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right]\leq\gamma^2\sum_{j=1}^{q}\mathsf{E}_x\left[\left(\sum_{p=j}^{q}\partial_{y_{j}}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right)^{2}\right].
+\mathsf{Var}\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}^x\right)\right]\leq\gamma^2\sum_{j=1}^{q}\mathsf{E}\left[\left(\sum_{p=j}^{q}\partial_{y_{j}}\partial_{y_{1}}^{K}f\left(X_{p}^x\right)\right)^{2}\right].
 \end{equation}
 Now fix $p$ and $j$, $p\ge j$, in $\{1,\ldots,q\}$.
 By Fa\`a di Bruno's formula
 \[
-\partial_{y_{1}}^{K}f\left(X_{p}\right)=\sum\frac{K!}{m_{1}!\ldots m_{K}!}f^{(m_{1}+\ldots+m_{K})}(X_{p})\prod_{k=1}^{K}\left(\frac{\partial_{y_{1}}^{k}X_{p}}{k!}\right)^{m_{k}},
+\partial_{y_{1}}^{K}f\left(X_{p}^x\right)=\sum\frac{K!}{m_{1}!\ldots m_{K}!}f^{(m_{1}+\ldots+m_{K})}(X_{p}^x)\prod_{k=1}^{K}\left(\frac{\partial_{y_{1}}^{k}X^x_{p}}{k!}\right)^{m_{k}},
 \]
 where the sum is taken over all $K$-tuples of nonnegative integers
 $(m_1,\ldots,m_K)$ satisfying
@@ -1122,28 +1122,28 @@ $$
 $$
 Then
 \begin{eqnarray*}
-\partial_{y_{j}}\partial_{y_{1}}^{K}f\left(X_{p}\right)
-&=&\sum\frac{K!}{m_{1}!\ldots m_{K}!}f^{(m_{1}+\ldots+m_{K}+1)}(X_{p})\left[\partial_{y_{j}}X_{p}\right]\prod_{k=1}^{K}\left(\frac{\partial_{y_{1}}^{k}X_{p}}{k!}\right)^{m_{k}} \\
-&&+\sum\frac{K!}{m_{1}!\ldots m_{K}!}f^{(m_{1}+\ldots+m_{K})}(X_{p})
+\partial_{y_{j}}\partial_{y_{1}}^{K}f\left(X_{p}^x\right)
+&=&\sum\frac{K!}{m_{1}!\ldots m_{K}!}f^{(m_{1}+\ldots+m_{K}+1)}(X^x_{p})\left[\partial_{y_{j}}X^x_{p}\right]\prod_{k=1}^{K}\left(\frac{\partial_{y_{1}}^{k}X_{p}^x}{k!}\right)^{m_{k}} \\
+&&+\sum\frac{K!}{m_{1}!\ldots m_{K}!}f^{(m_{1}+\ldots+m_{K})}(X^x_{p})
 \sum_{s=1}^{K}\frac{m_{s}}{s!}
-\left(\frac{\partial_{y_{1}}^{s}X_{p}}{s!}\right)^{m_{s}-1}
+\left(\frac{\partial_{y_{1}}^{s}X^x_{p}}{s!}\right)^{m_{s}-1}
 \\
-&& \times\left[\partial_{y_{j}}\partial_{y_{1}}^{s}X_{p}\right]
-\prod_{k\le K,\,k\neq s}\left(\frac{\partial_{y_{1}}^{k}X_{p}}{k!}\right)^{m_{k}}.
+&& \times\left[\partial_{y_{j}}\partial_{y_{1}}^{s}X^x_{p}\right]
+\prod_{k\le K,\,k\neq s}\left(\frac{\partial_{y_{1}}^{k}X^x_{p}}{k!}\right)^{m_{k}}.
 \end{eqnarray*}
 Using the bounds of
 Lemmas \ref{lem:06062018a2} and~\ref{lem:06062018a3},
 we obtain
 \begin{eqnarray}
 \label{eq:part-part}
-\left|\partial_{y_{j}}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right|
+\left|\partial_{y_{j}}\partial_{y_{1}}^{K}f\left(X_{p}^x\right)\right|
 \leq A_{K}\prod_{k=2}^{p}\alpha_{k}
 \end{eqnarray}
 with a suitable constant $A_{K}$.
 Substituting this in~\eqref{eq:10062018a2},
 we proceed as follows
 \begin{align*}
-\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right]
+\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}^x\right)\right]
 &\le
 \gamma^2 A_{K}^{2}\sum_{j=1}^{q}
 \mathsf{E}\left(\sum_{p=j}^{q}\prod_{k=2}^{p}\alpha_{k}\right)^{2}
@@ -1172,25 +1172,25 @@ we proceed as follows
 
 Now, from the H\"older inequality, we obtain (with $\|X\|_p = (\mathsf{E}X^p)^{\frac{1}{p}}$)
 \begin{align*}
-\mathsf{E}_x\left[\sum_{j=1}^{q}\prod_{k=l}^{j}\alpha_{k}\left( \sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right] & \leq\sum_{j=1}^{q}\left\Vert \prod_{k=1}^{j}\alpha_{k}\right\Vert _{2}\left\Vert \sum_{p=j+1}^{q+1} \prod_{k=j+1}^{p}\alpha_{k}\right\Vert _{4}^{2}\\
+\mathsf{E}\left[\sum_{j=1}^{q}\prod_{k=l}^{j}\alpha_{k}\left( \sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right] & \leq\sum_{j=1}^{q}\left\Vert \prod_{k=1}^{j}\alpha_{k}\right\Vert _{2}\left\Vert \sum_{p=j+1}^{q+1} \prod_{k=j+1}^{p}\alpha_{k}\right\Vert _{4}^{2}\\
  & \leq\sum_{j=1}^{q} \left\Vert \prod_{k=1}^{j}\alpha_{k}\right\Vert _{2}\left(\sum_{p=j+1}^{q+1}\left\Vert \prod_{k=j+1}^{p}\alpha_{k}\right\Vert _{4}\right)^{2}.
 \end{align*}
-Now using the fact that $\prod\limits_{k=j+1}^{p}\alpha_{k} \leq \exp\left(-\sum\limits_{k=j+1}^{p}\gamma\mu'(X_{k-1})\right),$
+Now using the fact that $\prod\limits_{k=j+1}^{p}\alpha_{k} \leq \exp\left(-\sum\limits_{k=j+1}^{p}\gamma\mu'(X_{k-1}^x)\right),$
 we get
 \[
-\mathsf{E}_x\left[\sum_{j=1}^{q}\prod_{k=1}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right]\leq\sum_{j=1}^{q} \zeta^{1/2}_{1,j}(2) \left(\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4)\right)^{2},
+\mathsf{E}\left[\sum_{j=1}^{q}\prod_{k=1}^{j}\alpha_{k}\left(\sum_{p=j+1}^{q+1}\prod_{k=j+1}^{p}\alpha_{k}\right)^{2}\right]\leq\sum_{j=1}^{q} \zeta^{1/2}_{1,j}(2) \left(\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4)\right)^{2},
 \]
 where we denote
 \[
-\zeta_{l,j}(u)=\mathsf{E}_x\left[e^{-u\gamma\sum_{k=l}^{j}\mu'(X_{k-1})}\right],\quad u>0.
+\zeta_{l,j}(u)=\mathsf{E}\left[e^{-u\gamma\sum_{k=l}^{j}\mu'(X^x_{k-1})}\right],\quad u>0.
 \]
 Note that $\mu^{\prime}(x)$ is bounded due  our assumptions and from Theorem~1 in \cite{delyon1999small} and Lemma~\ref{lem:v_ergodicity} in Appendix~\ref{sec:appendix} it follows that
 \[
-\mathsf{E}_x\left[e^{-u\gamma\left(\sum_{k=l}^{j}[\mu'(X_{k-1})-\pi_\gamma(\mu')]\right)}\right]\leq C(1+V(x)),\quad u\gamma\leq \gamma_0
+\mathsf{E}\left[e^{-u\gamma\left(\sum_{k=l}^{j}[\mu'(X^x_{k-1})-\pi_\gamma(\mu')]\right)}\right]\leq C(1+V(x)),\quad u\gamma\leq \gamma_0
 \]
 for some constants $\gamma_0$ and $C>0$  depending only on $\gamma_0$, provided that $n\gamma^2$ stays bounded. Then we have
 \[
-\zeta_{l,j}(u)=\mathsf{E}\left[e^{-s\gamma\sum_{k=l}^{j}\mu'(X_{k-1})}\right]\leq  C(1+V(x))e^{-s\gamma (j-l+1)\pi_\gamma(\mu')}.
+\zeta_{l,j}(u)=\mathsf{E}\left[e^{-s\gamma\sum_{k=l}^{j}\mu'(X^x_{k-1})}\right]\leq  C(1+V(x))e^{-s\gamma (j-l+1)\pi_\gamma(\mu')}.
 \]
 Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R})$ and $\pi^{\prime}(x) = -\frac{1}{2}\pi(x)\mu(x)$, we have
 \[
@@ -1211,7 +1211,7 @@ and
 \end{align*}
 Thus the final bound follows:
 \begin{align*}
-\mathsf{Var}_x\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}\right)\right] \leq \gamma^{-1} C_K (1+V(x))
+\mathsf{Var}\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X^x_{p}\right)\right] \leq \gamma^{-1} C_K (1+V(x))
 \end{align*}
 for $\gamma$ small enough with $C_K$ not depending on $q$. The proof is completed.
 \end{proof}
