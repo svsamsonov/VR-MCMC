@@ -455,7 +455,7 @@ The representation \eqref{eq:coeff_mart} suggests that the variance of  the  var
 should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_{k'}(\xi_l)]=0$ if $k \ne k'$, we obtain
 \begin{equation}
 \label{eq:expression-variance}
-\PVar_x[\pi_{K,n}^N(f)]\leq\sum_{k=K+1}^{\infty}\frac{1}{n^2}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X^x_{N+l-1})],
+\PVar_x[\pi_{K,n}^N(f)]=\sum_{k=K+1}^{\infty}\frac{1}{n^2}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X^x_{N+l-1})],
 \end{equation}
 where 
 \begin{eqnarray}
@@ -464,6 +464,40 @@ A_{q,k}(y)=\sum_{r=0}^q \bar{a}_{r,k}(y),\quad q\in \mathbb{N}
 \end{eqnarray}
 and $\mathsf{Var}[\pi_{K,n}^N(f)]$ is small provided that the coefficients $A_{s,k}$ decay fast enough as $k\to \infty.$
 In the next section   we provide a detailed   analysis of  $\mathsf{Var}[\pi_{K,n}^N(f)]$  for the  ULA  algorithm (see Example~\ref{exam:langevin-algorithm}).
+\section{Estimation of coefficients}
+The coefficients \((\bar a_{l,k})\) need to be estimated before one can apply the proposed variance reduction approach. This amounts to solve a nonparametric regression problem.
+We present a generic regression algorithm. Algorithm starts with estimating the functions \(Q_{r}(x)=\mathsf{E}\left[f(X^x_{r})\right],\) for $r=N+1,\ldots,N+n.$ We first generate \(\NtrainPath\)  paths  of the chain \(X\)
+(the so-called ``training paths''):
+\[
+\TrainSet=\Bigl\{(X^{(s)}_{0},\ldots,X^{(s)}_{N+n}),\quad s=1,\ldots,\NtrainPath\Bigr\}
+\]
+with $X^{(s)}_{0}=x,$ $s=1,\ldots,T.$
+The regression algorithm proceeds with estimating the  functions \((\bar Q_{l})\) by solving  the least squares optimization problems
+\begin{equation}\label{eq:06042018a1}
+\widehat{Q}_r = \argmin_{\psi \in \Psi} \sum_{s = 1}^{T} \sum_{l = N + 1}^{N+n-r} \left| f(X_{l+r}^{(s)}) - \psi(X_l^{(s)})\right|^2
+\end{equation}
+for \(r=1,\ldots, n-1,\)
+where \(\Psi\) is a  class of  functions on \(\mathbb{R}^d.\)
+Next  we estimate the coefficients \( \bar a_{l,k}\) using
+the formula
+\begin{equation}
+\label{eq:a_est_int}
+\widehat a_{l,k}(x)=\mathsf{E}\left[\left.\phi_k\left(\xi\right)\widehat Q_{l}\left(\Phi(x,\xi)\right)\right | \TrainSet\right] \,,
+\end{equation}
+where $\xi$ is a random variable independent from $\mathcal{T}$ with law $P_\xi,$
+$\Phi_l$ is defined in \eqref{eq:chain_gen} and the expectation is taken according to known distribution \(P_\xi\). Conditioning on $\TrainSet$ underlines that estimation of $\widehat Q_{l}$ derived from training trajectories. In many cases integration can be done in closed analytical form. For example, in the case of ULA algorithm we have \(P_\xi$ is the multivariate normal distribution $ \mathcal{N}(0,I_d)\) and \(\Phi_l(x,\xi)=x-\gamma_{l}\mu(x)+\sqrt{\gamma_{l}}\xi.\) Therefore if we use polynomials to approximate \((\bar Q_{l}),\) then \((\widehat a_{l,k})\) can be even computed in closed form; implementations details are provided in  Section~\ref{sec:num}.
+Upon estimating  the coefficients \((\widehat a_{l,k})\), one can construct an empirical estimate  of \(M_{K,n}^N(f)\) in the form
+\begin{eqnarray*}
+\widehat M_{K,n}^N(f) =\frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left[\sum_{p=0}^{N+n-l}\widehat{a}_{p,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\right].
+\end{eqnarray*}
+Obviously, \(\mathsf{E}[\widehat M_{K,n}^N(f)|\TrainSet]=0\) and \(\widehat M_{K,n}^N(f)\) is indeed a valid control variate in that it
+does not introduce any bias. By the Jensen inequality and orthonormality of \((\phi_k)_{k\geq 0},\)
+\begin{multline*}
+\mathsf{E}_x\left[\left.\left|\widehat{M}_{K,n}^{N}(f)-M_{K,n}^{N}(f)\right|^{2}\right | \TrainSet \right]
+\\
+\leq \sum_{k=1}^{K}\frac{1}{n^2}\sum_{l=1}^{n}\PE\left[\left.|A_{n-l,k}(X^x_{N+l-1})-\widehat A_{n-l,k}(X^x_{N+l-1})|^2\right | \TrainSet \right].
+\end{multline*}
+
 \section{Analysis of variance reduced ULA}
 \label{sec:ula_analysis}
 In this section we perform the convergence analysis of the ULA algorithm. We use the notations of example \ref{exam:langevin-algorithm}. For the sake of clarity and notational simplicity we restrict our attention to the constant time step, that is, we take $\gamma_k =\gamma$ for any $k \in \nset$.
@@ -578,13 +612,13 @@ Then  it holds
 provided $n\gamma^2$ is bounded.
 %where \tcr{\(\lesssim\) stands for inequality up to a constant not depending  on $\gamma,$ \(n\) and \(N.\)}
 \end{thm}
-Let us sketch the main steps of the proof. First using integration by parts we prove that
+Let us sketch the main steps of the proof. First using integration by parts, we prove that
 \begin{eqnarray}
 \label{eq:Ask-part}
-A_{q,\mathbf{k}}(x)=\gamma^{|\mathbf{k}'|/2}\frac{\sqrt{(\mathbf{k}-\mathbf{k}')!}}{\sqrt{\mathbf{k}!}}\mathsf{E}\left[ \partial_{Z_1}^{\mathbf{k}'} F(x,Z_1,\ldots,Z_q) \mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_{1})\right]
+A_{q,\mathbf{k}}(x)=\gamma^{|\mathbf{k}'|/2}\frac{\sqrt{(\mathbf{k}-\mathbf{k}')!}}{\sqrt{\mathbf{k}!}}\mathsf{E}_x\left[ \partial_{Z_1}^{\mathbf{k}'} F(x,Z_1,\ldots,Z_q) \mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_{1})\right],
 \end{eqnarray}
 where $F_q(x,Z_1,\ldots,Z_q)=\sum_{r=0}^q f(X^x_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
-stands for a weak partial derivative of the functional $F_s$ that also can be viewed as discretised version of Malliavin derivative. From \eqref{eq:Ask-part}, we derive
+stands for a weak partial derivative of the functional $F_s$ that also can be viewed as discretised version of Malliavin derivative. From \eqref{eq:Ask-part} we derive
 \begin{eqnarray*}
 \sum_{\mathbf{k}\colon\|\mathbf{k}\|\geq K+1} A^2_{q,\mathbf{k}}(x)\leq \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
 \left(\frac{\gamma}{2}\right)^{|I|K}
