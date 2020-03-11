@@ -930,7 +930,7 @@ which, together with~\eqref{eq:06062018a3}, completes the proof.
 In what follows, we use the notation
 \begin{equation}
 \label{eq:definition-alpha}
-\alpha_k=1-\gamma \mu'(X_{k-1}),\quad k\in\mathbb N.
+\alpha_k=1-\gamma \mu'(X_{k-1}^x),\quad k\in\mathbb N.
 \end{equation}
 The assumption \eqref{eq:smooth-mu} implies that  $|\mu'(x)|\leq B_\mu$ for some constant $B_\mu>0$ and all $x\in \mathbb{R}^d$. Without loss of generality we suppose that $\gamma B_\mu<1.$
 \begin{lem}\label{lem:06062018a2}
@@ -938,21 +938,21 @@ Under assumptions of Theorem~\ref{th:mr},
 for all natural $r\le K$ and $l\le p$, there exist constants $C_r$ (not depending on $l$ and $p$) such that
 \begin{equation}
 \label{eq:08062018b2}
-\left|\partial_{y_l}^r X_p \right| \le C_r\prod_{k=l+1}^p (1-\gamma\mu'(X_{k-1}))\quad \text{a.s.}
+\left|\partial_{y_l}^r X^x_p \right| \le C_r\prod_{k=l+1}^p (1-\gamma\mu'(X^x_{k-1}))\quad \text{a.s.}
 \end{equation}
-where $\partial_{y_l}^r X_p$ is defined in \eqref{eq:definition-differential-f-p}. Moreover, we can choose $C_1=1$.
+where $\partial_{y_l}^r X^x_p$ is defined in \eqref{eq:definition-differential-f-p}. Moreover, we can choose $C_1=1$.
 \end{lem}
 \begin{lem}\label{lem:06062018a3}
 Under assumptions of Theorem~\ref{th:mr},
 for all natural $r\le K$, $j\ge l$ and $p>j$, we have
 \begin{equation}\label{eq:08062018b3}
-\left|\partial_{y_j} \partial_{y_l}^r X_p\right|
-\le c_r\prod_{k=l+1}^p (1-\gamma\mu'(X_{k-1})), \quad \text{a.s.}
+\left|\partial_{y_j} \partial_{y_l}^r X^x_p\right|
+\le c_r\prod_{k=l+1}^p (1-\gamma\mu'(X^x_{k-1})), \quad \text{a.s.}
 \end{equation}
 with some constants $c_r$
 not depending on $j$, $l$ and $p$,
 while, for $p\le j$, it holds
-$\partial_{y_{j}}\partial_{y_{l}}^{r}X_{p}=0$.
+$\partial_{y_{j}}\partial_{y_{l}}^{r}X^x_{p}=0$.
 \end{lem}
 
 \begin{proof}
@@ -961,23 +961,23 @@ We fix natural numbers $j\ge l$ and prove~\eqref{eq:08062018b3}
 for all $p>j$ by induction in~$r$.
 First, for $p>j$, we write
 $$
-\partial_{y_{l}}X_{p}
-=\left[1-\gamma\mu'(X_{p-1})\right]\partial_{y_{l}}X_{p-1}
+\partial_{y_{l}}X^x_{p}
+=\left[1-\gamma\mu'(X^x_{p-1})\right]\partial_{y_{l}}X^x_{p-1}
 $$
 and differentiate this identity with respect to~$y_j$
 $$
-\partial_{y_{j}}\partial_{y_{l}}X_{p}
-=\left[1-\gamma\mu'(X_{p-1})\right]\partial_{y_{j}}\partial_{y_{l}}X_{p-1}-\gamma\mu''(X_{p-1})\partial_{y_{j}}X_{p-1}\partial_{y_{l}}X_{p-1}.
+\partial_{y_{j}}\partial_{y_{l}}X^x_{p}
+=\left[1-\gamma\mu'(X^x_{p-1})\right]\partial_{y_{j}}\partial_{y_{l}}X^x_{p-1}-\gamma\mu''(X^x_{p-1})\partial_{y_{j}}X^x_{p-1}\partial_{y_{l}}X^x_{p-1}.
 $$
 By Lemma~\ref{lem:06062018a2}, we have
 \begin{align*}
-|\partial_{y_{j}}\partial_{y_{l}}X_{p}|
-&\le\alpha_p|\partial_{y_{j}}\partial_{y_{l}}X_{p-1}|
+|\partial_{y_{j}}\partial_{y_{l}}X^x_{p}|
+&\le\alpha_p|\partial_{y_{j}}\partial_{y_{l}}X^x_{p-1}|
 +\gamma
 B_\mu
 \prod_{k=l+1}^{p-1}\alpha_k
 \prod_{k=j+1}^{p-1}\alpha_k\\
-&\le\alpha_p|\partial_{y_{j}}\partial_{y_{l}}X_{p-1}|
+&\le\alpha_p|\partial_{y_{j}}\partial_{y_{l}}X^x_{p-1}|
 +\gamma
 \const
 \prod_{k=l+1}^{j}\alpha_k
@@ -986,26 +986,26 @@ B_\mu
 \end{align*}
 with a suitable constant.
 By Lemma~\ref{lem:06062018a1} applied
-to bound $|\partial_{y_{j}}\partial_{y_{l}}X_{p}|$
+to bound $|\partial_{y_{j}}\partial_{y_{l}}X^x_{p}|$
 for $p\ge j+1$
-(notice that $\partial_{y_j}\partial_{y_l}X_j=0$, that is,
+(notice that $\partial_{y_j}\partial_{y_l}X^x_j=0$, that is,
 $\ol C_0$ in Lemma~\ref{lem:06062018a1} is zero,
 while $\ol C_1$ in Lemma~\ref{lem:06062018a1}
 has the form $\const\prod_{k=l+1}^j \alpha_k$),
 we obtain~\eqref{eq:08062018b3} for $r=1$.
 The induction hypothesis is now that the inequality
 \begin{equation}\label{eq:induc-derive}
-\left|\partial_{y_{j}}\partial_{y_{l}}^{k}X_{p}\right|
+\left|\partial_{y_{j}}\partial_{y_{l}}^{k}X^x_{p}\right|
 \leq c_{k}\prod_{s=l+1}^{p}\alpha_{s}
 \end{equation}
 holds for all natural $k<r\;(\le K)$ and $p>j$.
 We need to show~\eqref{eq:induc-derive} for $k=r$.
 Fa\`a di Bruno's formula implies for $2\le r\le K$ and $p>l$
 \begin{align}
-\partial_{y_{l}}^{r}X_{p}
-&=\left[1-\gamma\mu'(X_{p-1})\right]\partial_{y_{l}}^{r}X_{p-1}
+\partial_{y_{l}}^{r}X^x_{p}
+&=\left[1-\gamma\mu'(X^x_{p-1})\right]\partial_{y_{l}}^{r}X^x_{p-1}
 \label{eq:08062018a1}\\
-&\hspace{1em}-\gamma\sum\frac{r!}{m_{1}!\ldots m_{r-1}!\,}\mu^{(m_{1}+\ldots+m_{r-1})}(X_{p-1})\prod_{k=1}^{r-1}\left(\frac{\partial_{y_{l}}^{k}X_{p-1}}{k!}\right)^{m_{k}},
+&\hspace{1em}-\gamma\sum\frac{r!}{m_{1}!\ldots m_{r-1}!\,}\mu^{(m_{1}+\ldots+m_{r-1})}(X^x_{p-1})\prod_{k=1}^{r-1}\left(\frac{\partial_{y_{l}}^{k}X^x_{p-1}}{k!}\right)^{m_{k}},
 \notag
 \end{align}
 where the sum is taken over all $(r-1)$-tuples of nonnegative integers
@@ -1016,27 +1016,27 @@ $(m_{1},\ldots,m_{r-1})$ satisfying the constraint
 Notice that we work with $(r-1)$-tuples
 rather than with $r$-tuples
 because the term containing
-$\partial_{y_l}^r X_{p-1}$
+$\partial_{y_l}^r X^x_{p-1}$
 on the right-hand side of~\eqref{eq:08062018a1}
 is listed separately.
 For $p>j$, we then have
 \begin{align}
-&\partial_{y_{j}}\partial_{y_{l}}^{r}X_{p}
-=\left[1-\gamma_{p}\mu'(X_{p-1})\right]\partial_{y_{j}}\partial_{y_{l}}^{r}X_{p-1}-\gamma\mu''(X_{p-1})\partial_{y_{l}}^{r}X_{p-1}\partial_{y_{j}}X_{p-1}
+&\partial_{y_{j}}\partial_{y_{l}}^{r}X^x_{p}
+=\left[1-\gamma_{p}\mu'(X^x_{p-1})\right]\partial_{y_{j}}\partial_{y_{l}}^{r}X^x_{p-1}-\gamma\mu''(X^x_{p-1})\partial_{y_{l}}^{r}X^x_{p-1}\partial_{y_{j}}X^x_{p-1}
 \label{eq:09062018a2}\\
-&\hspace{1em}-\gamma\sum\frac{r!}{m_{1}!\ldots m_{r-1}!\,}\mu^{(m_{1}+\ldots+m_{r-1}+1)}(X_{p-1})\partial_{y_{j}}X_{p-1}\prod_{k=1}^{r-1}\left(\frac{\partial_{y_{l}}^{k}X_{p-1}}{k!}\right)^{m_{k}}
+&\hspace{1em}-\gamma\sum\frac{r!}{m_{1}!\ldots m_{r-1}!\,}\mu^{(m_{1}+\ldots+m_{r-1}+1)}(X^x_{p-1})\partial_{y_{j}}X^x_{p-1}\prod_{k=1}^{r-1}\left(\frac{\partial_{y_{l}}^{k}X^x_{p-1}}{k!}\right)^{m_{k}}
 \notag\\
-&\hspace{1em}-\gamma\sum\frac{r!}{m_{1}!\ldots m_{r-1}!\,}\mu^{(m_{1}+\ldots+m_{r-1})}(X_{p-1})\partial_{y_{j}}\left[\prod_{k=1}^{r-1}\left(\frac{\partial_{y_{l}}^{k}X_{p-1}}{k!}\right)^{m_{k}}\right]
+&\hspace{1em}-\gamma\sum\frac{r!}{m_{1}!\ldots m_{r-1}!\,}\mu^{(m_{1}+\ldots+m_{r-1})}(X^x_{p-1})\partial_{y_{j}}\left[\prod_{k=1}^{r-1}\left(\frac{\partial_{y_{l}}^{k}X^x_{p-1}}{k!}\right)^{m_{k}}\right]
 \notag\\
-&\hspace{1em} =\left[1-\gamma\mu'(X_{p-1})\right]\partial_{y_{j}}\partial_{y_{l}}^{r}X_{p-1}+\gamma\epsilon_{l,j,p},
+&\hspace{1em} =\left[1-\gamma\mu'(X^x_{p-1})\right]\partial_{y_{j}}\partial_{y_{l}}^{r}X^x_{p-1}+\gamma\epsilon_{l,j,p},
 \notag
 \end{align}
 where the last equality defines the quantity $\epsilon_{l,j,p}$.
 Furthermore,
 \begin{eqnarray*}
-\partial_{y_{j}}\left[\prod_{k=1}^{r-1}\left(\frac{\partial_{y_{l}}^{k}X_{p-1}}{k!}\right)^{m_{k}}\right]&=&\sum_{s=1}^{r-1}\frac{m_{s}}{s!}\left(\frac{\partial_{y_{l}}^{s}X_{p-1}}{s!}\right)^{m_{s}-1}\partial_{y_{j}}\partial_{y_{l}}^{s}X_{p-1}
+\partial_{y_{j}}\left[\prod_{k=1}^{r-1}\left(\frac{\partial_{y_{l}}^{k}X^x_{p-1}}{k!}\right)^{m_{k}}\right]&=&\sum_{s=1}^{r-1}\frac{m_{s}}{s!}\left(\frac{\partial_{y_{l}}^{s}X^x_{p-1}}{s!}\right)^{m_{s}-1}\partial_{y_{j}}\partial_{y_{l}}^{s}X^x_{p-1}
 \\
-&& \times \prod_{k\le r-1,\,k\neq s}\left(\frac{\partial_{y_{l}}^{k}X_{p-1}}{k!}\right)^{m_{k}}.
+&& \times \prod_{k\le r-1,\,k\neq s}\left(\frac{\partial_{y_{l}}^{k}X^x_{p-1}}{k!}\right)^{m_{k}}.
 \end{eqnarray*}
 Using Lemma~\ref{lem:06062018a2},
 induction hypothesis~\eqref{eq:induc-derive}
@@ -1056,15 +1056,15 @@ with some constant ``$\const$'' depending on
 $B_\mu,r,C_1,\ldots,C_r,c_1,\ldots,c_{r-1}$.
 Thus, \eqref{eq:09062018a2} now implies
 $$
-|\partial_{y_{j}}\partial_{y_{l}}^{r}X_{p}|
-\le\alpha_p|\partial_{y_{j}}\partial_{y_{l}}^{r}X_{p-1}|
+|\partial_{y_{j}}\partial_{y_{l}}^{r}X^x_{p}|
+\le\alpha_p|\partial_{y_{j}}\partial_{y_{l}}^{r}X^x_{p-1}|
 +\gamma \,\const\prod_{k=l+1}^{j}\alpha_{k}\prod_{k=j+1}^{p}\alpha_{k}^{2},
 \quad p\ge j+1.
 $$
 We can again apply Lemma~\ref{lem:06062018a1}
-to bound $|\partial_{y_{j}}\partial_{y_{l}}^r X_{p}|$
+to bound $|\partial_{y_{j}}\partial_{y_{l}}^r X^x_{p}|$
 for $p\ge j+1$
-(notice that $\partial_{y_j}\partial_{y_l}^r X_j=0$, that is,
+(notice that $\partial_{y_j}\partial_{y_l}^r X^x_j=0$, that is,
 $\ol C_0$ in Lemma~\ref{lem:06062018a1} is zero,
 while $\ol C_1$ in Lemma~\ref{lem:06062018a1}
 has the form $\const\prod_{k=l+1}^j \alpha_k$),
