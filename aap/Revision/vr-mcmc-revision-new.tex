@@ -751,8 +751,26 @@ In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and $\Sig
 \label{fig:GMM}}
 \end{figure}
 
-\subsection{Binary Logistic Regression}
+\subsection{Banana shape distribution}
+The “Banana-shape” distribution, proposed by \cite{Haario1999}, can be obtained from a d-dimensional Gaussian vector with zero mean and covariance $\mathrm{diag}(p,1,\ldots,1)$ by applying transformation $\varphi_b(x) : \rset^d \rightarrow \rset^d$ of the form
+\[
+\varphi(x_1,\ldots,x_n) = (x_1, x_2 + bx^2_1 - pb,x_3,\ldots,x_d)
+\]
+where $p > 0$ and $b > 0$ are parameters; $b$ accounts for the curvature of density’s level sets. The potential $U$ is given by
+\[
+U(x_1, . . . , x_d) = \frac{x_1^2}{2} + (x_2 + bx_1^2 - pb)^2 + \sum\limits_{k=3}^{d}\frac{x_k^2}{2}
+\]
+The quantity of interest is $\PE_{\pi}[X_2]$. We set $p = 100, b = 0.1$ and consider $d=8$. We solve the least squares  problems \eqref{eq:Qcircr} using the second-order polynomial approximations for the coefficients \(a_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 2$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 10^3$ and plot boxplots of the ergodic averages in Figure~\ref{fig:banana_shape}.
 
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{../pictures/banana_shape.png}
+\caption{Boxplots of ergodic averages  from the variance reduced ULA algorithms for the Banana shape density. The compared estimators are the ordinary empirical average (Vanilla), our estimator of control variates (MDCV), zero variance estimator (ZV) control variates obtained with empirical spectral variance minimisation (ESVM).
+\label{fig:banana_shape}}
+\end{center}
+\end{figure}
+
+\subsection{Binary Logistic Regression}
 Second experiment considers the problem of logistic regression. Let $\mathsf{Y} = \left(\mathsf{Y}_1,\ldots,\mathsf{Y}_n\right) \in \{0,1\}^m$ be binary response variables, $\mathsf{X} \in \rset^{m \times d}$ be a feature matrix and $\theta \in \rset^d$ - vector of regression parameters. We define log-likelihood of $i$-th observation as
 \[
 \ell(\mathsf{Y}_i | \theta, \mathsf{X}_i) = \mathsf{Y}_i \mathsf{X}_i^T\theta - \ln{\left(1 + \rme^{\mathsf{X}_i^T\theta}\right)}
