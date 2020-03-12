@@ -490,7 +490,7 @@ where $\xi$ is a random variable independent from $\mathcal{T}$ with law $P_\xi,
 $\Phi$ is defined in \eqref{eq:chain_gen} and the expectation is taken according to known distribution \(P_\xi\). Conditioning on $\TrainSet$ underlines that estimation of $\widehat Q_{l}$ derived from training trajectories. In many cases integration can be done in closed analytical form. For example, in the case of ULA algorithm we have \(P_\xi$ is the multivariate normal distribution $ \mathcal{N}(0,I_d)\) and \(\Phi(x,\xi)=x-\gamma\mu(x)+\sqrt{\gamma}\xi.\) Therefore if we use polynomials to approximate \((\bar Q_{l}),\) then \((\widehat a_{l,k})\) can be even computed in closed form; implementations details are provided in  Section~\ref{sec:num}.
 Upon estimating  the coefficients \((\widehat a_{l,k})\), one can construct an empirical estimate  of \(M_{K,n}^N(f)\) in the form
 \begin{eqnarray*}
-\widehat M_{K,n}^N(f) =\frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left[\sum_{p=0}^{N+n-l}\widehat{a}_{p,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\right].
+\widehat M_{K,n}^N(f) = \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left[\sum_{p=0}^{N+n-l}\widehat{a}_{p,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\right].
 \end{eqnarray*}
 Obviously, \(\mathsf{E}[\widehat M_{K,n}^N(f)|\TrainSet]=0\) and \(\widehat M_{K,n}^N(f)\) is indeed a valid control variate in that it
 does not introduce any bias. By the Jensen inequality and orthonormality of \((\phi_k)_{k\geq 0},\)
@@ -499,6 +499,36 @@ does not introduce any bias. By the Jensen inequality and orthonormality of \((\
 \\
 \leq \frac{1}{n^2}\sum_{k=1}^{K}\sum_{l=1}^{n}\PE\left[\left.|A_{n-l,k}(X^x_{N+l-1})-\widehat A_{n-l,k}(X^x_{N+l-1})|^2\right | \TrainSet \right].
 \end{multline*}
+Yet it is impractical to use estimator of the form $\widehat M_{K,n}^N(f)$, since it may be too expensive to compute for $n$ large enough. Instead we introduce the truncated version of this control variate
+\begin{eqnarray*}
+\tilde M_{K,n}^N(f) = \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left[\sum_{p=0}^{N+n-l}\widehat{a}_{p,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\mathbbm{1}\{ |p-k| < n_{\mathrm{trunc}} \}\right]
+\end{eqnarray*}
+where $n_{\mathrm{trunc}} \in \nset$ is a hyperparameter. Validity of this approach follows from the following lemma
+
+\begin{lem}
+\label{lem:coef_decrease}
+Let $(X^x_{p})_{p \in \nset_0}$ be a $V-$geometrically ergodic homogeneous Markov chain with stationary distribution $\pi$ and $f$ be a Borel function with $\|f\|_{V} < \infty$. Then it holds
+\begin{equation}
+|\bar a_{r,k}(x)| \leq C\rho^r\|f\|_{V} (\PE V^2(\Phi(x,\xi)))^{1/2}
+\end{equation}
+where $\bar a_{r,k}(x)$ is defined in \eqref{eq:definition-bar-a}.
+\end{lem}
+\begin{proof}
+Note that 
+\[
+\bar a_{r,k}(x)=\mathsf{E}\left[\phi_k\left(\xi\right)Q_{r}\left(\Phi(x,\xi)\right)\right]
+\]
+with  $Q_{r}(x)=\mathsf{E}\left[f(X^x_{r})\right], r\in \mathbb{N}$. $V-$ergodicity of $(X^x_{p})_{p \in \nset_0}$ implies that
+\[
+|Q_{r}(x) - \pi(f)| \leq |\int\limits_{\rset^d} f(y)\left(\P^r(x,dy)-\pi(dy)\right)| \leq C\rho^r V(x) \|f\|_{V}
+\]
+Thus, since $\PE\phi_k\left(\xi\right) = 0$, we obtain from Cauchy-Schwarz inequality
+\begin{eqnarray*}
+|\bar a_{r,k}(x)| \leq \left(\PE \phi^2_k\left(\xi\right)\right)^{1/2}\left(\PE |Q_{r}(\Phi(x,\xi)) - \pi(f)|^{2}\right)^{1/2} \leq C\rho^r\|f\|_{V} (\PE V^2(\Phi(x,\xi)))^{1/2}
+\end{eqnarray*}
+and the statement follows.
+\end{proof}
+
 
 \section{Analysis of variance reduced ULA}
 \label{sec:ula_analysis}
