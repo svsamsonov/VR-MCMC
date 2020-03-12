@@ -457,12 +457,12 @@ The representation \eqref{eq:coeff_mart} suggests that the variance of  the  var
 should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_{k'}(\xi_l)]=0$ if $k \ne k'$, we obtain
 \begin{equation}
 \label{eq:expression-variance}
-\PVar_x[\pi_{K,n}^N(f)]=\frac{1}{n^2}\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X^x_{N+l-1})],
+\PVar[\pi_{K,n}^N(f)]=\frac{1}{n^2}\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X^x_{N+l-1})],
 \end{equation}
 where 
 \begin{eqnarray}
 \label{eq:definition-A-s,k}
-A_{q,k}(y)=\sum_{r=0}^q \bar{a}_{r,k}(y),\quad q\in \mathbb{N}
+A_{q,k}(y)=\sum_{r=0}^q \bar{a}_{r,k}(y),\quad q\in \mathbb{N},
 \end{eqnarray}
 and $\mathsf{Var}[\pi_{K,n}^N(f)]$ is small provided that the coefficients $A_{s,k}$ decay fast enough as $k\to \infty.$
 In the next section   we provide a detailed   analysis of  $\mathsf{Var}[\pi_{K,n}^N(f)]$  for the  ULA  algorithm (see Example~\ref{exam:langevin-algorithm}).
