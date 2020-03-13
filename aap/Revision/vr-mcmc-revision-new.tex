@@ -465,7 +465,17 @@ where
 A_{q,k}(y)=\sum_{r=0}^q \bar{a}_{r,k}(y),\quad q\in \mathbb{N},
 \end{eqnarray}
 and $\mathsf{Var}[\pi_{K,n}^N(f)]$ is small provided that the coefficients $A_{s,k}$ decay fast enough as $k\to \infty.$
-In the next section   we provide a detailed   analysis of  $\mathsf{Var}[\pi_{K,n}^N(f)]$  for the  ULA  algorithm (see Example~\ref{exam:langevin-algorithm}).
+In the next section   we provide a detailed   analysis of  $\mathsf{Var}[\pi_{K,n}^N(f)]$  for the  ULA  algorithm (see Example~\ref{exam:langevin-algorithm}). In many situations the coefficients $\bar{a}_{r,k}$ also decay exponentially fast as $r$ increases. The following result can be easily established.
+\begin{lem}
+\label{lem:coef_decrease}
+Let $(X^x_{p})_{p \in \nset_0}$ be a $V-$geometrically ergodic homogeneous Markov chain with stationary distribution $\pi$ and $f$ be a Borel function with $\|f\|_{V} < \infty$. Then it holds
+\begin{equation}
+|\bar a_{r,k}(x)| \leq C\rho^r\|f\|_{V} (\PE V^2(\Phi(x,\xi)))^{1/2}
+\end{equation}
+where $\rho\in (0,1)$ and $C$ is an absolute constant.
+\end{lem}
+
+
 \section{Estimation of coefficients}
 The coefficients \((\bar a_{l,k})\) need to be estimated before one can apply the proposed variance reduction approach. This amounts to solve a nonparametric regression problem.
 We present a generic regression algorithm. Algorithm starts with estimating the functions \(Q_{r}(x)=\mathsf{E}\left[f(X^x_{r})\right],\) for $r=N+1,\ldots,N+n.$ We first generate \(\NtrainPath\)  paths  of the chain \(X\)
@@ -476,10 +486,10 @@ We present a generic regression algorithm. Algorithm starts with estimating the 
 with $X^{(s)}_{0}=x,$ $s=1,\ldots,T.$
 The regression algorithm proceeds with estimating the  functions \((\bar Q_{l})\) by solving  the least squares optimization problems
 \begin{equation}\label{eq:06042018a1}
-\widehat{Q}_r = \argmin_{\psi \in \Psi} \sum_{s = 1}^{T} \sum_{l = N + 1}^{N+n-r} \left| f(X_{l+r}^{(s)}) - \psi(X_l^{(s)})\right|^2
+\widehat{Q}_r = \argmin_{\psi \in \Psi} \sum_{s = 1}^{T} \sum_{l = N + 1}^{N+n_{tr}-r} \left| f(X_{l+r}^{(s)}) - \psi(X_l^{(s)})\right|^2
 \end{equation}
-for \(r=1,\ldots, n-1,\)
-where \(\Psi\) is a  class of  real-valued functions on \(\mathbb{R}^d.\)
+for \(r=1,\ldots, n_{tr}-1,\)
+where \(\Psi\) is a  class of  real-valued functions on \(\mathbb{R}^d\) and $n_tr$ is a fixed natural number. 
 Next  we estimate the coefficients \( \bar a_{l,k}\) using
 the formula
 \begin{equation}
@@ -505,29 +515,6 @@ Yet it is impractical to use estimator of the form $\widehat M_{K,n}^N(f)$, sinc
 \end{eqnarray*}
 where $n_{\mathrm{trunc}} \in \nset$ is a hyperparameter. Validity of this approach follows from the following lemma
 
-\begin{lem}
-\label{lem:coef_decrease}
-Let $(X^x_{p})_{p \in \nset_0}$ be a $V-$geometrically ergodic homogeneous Markov chain with stationary distribution $\pi$ and $f$ be a Borel function with $\|f\|_{V} < \infty$. Then it holds
-\begin{equation}
-|\bar a_{r,k}(x)| \leq C\rho^r\|f\|_{V} (\PE V^2(\Phi(x,\xi)))^{1/2}
-\end{equation}
-where $\bar a_{r,k}(x)$ is defined in \eqref{eq:definition-bar-a}.
-\end{lem}
-\begin{proof}
-Note that 
-\[
-\bar a_{r,k}(x)=\mathsf{E}\left[\phi_k\left(\xi\right)Q_{r}\left(\Phi(x,\xi)\right)\right]
-\]
-with  $Q_{r}(x)=\mathsf{E}\left[f(X^x_{r})\right], r\in \mathbb{N}$. $V-$ergodicity of $(X^x_{p})_{p \in \nset_0}$ implies that
-\[
-|Q_{r}(x) - \pi(f)| \leq |\int\limits_{\rset^d} f(y)\left(\P^r(x,dy)-\pi(dy)\right)| \leq C\rho^r V(x) \|f\|_{V}
-\]
-Thus, since $\PE\phi_k\left(\xi\right) = 0$, we obtain from Cauchy-Schwarz inequality
-\begin{eqnarray*}
-|\bar a_{r,k}(x)| \leq \left(\PE \phi^2_k\left(\xi\right)\right)^{1/2}\left(\PE |Q_{r}(\Phi(x,\xi)) - \pi(f)|^{2}\right)^{1/2} \leq C\rho^r\|f\|_{V} (\PE V^2(\Phi(x,\xi)))^{1/2}
-\end{eqnarray*}
-and the statement follows.
-\end{proof}
 
 
 \section{Analysis of variance reduced ULA}
@@ -1431,6 +1418,21 @@ S_2 & \leq & \frac{2}{n^2}\sum\limits_{k=N+1}^{N+n-1}\left[C^2V^2(x)\rho^{k+1}\f
 \end{eqnarray*}
 Hence \eqref{eq:vanilla_var} follows.
 \end{proof} 
+\section{Proofs}
+\subsection{Proof of Lemma~\ref{lem:coef_decrease}}
+Note that 
+\[
+\bar a_{r,k}(x)=\mathsf{E}\left[\phi_k\left(\xi\right)Q_{r}\left(\Phi(x,\xi)\right)\right]
+\]
+with  $Q_{r}(x)=\mathsf{E}\left[f(X^x_{r})\right], r\in \mathbb{N}$. $V-$ergodicity of $(X^x_{p})_{p \in \nset_0}$ implies that
+\[
+|Q_{r}(x) - \pi(f)| \leq \left|\int\limits_{\rset^d} f(y)\left(\P^r(x,dy)-\pi(dy)\right)\right| \leq C\rho^r V(x) \|f\|_{V}
+\]
+Thus, since $\PE\phi_k\left(\xi\right) = 0$, we obtain from Cauchy-Schwarz inequality
+\begin{eqnarray*}
+|\bar a_{r,k}(x)| \leq \left(\PE \phi^2_k\left(\xi\right)\right)^{1/2}\left(\PE |Q_{r}(\Phi(x,\xi)) - \pi(f)|^{2}\right)^{1/2} \leq C\rho^r\|f\|_{V} (\PE V^2(\Phi(x,\xi)))^{1/2}
+\end{eqnarray*}
+and the statement follows.
 
 %Aforementioned lemmas allow us to bound the exponential moment of the additive functional of ULA. Namely, the following theorem holds
 %
