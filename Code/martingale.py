@@ -54,7 +54,7 @@ def approx_q(X_train,Y_train,N_traj_train,lag,max_deg):
     Args:
         X_train - train tralectory;
         Y_train - function values;
-        N_traj_train - number of teraining trajectories;
+        N_traj_train - number of training trajectories;
         lag - truncation point for coefficients, those for |p-l| > lag are set to 0;
         max_deg - maximum degree of polynomial in regression
     """
@@ -88,6 +88,31 @@ def approx_q(X_train,Y_train,N_traj_train,lag,max_deg):
         else:
             coefs_poly = np.concatenate((coefs_poly,coefs),axis=0)
     return coefs_poly
+
+def approx_q_independent(X_train,Y_train,N_traj_train,lag,max_deg):
+    """
+    Function to regress q on a polynomial basis based on independent trajectories
+    """
+    dim = X_train[0,:].shape[0]
+    print("dimension = ",dim)
+    coefs_poly = np.array([])
+    for i in range(lag):
+        x_all = X_train[:,0,:]
+        y_all = Y_train[:,i,:]
+        #should use polyfeatures here
+        poly = PolynomialFeatures(max_deg)
+        X_features = poly.fit_transform(x_all)
+        print(X_features.shape)
+        lstsq_results = np.linalg.lstsq(X_features,y_all,rcond = None)
+        coefs = copy.deepcopy(lstsq_results[0])
+        coefs.resize((1,X_features.shape[1]))           
+        if coefs_poly.size == 0:
+            coefs_poly = copy.deepcopy(coefs)
+        else:
+            coefs_poly = np.concatenate((coefs_poly,coefs),axis=0)
+    return coefs_poly
+    
+    
 
 def get_indices_poly(ind,K_max,S_max):
     """

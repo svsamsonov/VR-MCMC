@@ -110,7 +110,7 @@ def ULA_light(r_seed,Potential,step, N, n, d, return_noise = False, x0 = None, f
     #traj_grad = np.zeros((n, d))
     if return_noise:
         noise = np.zeros((n, d))
-    x = np.random.normal(scale=5.0, size=d) # initial value X_0
+    x = np.random.normal(scale=10.0, size=d) # initial value X_0
     for k in np.arange(N): # burn-in period
         grad_burn_val = grad_burn(x)
         x = x + step * grad_burn_val +\
@@ -118,7 +118,7 @@ def ULA_light(r_seed,Potential,step, N, n, d, return_noise = False, x0 = None, f
     #burn-in ended
     if fixed_start: #start all test trajectories from the same point
         x = x0
-    traj[0,] = x0
+    traj[0,] = x
     grad_main = Potential.gradpotential
     for k in np.arange(1,n): # samples
         grad = grad_main(x)
