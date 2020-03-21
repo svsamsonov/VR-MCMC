@@ -465,8 +465,7 @@ If the class of functions $\Psi$ is a linear one of dimension $\mathtt{D}_\Psi,$
 Thus, for any fixed $K\geq 1,$  our variance reduction method is advantageous if $\gamma<\min\{1/(\mathtt{D}_\Psi T^2),1/\sqrt{n}\}.$  
 \section{Analysis of variance reduced ULA}
 \label{sec:ula_analysis}
-In this section we perform the convergence analysis of the ULA algorithm. We use the notations of example \ref{exam:langevin-algorithm}. For the sake of clarity and notational simplicity we restrict our attention to the constant time step, that is, we take $\gamma_k =\gamma$ for any $k \in \nset$.
-
+In this section we perform the convergence analysis of the ULA algorithm. We use the notations of Example~\ref{exam:langevin-algorithm}. For the sake of clarity and notational simplicity we restrict our attention to the constant time step, that is, we take $\gamma_k =\gamma$ for any $k \in \nset$.
 By $H_k$, $k\in\mathbb N_0$,
 we denote the normalized Hermite polynomial on $\mathbb R$, that is,
 $$
@@ -483,7 +482,7 @@ $|\mathbf{k}|=\sum_{i=1}^d k_i$ for $\mathbf{k}=(k_i)\in\mathbb N_0^d$,
 and we set $\mathcal G_p=\sigma(Z_1,\ldots,Z_p)$, $p\in\mathbb N$, and $\mathcal G_0=\mathrm{triv}$.
 Given $N$ and $n$ as above, for $K\in\mathbb N$, denote
 \begin{align}
-M_{K,n}^N(f) & =\sum_{\mathbf k\colon 0<\|\mathbf{k}\|\le K}\frac{1}{n}\sum_{l=1}^{n}A_{n-l,\mathbf{k}}(X_{N+l-1})\mathbf{H}_\mathbf{k}(Z_{N+l})
+M_{K,n}^N(f) & =\sum_{ 0<\|\mathbf{k}\|\le K}\frac{1}{n}\sum_{l=1}^{n}A_{n-l,\mathbf{k}}(X_{N+l-1})\mathbf{H}_\mathbf{k}(Z_{N+l})
 \label{eq:29032018a5}
 \notag
 \end{align}
@@ -528,9 +527,9 @@ Hence both estimators
 $\pi_n^N(f)$ and $\pi_{K,n}^N(f)$ have the same  bias. Under assumptions {\bf (H1)} and {\bf (H2)}, the corresponding Markov chain has a unique stationary distribution $\pi_\gamma$, which is different from $\pi$. From \cite[Theorem~10]{durmus:moulines:2017} and Lemma~\ref{lem:v_ergodicity} it follows that
 \begin{equation}
 \label{eq:bias_2}
-\tvnorm{\pi - \pi_\gamma} < C\sqrt{\gamma}.
+\tvnorm{\pi - \pi_\gamma} \leq  C\sqrt{\gamma}
 \end{equation}
-Let us now derive an upper bound for the variance of the classical estimator~\eqref{eq:29032018a2} for ULA-based chain. 
+for some constant $C>0.$ Let us now derive an upper bound for the variance of the classical estimator~\eqref{eq:29032018a2} for ULA-based chain. 
 
 \begin{lem} 
 \label{lem:variance}
@@ -540,7 +539,7 @@ Let $f$ be a bounded Borel function and $(X^x_{p})_{p \in \nset_0}$ be a Markov 
 \label{eq:var-mc}
 \PVar[\pi_n^N(f)]\lesssim \frac{V(x)}{n\gamma} \eqsp,
 \end{equation}
-with $V(x) = 1+ \|x\|^2$ where $\lesssim$ stands for inequality up to a constant depending on constants $L,$ $m,$  $M$ and $\mathrm{osc}(f)$.
+with $V(x) = 1+ \|x\|^2$ where $\lesssim$ stands for inequality up to a constant not depending on $\gamma$ and $n$.
 \end{lem}
 \begin{remark}
 \label{rem:var-low}
@@ -556,7 +555,7 @@ Thus, setting $X_0 = 0$, we obtain
 \geq  \frac{2}{n\gamma} - \frac{4(1-\gamma)}{n^2\gamma^2}.
 \end{eqnarray*}
 \end{remark}
-One of the main results of this paper is the following  upper bound for the functions $A_{q,\mathbf{k}}.$
+One of the main results of this paper is the following  upper bound for the functions $(A_{q,\mathbf{k}}).$
 \begin{thm}\label{th:mr}
 Assume {\bf (H1)} and {\bf (H2)}.
 Fix some $K\geq 1$ and suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K \times d $ times continuously differentiable
@@ -586,7 +585,7 @@ Under assumptions of Theorem~\ref{th:mr},
 \PVar\left(\pi_{K,n}^{N}(f)\right)\lesssim n^{-1} \gamma^{K-1}  e^{\varkappa n\gamma^2}
 \eqsp,
 \end{eqnarray}
-where $\lesssim$ stands for inequality up to a constant not depending  on $n$ and $\gamma$.
+where $\lesssim$ stands for inequality up to a constant not depending  on $n,$ $N$ and $\gamma$.
 \end{cor}
 Let us sketch the main steps of the proof. First using integration by parts, we prove that
 \begin{eqnarray}
@@ -598,7 +597,7 @@ stands for a weak partial derivative of the functional $F_s$ that also can be vi
 Now by taking $\mathbf{k}'=\mathbf{k},$ we get
 \begin{eqnarray*}
 A^2_{q,\mathbf{k}}(x)\leq \gamma^{|\mathbf{k}|} \PVar \left( \sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X_{p}^x\right)
-\right).
+\right),\quad q=0,\ldots,n-1.
 \end{eqnarray*}
 Also from \eqref{eq:Ask-part} we can derive
 \begin{eqnarray*}
