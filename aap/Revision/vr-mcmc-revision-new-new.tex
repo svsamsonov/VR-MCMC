@@ -460,9 +460,9 @@ for a sequence  $(R_k)$ satisfying $\sum_{k=1}^\infty R^2_k\leq C$ with constant
  Note that the above estimate is rather rough, as we ignore here the fact that the difference between $\widehat A_{n-l,k}$ and $A_{n-l,k}$ is small.
 If the class of functions $\Psi$ is a linear one of dimension $\mathtt{D}_\Psi,$ then the cost of computing $\widehat \pi_{K,n}^N(f)$ is of order $ \mathtt{D}_\Psi K T^2 n$. At the same time the variance of the standard estimate $ \pi_{n}^N(f)$ is of order $1/(n\gamma)$ and this bound can not be improved, see Lemma~\ref{lem:variance} and Remark~\ref{rem:var-low}. Thus, the ratio of the corresponding cost-variances is of order
 \begin{eqnarray*}
-\frac{\mathrm{cost}(\pi_{K,n}^N) \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]}{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}\leq C e^{\varkappa n\gamma^2} K \gamma \, T^2 \mathtt{D}_\Psi. 
+\frac{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]}{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}\leq C e^{\varkappa n\gamma^2} K \gamma \, T^2 \mathtt{D}_\Psi. 
 \end{eqnarray*}
-Thus, for any fixed $K\geq 1,$  our variance reduction method is advantageous if $\gamma<\min\{1/(\mathtt{D}_\Psi T^2),1/\sqrt{n}\}.$  
+Thus, for any fixed $K\geq 1,$  our variance reduction method is advantageous if $\gamma\ll\min\{1/(\mathtt{D}_\Psi T^2),1/\sqrt{n}\}.$  
 \section{Analysis of variance reduced ULA}
 \label{sec:ula_analysis}
 In this section we perform the convergence analysis of the ULA algorithm. We use the notations of Example~\ref{exam:langevin-algorithm}. For the sake of clarity and notational simplicity we restrict our attention to the constant time step, that is, we take $\gamma_k =\gamma$ for any $k \in \nset$.
