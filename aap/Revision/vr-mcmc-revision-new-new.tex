@@ -1302,10 +1302,10 @@ Q_{\gamma}V(x) \leq \lambda^{\gamma} V(x) + \gamma C
 
 \begin{definition}
 \label{def:v_ergodicity}
-We say that the Markov chain $(X_p)_{p \in \nset_0}$  taking values in some space $X$ with the Markov kernel $Q$ is $V-$geometrically ergodic for a given function $V: X \rightarrow [1; +\infty)$ if there exist real numbers $C > 0$ and $0 < \rho < 1$ such that for any $n \in \nset$,
+Let $(X_p)_{p \in \nset_0}$ be a Markov chain taking values in some space $X$ with the Markov kernel $Q$ and stationary distribution $\pi$. We say that $(X_p)_{p \in \nset_0}$ is $V-$geometrically ergodic for a given function $V: X \rightarrow [1; +\infty)$ if there exist real numbers $C > 0$ and $0 < \rho < 1$ such that for any $n \in \nset$,
 \begin{equation}
 \label{eq:v_ergodicity}
-d_V(\delta_xQ^{1,n},\pi_\gamma) \leq C\rho^n V(x)
+d_V(\delta_xQ^{1,n},\pi) \leq C\rho^n V(x)
 \end{equation}
 \end{definition}
 
@@ -1366,7 +1366,7 @@ C = \left(1 + \exp{\left(-\frac{m\gamma}{2}\right)}\right)\left(1+\frac{\overlin
 $$
 
 $$
-b = \gamma(\frac{25K_1^2}{8} + 2d + m); \quad \overline{b} = b\exp^{-\frac{m\gamma}{2}} + d; \quad \varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right); \quad
+b = \gamma(\frac{25K_1^2}{8} + 2d + m); \quad \overline{b} = b\exp{\left(-\frac{m\gamma}{2}\right)} + d; \quad \varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right); \quad
 $$
 
 $$
