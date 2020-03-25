@@ -154,14 +154,14 @@ Note that in order to compare different  variance reduction approaches, one has 
 
 
 The situation becomes much more difficult in the case of MCMC algorithms, where one  has to work with a
-Markov chain \(X_p,\) \(p=0,1,2,\ldots,\) whose marginal distribution  converges  to \(\pi\) as time grows. One important class of the variance reduction methods in this case  is based on the Poisson equation for the corresponding  Markov chain. It was observed in~\cite{henderson1997variance}  that if a time-homogeneous Markov chain \((X_p)\) is stationary with stationary distribution \(\pi,\) then for any real-valued function \(G \in L^1(\pi) \) defined on the state space of the Markov chain \((X_p),\)  the function \(U(x) := G(x)-\mathsf{E}[G(X_{1})|X_0 = x]\) has zero mean with respect to \(\pi\).  The best choice for the function \(G\) corresponds to a solution of the Poisson equation  \(\mathsf{E}[G(X_{1})|X_0 = x]-G(x)=-f(x)+\pi(f)\).  Moreover, it is also related to the minimal asymptotic variance in the corresponding central limit theorem, see \cite{duncan2016variance} and \cite{mira2013zero}.   Although the Poisson equation involves the quantity of interest \(\pi(f)\)  and can not be  solved explicitly in most cases, this idea still can be used to construct some  approximations for the optimal zero-variance control variates. For example,  \cite{henderson1997variance} proposed to compute approximations for the solution of the Poisson equation for specific Markov chains with particular emphasis on models arising in stochastic network theory. In \cite{dellaportas2012control} and \cite{brosse2018diffusion}  series-type control variates are introduced and studied for reversible Markov chains. It is assumed in \cite{dellaportas2012control}  that the one-step conditional expectations  can be computed explicitly  for a set of basis functions. The authors in \cite{brosse2018diffusion} proposed another approach tailored to diffusion setting which does not require the computation of integrals of basis functions and only involves  applications of the underlying generator.
+Markov chain \((X_p),\) \(p=0,1,2,\ldots,\) whose marginal distribution  converges  to \(\pi\) as time grows. One important class of the variance reduction methods in this case  is based on the Poisson equation for the corresponding  Markov chain. It was observed in~\cite{henderson1997variance}  that if a time-homogeneous Markov chain \((X_p)\) is stationary with stationary distribution \(\pi,\) then for any real-valued function \(G \in L^1(\pi) \) defined on the state space of the Markov chain \((X_p),\)  the function \(U(x) := G(x)-\mathsf{E}[G(X_{1})|X_0 = x]\) has zero mean with respect to \(\pi\).  The best choice for the function \(G\) corresponds to a solution of the Poisson equation  \(\mathsf{E}[G(X_{1})|X_0 = x]-G(x)=-f(x)+\pi(f)\).  Moreover, it is also related to the minimal asymptotic variance in the corresponding central limit theorem, see \cite{duncan2016variance} and \cite{mira2013zero}.   Although the Poisson equation involves the quantity of interest \(\pi(f)\)  and can not be  solved explicitly in most cases, this idea still can be used to construct some  approximations for the optimal zero-variance control variates. For example,  \cite{henderson1997variance} proposed to compute approximations for the solution of the Poisson equation for specific Markov chains with particular emphasis on models arising in stochastic network theory. In \cite{dellaportas2012control} and \cite{brosse2018diffusion}  series-type control variates are introduced and studied for reversible Markov chains. It is assumed in \cite{dellaportas2012control}  that the one-step conditional expectations  can be computed explicitly  for a set of basis functions. The authors in \cite{brosse2018diffusion} proposed another approach tailored to diffusion setting which does not require the computation of integrals of basis functions and only involves  applications of the underlying generator.
 \par
 In this paper we focus on the  Langevin type algorithms which got much attention recently, see \cite{dalalyan2017theoretical,durmus:moulines:2017, MR2353037, MR3861816, MR2977986} and references therein. We propose  a generic variance reduction method for these and other types algorithms, which is purely non-asymptotic and does not require that    the conditional expectations of the corresponding Markov chain can be computed  or that the generator is known analytically. Moreover, we do not need to assume stationarity or/and sampling under the invariant distribution \(\pi.\) We rigorously analyse the convergence of the method and study its complexity. It is shown that  our variance-reduced Langevin algorithm outperforms the standard Langevin algorithms in terms of complexity.
 \par
 The paper is organized as follows.  In Section~\ref{sec:setup} we set up the problem and introduce some notations. Section~\ref{seq:mart_repr} contains a novel martingale representation and shows how this representation can be used for variance reduction. In Section~\ref{sec:ula_analysis} we analyze the performance of the proposed variance reduction algorithm in the case of Unadjusted Langevin Algorithm (ULA).  Finally, numerical examples are presented in Section~\ref{sec:num}.
 
 \paragraph{Notations. }\label{par:notations}
-We use the notations $\nset=\{1,2,\ldots\}$ and $\nset_0=\mathbb N\cup\{0\}$. We denote $\boldsymbol{\varphi}(z)=(2\pi)^{-d/2} \exp\{-|z|^2/2\}$, $z\in\mathbb R^d$ probability density function of the $d-$dimensional standard normal distribution. For $x \in \rset^d$ and $r>0$ let $B_r(x) = \{y \in \rset^d | \|y - x\| < r\}$ where $\|\cdot\|$ is a standard Euclidean norm. For the twice differentiable function $g: \rset^d \rightarrow \rset$ we denote by $D^2g$ its Hessian at point $x$. For $m\in\mathbb N$, a smooth function
+We use the notations $\nset=\{1,2,\ldots\}$ and $\nset_0=\mathbb N\cup\{0\}$. We denote $\boldsymbol{\varphi}(z)=(2\pi)^{-d/2} \exp\{-|z|^2/2\}$, $z\in\mathbb R^d$ probability density function of the $d-$dimensional standard normal distribution. For $x \in \rset^d$ and $r>0$ let $B_r(x) = \{y \in \rset^d | \|y - x\| < r\}$ where $\|\cdot\|$ is a standard Euclidean norm. For the twice differentiable function $g: \rset^d \rightarrow \rset$ we denote by $D^2g(x)$ its Hessian at point $x$. For $m\in\mathbb N$, a smooth function
 $h\colon\mathbb R^{d\times m}\to\mathbb R$
 with arguments being denoted
 $(y_1,\ldots,y_m)$, $y_i\in\mathbb R^d$, $i=1,\ldots,m$,
@@ -170,7 +170,7 @@ and $j\in\{1,\ldots,m\}$,
 we use the notation $\partial^{\mathbf k}_{y_j} h$ for the multiple derivative of $h$
 with respect to the components of~$y_j$:
 \[
-\partial^{\mathbf k}_{j} h(y_1,\ldots,y_m)
+\partial^{\mathbf k}_{y_j} h(y_1,\ldots,y_m)
 :=\partial^{k_d}_{y_j^d}
 \ldots
 \partial^{k_1}_{y_j^1}
@@ -182,7 +182,10 @@ In the particular case $m=1$ we drop the subscript $y_1$ in that notation. For p
 \tvnorm{\mu-\nu}=\sup_{A \in \mathcal{B}(\rset^d)}
 |\mu(A)-\nu(A)| \eqsp.
 \]
-where $\mathcal{B}(\rset^d)$ is a Borel $\sigma$-algebra of $\rset^d$. For a bounded Borel function $f: \rset^d \rightarrow \rset$ denote $\mathrm{osc}(f):=\sup_{x\in\mathbb R^d}f(x)-\inf_{x\in\mathbb R^d}f(x)$.
+where $\mathcal{B}(\rset^d)$ is a Borel $\sigma$-algebra of $\rset^d$. For a bounded Borel function $f: \rset^d \rightarrow \rset$ denote $\mathrm{osc}(f):=\sup_{x\in\mathbb R^d}f(x)-\inf_{x\in\mathbb R^d}f(x)$. Given a function $V: \rset^d \rightarrow \rset$, for a function $f: \rset^d \rightarrow \rset$ we define $\|f\|_{V} = \sup_{x \in \rset^d}\frac{|f(x)|}{V(x)}$ and the corresponding $V-$norm between probability measures $\mu$ and $\nu$ on $\mathcal{B}(\rset^d)$ as
+\[
+d_V(\mu, \nu) = \|\mu - \nu\|_{V} = \sup_{\|f\|_{V} \leq 1} \left[\int\limits_{\rset^d}f(x)\,d\mu(x) - \int\limits_{\rset^d}f(x)\,d\nu(x)\right]  \eqsp.
+\]
 
 
 \section{Setup}\label{sec:setup}
@@ -191,7 +194,7 @@ Let  \(\mathcal{X}\) be a domain in \( \mathbb{R}^d.\)  Our aim is to numericall
 \pi(f)=\int_{\mathcal{X}} f(x)\pi(\rmd x),
 \]
 where \(f:\) \(\mathcal{X}\longrightarrow \mathbb{R}\) and \(\pi\) is a probability measure supported on \(\mathcal{X}.\)
-If  the dimension of the space \(\mathcal{X}\) is large and \(\pi(f)\) can not be computed analytically, one can apply Monte Carlo methods. However, in many practical situations  direct sampling from \(\pi\) is impossible and this precludes the use of plain Monte Carlo methods in this case. One popular alternative to Monte Carlo  is Markov Chain Monte Carlo (MCMC), where one is looking for a discrete time  (possibly non-homogeneous) Markov chain   \((X_p)_{p\geq 0}\) such that \(\pi\) is its unique invariant measure. In this paper we study a class of MCMC algorithms with \((X_p)_{p\geq 0}\) satisfying the  the following recurrence relation:
+If  the dimension of the space \(\mathcal{X}\) is large and \(\pi(f)\) can not be computed analytically, one can apply Monte Carlo methods. However, in many practical situations  direct sampling from \(\pi\) is impossible and this precludes the use of plain Monte Carlo methods in this case. One popular alternative to Monte Carlo  is Markov Chain Monte Carlo (MCMC), where one is looking for a discrete time  (possibly non-homogeneous) Markov chain   \((X_p)_{p \in \nset_0}\) such that \(\pi\) is its unique invariant measure. In this paper we study a class of MCMC algorithms with \((X_p)_{p \in \nset_0}\) satisfying the  the following recurrence relation:
 \begin{equation}
 \label{eq:chain_gen}
 X_{p}=\Phi_{p}(X_{p-1},\xi_{p}),\quad p=1,2,\ldots ,\quad X_{0}=x,
@@ -200,7 +203,7 @@ for some i.i.d.  random vectors \(\xi_p\in \mathbb{R}^m\) with distribution \(P_
 and some Borel-measurable
 functions $\Phi_{p}\colon\mathcal{X}\times\mathbb{R}^{m}\to\mathcal{X}.$
 In fact, this is quite general class of Markov chains (see Theorem~1.3.6 in ~\cite{moulines2018})
-and many well-known MCMC algorithms can be represented in form \eqref{eq:chain_gen}.
+and many well-known MCMC algorithms can be represented in the form \eqref{eq:chain_gen}.
 Let us consider two popular examples.
 \begin{example}[Unadjusted Langevin Algorithm]
 \label{exam:langevin-algorithm}
@@ -524,7 +527,9 @@ we have
 \mathsf E\left[M_{K,n}^N(f)\right]=0.
 \]
 Hence both estimators
-$\pi_n^N(f)$ and $\pi_{K,n}^N(f)$ have the same  bias. Under assumptions {\bf (H1)} and {\bf (H2)}, the corresponding Markov chain has a unique stationary distribution $\pi_\gamma$, which is different from $\pi$. From \cite[Theorem~10]{durmus:moulines:2017} and Lemma~\ref{lem:v_ergodicity} it follows that
+$\pi_n^N(f)$ and $\pi_{K,n}^N(f)$ have the same  bias. Under assumptions {\bf (H1)} and {\bf (H2)}, the corresponding Markov chain has a unique stationary distribution $\pi_\gamma$, which is different from $\pi$. From \cite[Theorem~10]{durmus:moulines:2017} 
+%and Lemma~\ref{lem:v_ergodicity} 
+it follows that
 \begin{equation}
 \label{eq:bias_2}
 \tvnorm{\pi - \pi_\gamma} \leq  C\sqrt{\gamma}
@@ -546,13 +551,13 @@ with $V(x) = 1+ \|x\|^2$ where $\lesssim$ stands for inequality up to a constant
 The bound in Lemma~\ref{lem:variance} is sharp and can not be improved even in the case of a normal distribution $\pi.$
 Indeed,  ULA for the standard normal distribution takes form
 \begin{eqnarray*}
-X_{k+1} = (1-\gamma)X_k + \sqrt{2\gamma}\xi_{k+1},\quad \xi_{k+1} \sim \mathcal{N}(0,1)
+X_{k+1} = (1-2\gamma)X_k + \sqrt{\gamma}\xi_{k+1},\quad \xi_{k+1} \sim \mathcal{N}(0,1)
 \end{eqnarray*}
 Thus, setting $X_0 = 0$, we obtain
 \begin{eqnarray*}
 \PVar_{0} \pi_n^0(f) &=& \PVar_{0}\left[\frac{1}{n}\sum\limits_{i=1}^{n}X_i\right] 
-= \frac{1}{n^2}\PVar\left[\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{i}\sqrt{2\gamma}(1-\gamma)^{i-j}\xi_{j}\right]
-\geq  \frac{2}{n\gamma} - \frac{4(1-\gamma)}{n^2\gamma^2}.
+= \frac{1}{n^2}\PVar\left[\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{i}\sqrt{\gamma}(1-2\gamma)^{i-j}\xi_{j}\right]
+\geq  \frac{1}{n\gamma} - \frac{2(1-2\gamma)}{n^2\gamma^2}.
 \end{eqnarray*}
 \end{remark}
 One of the main results of this paper is the following  upper bound for the functions $(A_{q,\mathbf{k}}).$
@@ -680,7 +685,7 @@ U(x) = \frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu) - \ln{\left(1 + \rme^{-2\mu^\top \
 \nabla U(x) = \Sigma^{-1}(x-\mu) +2\mu^\top\Sigma^{-1}\left(1 + \rme^{2 \mu^\top\Sigma^{-1} x}\right)^{-1},
 \]
 respectively.
-In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and $\Sigma = \Sigma_0$ with randomly generated positive-definite matrix $\Sigma_0$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) with \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i\) we used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 10$ independent training trajectories, each one of size $n = 10^4$.  Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for the coefficients \(a_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 1$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 10^3$ and plot boxplots of the ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials, since they are used as regressors during computations of $\hat{a}_{p-l,\mathbf{k}}$.
+In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and randomly generated positive-definite matrix $\Sigma$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) with \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i\) we used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 10$ independent training trajectories, each one of size $n = 10^4$.  Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for the coefficients \(\hat{a}_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 1$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 10^3$ and plot boxplots of the ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials, since they are used as regressors during computations of $\hat{a}_{p-l,\mathbf{k}}$.
 
  \begin{figure}[tbh]
 \centering
@@ -704,7 +709,7 @@ where $p > 0$ and $b > 0$ are parameters; $b$ accounts for the curvature of dens
 \[
 U(x_1, . . . , x_d) = \frac{x_1^2}{2} + (x_2 + bx_1^2 - pb)^2 + \sum\limits_{k=3}^{d}\frac{x_k^2}{2}
 \]
-The quantity of interest is $\PE_{\pi}[X_2]$. We set $p = 100, b = 0.1$ and consider $d=8$. We solve the least squares  problems \eqref{eq:Qregr} using the second-order polynomial approximations for the coefficients \(a_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 2$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 10^3$ and plot boxplots of the ergodic averages in Figure~\ref{fig:banana_shape}.
+The quantity of interest is the expectation of $f(x) = x_2$. We set $p = 100, b = 0.1$ and consider $d=8$. We solve the least squares  problems \eqref{eq:Qregr} using the second-order polynomial approximations for the coefficients \(\hat{a}_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 2$. We use $T=10$ independent training trajectories, each of size $n=10^4$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 10^3$ and plot boxplots of the ergodic averages in Figure~\ref{fig:banana_shape}.
 
 \begin{figure}[h]
 \begin{center}
@@ -1285,13 +1290,7 @@ Thus the final bound follows:
 
 \appendix
 \section{Bounds for moments of  ULA}\label{sec:appendix}
-First let us notice that conditions {\bf (H1)} and {\bf (H2)} imply (\cite[Lemma~16]{brosse2018diffusion}) that for some $K_2 > 0$ it holds
-\begin{equation}
-\label{eq:H3}
-\ps{\nabla U(x)}{x} \geq \frac{m}{2}\|x\|^2, \quad \|x\| \geq K_2
-\end{equation}
-
-Now we shall show that conditions {\bf (H1)} and {\bf (H2)} are sufficient to show that ULA kernel $Q_\gamma$ satisfies the so-called drift condition:
+First let us introduce some definitions 
 \begin{definition}
 \label{def:drift}
 We say that the Markov kernel $Q_{\gamma}$ satisfies Foster-Lyapunov drift condition if there exist a measurable function $V: X \rightarrow [1; +\infty)$, real numbers $\lambda \in (0,1)$ and $C > 0$ such that for any $x \in X$,
@@ -1301,9 +1300,26 @@ Q_{\gamma}V(x) \leq \lambda^{\gamma} V(x) + \gamma C
 \end{equation}
 \end{definition}
 
+\begin{definition}
+\label{def:v_ergodicity}
+We say that the Markov chain $(X_p)_{p \in \nset_0}$  taking values in some space $X$ with the Markov kernel $Q$ is $V-$geometrically ergodic for a given function $V: X \rightarrow [1; +\infty)$ if there exist real numbers $C > 0$ and $0 < \rho < 1$ such that for any $n \in \nset$,
+\begin{equation}
+\label{eq:v_ergodicity}
+d_V(\delta_xQ^{1,n},\pi_\gamma) \leq C\rho^n V(x)
+\end{equation}
+\end{definition}
+
+Note that conditions {\bf (H1)} and {\bf (H2)} imply (\cite[Lemma~16]{brosse2018diffusion}) that for some $K_2 > 0$ it holds
+\begin{equation}
+\label{eq:H3}
+\ps{\nabla U(x)}{x} \geq \frac{m}{2}\|x\|^2, \quad \|x\| \geq K_2
+\end{equation}
+
+Now we shall show that conditions {\bf (H1)} and {\bf (H2)} are sufficient to show that ULA kernel $Q_\gamma$ satisfies the drift condition \eqref{eq:drift}
+
 \begin{lem}
 \label{lem:drift}
- Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$. Then the kernel $Q_\gamma$ from \eqref{eq:ula_kernel} satisfies drift condition \eqref{eq:lyapunov} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L}$ with drift function $V(x) = 1 + \|x\|^2$,   $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = \frac{25K_2^2}{8} + d + m$ with $K_2$ from \eqref{eq:H3}, $m_U$ from {\bf (H2)}.
+ Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$. Then the kernel $Q_\gamma$ from \eqref{eq:ula_kernel} satisfies drift condition \eqref{eq:lyapunov} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L}$ with drift function $V(x) = 1 + \|x\|^2$,   $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = \frac{25K_2^2}{8} + d + m$ with $K_2$ from \eqref{eq:H3}, $m$ from {\bf (H2)}.
 \end{lem}
 
 \begin{proof} Let $V(x) = 1 + \|x\|^2$, then
@@ -1336,7 +1352,7 @@ $$
 $$
 \end{proof}
 
-For now let us assume for simplicity that we run ULA with fixed step size $\gamma$. Then it is known that under assumption {\bf (H1)} corresponding Markov chain would have unique stationary distribution $\pi_\gamma$, which is different from $\pi$. Yet this chain will be $V-$geometrically ergodic due to \cite[Theorem~19.4.1]{moulines2018}. Namely, the following lemma holds:
+It is known that under assumption {\bf (H1)} the Markov chain generated by ULA with constant step size $\gamma$ would have unique stationary distribution $\pi_\gamma$, which is different from $\pi$. Yet this chain will be $V-$geometrically ergodic due to \cite[Theorem~19.4.1]{moulines2018}. Namely, the following lemma holds:
 
 \begin{lem}
 \label{lem:v_ergodicity}
@@ -1358,7 +1374,7 @@ $$
 $$
 \end{lem}
 
-\begin{proof} Note that the condition {\bf (H1)} implies that the Markov kernel $Q^{1,n}_{\boldsymbol{\gamma}}$ satisfies $(1,\varepsilon)$-Doeblin condition with $\varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right)$. Together with drift condition \ref{eq:drift} it allows to apply \cite[Theorem~19.4.1]{moulines2018} with appropriate constants.
+\begin{proof} Note that the condition {\bf (H1)} implies that the Markov kernel $Q^{1,n}_{\boldsymbol{\gamma}}$ satisfies $(1,\varepsilon)$-Doeblin condition with $\varepsilon = 2\Phi\left(-\frac{\sqrt{d}(1+L\gamma)}{2\sqrt{\gamma}}\right)$. Together with drift condition \eqref{eq:lyapunov} it allows to apply \cite[Theorem~19.4.1]{moulines2018} with appropriate constants.
 \end{proof}
 
 \section{Covariance estimation for $V-$geometrically ergodic Markov chains}\label{sec:appendix_moments}
