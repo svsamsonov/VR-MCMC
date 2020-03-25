@@ -1381,7 +1381,7 @@ $$
 In this section we assume that $(X_p)_{p \in \nset_0}$ is a $V-$geometrically ergodic Markov chain and prove bounds on the variance of ergodic average $\pi_N^n(f)$ of the form \eqref{eq:29032018a2}. We use the same technique as in \cite{belomestny2019esvm} to control autocovariances for a given Markov chain. We start from auxiliary lemma:
 \begin{lem} 
 \label{lem:fp_covariance}
-Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Then it holds for some constant $C > 0$
+Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Let $\tilde{f}(x) = f(x) - \pi(f)$. Then it holds for some constant $C > 0$
 \begin{equation}
 |\mathsf{E}_x[\tilde{f}(X_0)\tilde{f}(X_s)]| \leq C\rho^{s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}V(x)
 \end{equation}
@@ -1405,7 +1405,7 @@ yielding the first statement of lemma. The second statement can be obtained from
  
 \begin{lem}
 \label{lem:covariance}
-Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Then
+Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Let $\tilde{f}(x) = f(x) - \pi(f)$. Then
 \begin{equation}
 \label{eq:cov_v_ergodic}
 \PCov_x \left[f(X_k),f(X_{k+s})\right] \leq C^2V^2(x)\rho^{k+s} + C^2\rho^{k+s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}V(x) + C\pi(V)\rho^{s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}
