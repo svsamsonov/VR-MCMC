@@ -1,0 +1,70 @@
+\documentclass{article}%
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[authoryear]{natbib}
+\usepackage{color}%
+\setcounter{MaxMatrixCols}{30}
+%TCIDATA{OutputFilter=latex2.dll}
+%TCIDATA{Version=5.50.0.2890}
+%TCIDATA{CSTFile=40 LaTeX article.cst}
+%TCIDATA{Created=Thursday, September 14, 2017 13:22:20}
+%TCIDATA{LastRevised=Saturday, December 07, 2019 12:32:10}
+%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
+%TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
+%TCIDATA{BibliographyScheme=Manual}
+%TCIDATA{<META NAME="DocumentShell" CONTENT="Standard LaTeX\Blank - Standard LaTeX Article">}
+%BeginMSIPreambleData
+\providecommand{\U}[1]{\protect\rule{.1in}{.1in}}
+%EndMSIPreambleData
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\begin{document}
+
+\title{\textbf{Response to the Report by Referee 2}}
+\author{{\normalsize \vspace{-1cm} Denis Belomestny, Eric Moulines, and Sergei Samsonov}}
+\date{~ }
+\maketitle
+
+\vspace{-0.5cm}
+
+We thank the referee for carefully reading our manuscript and for pertinent
+comments which helped us to improve the paper. In the new version of our
+paper, we have taken all comments and suggestion into account.  Below are some additional responses to the
+comments by Referee 2
+
+\section*{Main remarks}
+
+\begin{itemize}
+
+\item \textit{... Restrictive assumptions for the theoretical analysis. The main theorems of the paper, which seem to be Theorem 4 and the results of section 6.1, have the restrictive assumption that the drift vector field  needs to satisfy the strong convexity assumption ... In typically interesting cases, such as Bayesian inverse problems and machine learning, this assumption is not satisfied. Unfortunately, even in the numerical examples provided in Section 7, this assumption is not fulfilled ? it already doesn't hold for a two-component Gaussian mixture in one dimension. This is a serious restriction ... }
+\par
+In the revised version we significantly weaken  the assumptions and prove our main result (Theorem~3 and Corollary~2) for ULA under smoothness  and convexity of the underlying potential outside a ball (assumption  (H2)).  Thus we avoid the strong convexity assumption.  Note that all assumptions needed are now collected in Theorem~3. These  assumptions can now be validated for a large class of examples including example of Gaussian mixtures considered in Section~6.1.
+\item \textit{... in complicated models such as PDE-related Bayesian inverse problems or machine learning, the computation of \(\nabla \log(\pi)\) is expensive ? but these examples are typically ones where \(\log(\pi)\) does not satisfy the needed concavity assumptions ...}
+\par
+Now we replaced the strong convexity assumption by a much weaker one (H2) (convexity outside a ball). Hence our method may gain additional efficiency as compared to other variance reduction approaches due to the fact that \(\nabla \log(\pi)\) doesn't need to be computed to construct control variates.
+\end{itemize}
+
+
+\end{document}
