@@ -8,6 +8,7 @@ from VR_methods import Train_1st_order,Train_2nd_order,Train_1st_order_grad,Trai
 from samplers import ULA,MALA,RWM,ULA_SAGA,MC_sampler
 from multiprocessing import Pool
 import multiprocessing
+import time
 
 """
 def optim_1var(i,crit,inds_arr,traj,traj_grad,W_train_spec,n_restarts,tol,sigma):
@@ -466,6 +467,7 @@ def Run_eval_test(intseed,degree,sampler,methods,vars_arr,Potential,test_dict,CV
     N_burn = test_dict["burn_in"]
     N_test = test_dict["n_test"]
     d = test_dict["dim"]
+    start_time = time.time()
     if sampler_type == "ULA":
         traj,traj_grad = ULA(intseed,Potential,step, N_burn, N_test, d, burn_type, main_type)
     elif sampler_type == "MALA":
@@ -478,13 +480,16 @@ def Run_eval_test(intseed,degree,sampler,methods,vars_arr,Potential,test_dict,CV
     #lists to save the results of the trajectory
     res_dict = {"Vanilla":[],"ESVM":[],"EVM":[],"LS":[],"MAX":[]}
     vars_dict = {"Vanilla":[],"ESVM":[],"EVM":[],"LS":[],"MAX":[]}
+    time_dict = {"Vanilla":[],"ESVM":[],"EVM":[],"LS":[],"MAX":[]}
     #initialize function values
     f_vals = set_function(f_type,[traj],vars_arr,params_test)
     #kill dimension which is not needed
     f_vals = f_vals[0]
     integrals,vars_spec = eval_samples("Vanilla",f_vals,traj,traj_grad,1,W_spec,N_test,d,vars_arr) #usual samples, without variance reduction
+    vanilla_time = time.time() - start_time
     res_dict["Vanilla"].append(integrals)
     vars_dict["Vanilla"].append(vars_spec)
+    time_dict["Vanilla"].append(vanilla_time)
     #set flag based upon the polynomial degree
     if degree == 2:
         flag = "2nd_order"
@@ -492,11 +497,14 @@ def Run_eval_test(intseed,degree,sampler,methods,vars_arr,Potential,test_dict,CV
         flag = "kth_order"
     #main loop
     for ind in range(len(methods)):
+        new_time = time.time()
         Coef_matr = CV_dict[methods[ind]]
         integrals,vars_spec = eval_samples(flag,f_vals,traj,traj_grad,Coef_matr,W_spec,N_test,d,vars_arr)
         res_dict[methods[ind]].append(integrals)
         vars_dict[methods[ind]].append(vars_spec)
-    return res_dict,vars_dict
+        loop_time = time.time() - new_time
+        time_dict[methods[ind]].append(loop_time + vanilla_time)
+    return res_dict,vars_dict, time_dict
 
 """
 def Run_eval_test(intseed,method,vars_arr,Potential,W_spec,CV_dict,step,N,n,d,params_test = None, f_type = "posterior_mean"):

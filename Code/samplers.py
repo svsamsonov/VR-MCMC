@@ -118,7 +118,7 @@ def ULA_light(r_seed,Potential,step, N, n, d, return_noise = False, x0 = None, f
     #burn-in ended
     if fixed_start: #start all test trajectories from the same point
         x = x0
-    traj[0,] = x0
+    traj[0,] = x
     grad_main = Potential.gradpotential
     for k in np.arange(1,n): # samples
         grad = grad_main(x)

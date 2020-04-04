@@ -6,6 +6,7 @@ from samplers import ULA_light
 from potentials import GaussPotential,GaussMixture,GausMixtureIdent,GausMixtureSame
 import copy
 from baselines import set_function
+import time
 
 def H(k, x):
     if k==0:
@@ -77,6 +78,8 @@ def approx_q(X_train,Y_train,N_traj_train,lag,max_deg):
                 x_all = np.concatenate((x_all,x),axis = 0)
             y_all = np.concatenate([y_all,y])
         #should use polyfeatures here
+        print("variance: ",np.var(y_all))
+        print(y_all[:50])
         poly = PolynomialFeatures(max_deg)
         X_features = poly.fit_transform(x_all)
         print(X_features.shape)
@@ -88,6 +91,33 @@ def approx_q(X_train,Y_train,N_traj_train,lag,max_deg):
         else:
             coefs_poly = np.concatenate((coefs_poly,coefs),axis=0)
     return coefs_poly
+
+def approx_q_independent(X_train,Y_train,N_traj_train,lag,max_deg):
+    """
+    Function to regress q functions bases on a polynomial basis and big number of short independent trajectories
+    """
+    dim = X_train[0,:].shape[0]
+    print("dimension = ",dim)
+    coefs_poly = np.array([])
+    for i in range(lag):
+        x_all = X_train[:,0,:]
+        y_all = Y_train[:,i,0]
+        print(y_all[:50])
+        print("variance: ",np.var(y_all))
+        #should use polyfeatures here
+        poly = PolynomialFeatures(max_deg)
+        X_features = poly.fit_transform(x_all)
+        print(X_features.shape)
+        lstsq_results = np.linalg.lstsq(X_features,y_all,rcond = None)
+        coefs = copy.deepcopy(lstsq_results[0])
+        coefs.resize((1,X_features.shape[1]))           
+        if coefs_poly.size == 0:
+            coefs_poly = copy.deepcopy(coefs)
+        else:
+            coefs_poly = np.concatenate((coefs_poly,coefs),axis=0)
+    return coefs_poly
+    
+        
 
 def get_indices_poly(ind,K_max,S_max):
     """
@@ -158,7 +188,7 @@ def get_representations(k,s,d,K_max):
         vec_table = np.array([[0],[1],[2],[3],[4],[5]])
         s_vec = vec_table[s,:]
     elif d == 2:
-        vec_table = np.array([[0,0],[1,0],[0,1],[2,0],[1,1],[0,2],[3,0],[2,1],[1,2],[0,3]])
+        vec_table = np.array([[0,0],[1,0],[0,1],[2,0],[1,1],[0,2],[3,0],[2,1],[1,2],[0,3],[4,0],[3,1],[2,2],[1,3],[0,4]])
         s_vec = vec_table[s,:]
     elif d == 4:
         vec_table = np.array([[0,0,0,0],[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1],
@@ -207,6 +237,7 @@ def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_tes
     st_norm_moments = init_moments(K_max+S_max+1)
     table_coefs = init_basis_polynomials(K_max,S_max,st_norm_moments,step)
     #print(table_coefs.shape)
+    start_time = time.time()
     for i in range(1,len(cvfs)):
         #start computing a_{p-l} coefficients
         num_lags = min(lag,i)
@@ -226,8 +257,18 @@ def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_tes
                 a_vals[-(func_order+1),k] = np.dot(a_cur,coefs_poly_regr[func_order,:])
             #OK, now I have coefficients of the polynomial, and I need to integrate it w.r.t. Gaussian measure
         #print("sum of coefficients",np.sum(np.abs(a_vals)))
+        if (i%100 == 0):
+            print(a_vals)
         cvfs[i] = np.sum(a_vals*(poly_vals[:,i-num_lags+1:i+1].T))
         #save results
         test_stat_vanilla[i] = np.mean(f_vals_vanilla[1:(i+1)])
         test_stat_vr[i] = test_stat_vanilla[i] - np.sum(cvfs[1:(i+1)])/i
-    return test_stat_vanilla, test_stat_vr
+    end_time = time.time() - start_time
+    return test_stat_vanilla, test_stat_vr, end_time
+
+def test_monte_carlo(r_seed,Potential,step,N_burn,N,d,return_noise, x0, fixed_start):
+    """
+    Function to test vanilla mcmc with large sample sizes
+    """
+    X_test = ULA_light(r_seed,Potential,step, N_burn, N, d, return_noise, x0, fixed_start)
+    return X_test

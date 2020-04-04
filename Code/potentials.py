@@ -272,13 +272,12 @@ class GausMixtureSame:
         returns gradient of log-density at point x
         """
         return self.Sigma_inv @ (self.mu - x) - 2*(1-self.p)*self.Sigma_inv @ self.mu/(1-self.p + self.p*np.exp(2*np.dot(self.mu,self.Sigma_inv @ x)))
-#################################################################################################################################
-    
+#################################################################################################################################    
 class BananaShape:
     """
     Implements Banana-shaped density potential function in R^2 for density f(x,y) = \exp{-\frac{x^2}{2M} - \frac{1}{2}(y+Bx^2-100B)^2}
     """
-    def __init__(self,B,M,d=2):
+    def __init__(self,B,M,d):
         self.B = B
         self.M = M
         self.d = d
@@ -311,6 +310,170 @@ class BananaShape:
             grad[i] = -z[i]
         return grad
 ################################################################################################################################ #### 
+class PotentialOne:
+    """
+    Implements denisty exp(-1/0.32*(x_2 - sin(pi/2*x_1))**2)
+    """
+    def __init__(self,B,M,d):
+        self.B = B
+        self.M = M
+        self.d = d
+        
+    def potential(self,z):
+        """
+        returns log-density at z
+        """
+        x = z[0]
+        y = z[1]
+        M = self.M
+        B = self.B
+        exponent = -1./(2*M)*x**2 - 1./2*(y-np.sin(B*x))**2
+        for i in range(2,self.d):
+            exponent -= 1./2*z[i]**2
+        return exponent
+    
+    def gradpotential(self,z):
+        """
+        returns gradient of log-density at point z
+        """
+        x = z[0]
+        y = z[1]
+        M = self.M
+        B = self.B
+        grad = np.zeros(self.d, dtype = float)
+        grad[0] = -x/M + B*(y-np.sin(B*x))*np.cos(B*x)
+        grad[1] = -(y - np.sin(B*x))
+        for i in range(2,self.d):
+            grad[i] = -z[i]
+        return grad
+################################################################################################################################ #### 
+class PotentialOnePrime:
+    """
+    Implements denisty exp(-1/0.32*(x_2 - sin(pi/2*x_1))**2)
+    """
+    def __init__(self,B,M,d):
+        self.B = B
+        self.M = M
+        self.d = d
+        
+    def potential(self,z):
+        """
+        returns log-density at z
+        """
+        x = z[0]
+        y = z[1]
+        M = self.M
+        B = self.B
+        exponent = -1./(2*M)*(y-np.sin(B*x))**2
+        for i in range(2,self.d):
+            exponent -= 1./2*z[i]**2
+        return exponent
+    
+    def gradpotential(self,z):
+        """
+        returns gradient of log-density at point z
+        """
+        x = z[0]
+        y = z[1]
+        M = self.M
+        B = self.B
+        grad = np.zeros(self.d, dtype = float)
+        grad[0] = (B/M)*(y-np.sin(B*x))*np.cos(B*x)
+        grad[1] = -(y - np.sin(B*x))/M
+        for i in range(2,self.d):
+            grad[i] = -z[i]
+        return grad
+##########################################################################################################################################
+class PotentialTwo:
+    """
+    Implements denisty exp(-1/0.32*(x_2 - sin(pi/2*x_1))**2)
+    """
+    def __init__(self,M,mu,sigma,d):
+        self.M = M
+        self.d = d
+        self.mu = mu
+        self.sigma = sigma
+        
+    def potential(self,z):
+        """
+        returns log-density at z
+        """
+        x = z[0]
+        y = z[1]
+        M = self.M
+        mu = self.mu
+        sigma = self.sigma
+        exponent = -1./(2*M**2)*(np.sqrt(x**2 + y**2) - mu)**2 + np.log(np.exp(-1/(2*sigma**2)*(x-mu)**2) + np.exp(-1/(2*sigma**2)*(x+mu)**2))
+        for i in range(2,self.d):
+            exponent -= 1./2*z[i]**2
+        return exponent
+    
+    def gradpotential(self,z):
+        """
+        returns gradient of log-density at point z
+        """
+        #print(z)
+        x = z[0]
+        y = z[1]
+        M = self.M
+        mu = self.mu
+        sigma = self.sigma
+        grad = np.zeros(self.d, dtype = float)
+        denom = np.exp(-1/(2*sigma**2)*(x-mu)**2) + np.exp(-1/(2*sigma**2)*(x+mu)**2)
+        #print(denom)
+        nom = -((x-mu)/sigma**2)*np.exp(-1/(2*sigma**2)*(x-mu)**2) - ((x+mu)/sigma**2)*np.exp(-1/(2*sigma**2)*(x+mu)**2)
+        grad[0] = -x*(np.sqrt(x**2 + y**2) - 2)/(np.sqrt(x**2 + y**2)*M**2) + nom/denom
+        grad[1] = -y*(x**2 + y**2 - 2)/(np.sqrt(x**2 + y**2)*M**2)
+        for i in range(2,self.d):
+            grad[i] = -z[i]
+        return grad
+##########################################################################################################################################
+class PotentialThree:
+    """
+    Implements denisty exp(-1/0.32*(x_2 - sin(pi/2*x_1))**2)
+    """
+    def __init__(self,M,mu,sigma,d):
+        self.M = M
+        self.d = d
+        self.mu = mu
+        self.sigma = sigma
+        
+    def potential(self,z):
+        """
+        returns log-density at z
+        """
+        x = z[0]
+        y = z[1]
+        M = self.M
+        mu = self.mu
+        sigma = self.sigma
+        exponent = -1./(2*M**2)*(np.sqrt(x**2 + y**2) - mu)**2 + np.log(np.exp(-1/(2*sigma**2)*(x-mu)**2) + np.exp(-1/(2*sigma**2)*(x+mu)**2))
+        for i in range(2,self.d):
+            exponent -= 1./2*z[i]**2
+        return exponent
+    
+    def gradpotential(self,z):
+        """
+        returns gradient of log-density at point z
+        """
+        #print(z)
+        x = z[0]
+        y = z[1]
+        M = self.M
+        mu = self.mu
+        sigma = self.sigma
+        grad = np.zeros(self.d, dtype = float)
+        denom = np.exp(-1/(2*sigma**2)*(x-mu)**2) + np.exp(-1/(2*sigma**2)*(x+mu)**2)
+        #print(denom)
+        nom = -((x-mu)/sigma**2)*np.exp(-1/(2*sigma**2)*(x-mu)**2) - ((x+mu)/sigma**2)*np.exp(-1/(2*sigma**2)*(x+mu)**2)
+        grad[0] = -x*(np.sqrt(x**2 + y**2) - 2)/(np.sqrt(x**2 + y**2)*M**2) + nom/denom
+        grad[1] = -y*(x**2 + y**2 - 2)/(np.sqrt(x**2 + y**2)*M**2)
+        for i in range(2,self.d):
+            grad[i] = -z[i]
+        return grad
+##########################################################################################################################################
+    
+
 class potentialRegression:
     """ implementing a potential U = logarithm of the posterior distribution
         given by a Bayesian regression
