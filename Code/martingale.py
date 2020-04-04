@@ -55,7 +55,7 @@ def approx_q(X_train,Y_train,N_traj_train,lag,max_deg):
     Args:
         X_train - train tralectory;
         Y_train - function values;
-        N_traj_train - number of teraining trajectories;
+        N_traj_train - number of training trajectories;
         lag - truncation point for coefficients, those for |p-l| > lag are set to 0;
         max_deg - maximum degree of polynomial in regression
     """
@@ -102,8 +102,6 @@ def approx_q_independent(X_train,Y_train,N_traj_train,lag,max_deg):
     for i in range(lag):
         x_all = X_train[:,0,:]
         y_all = Y_train[:,i,0]
-        print(y_all[:50])
-        print("variance: ",np.var(y_all))
         #should use polyfeatures here
         poly = PolynomialFeatures(max_deg)
         X_features = poly.fit_transform(x_all)
@@ -116,8 +114,6 @@ def approx_q_independent(X_train,Y_train,N_traj_train,lag,max_deg):
         else:
             coefs_poly = np.concatenate((coefs_poly,coefs),axis=0)
     return coefs_poly
-    
-        
 
 def get_indices_poly(ind,K_max,S_max):
     """
