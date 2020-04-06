@@ -179,7 +179,7 @@ def MALA(r_seed,Potential, step, N, n, d, burn_type = "SGLD",main_type = "SGLDFP
     grad_main = Potential.gradpotential
     traj = np.zeros((n, d))
     traj_grad = np.zeros((n, d))
-    x = np.random.normal(scale=5.0, size=d)
+    x = np.random.normal(scale=1.0, size=d)
     for k in np.arange(N):
         y = x + step * grad_burn(x) + np.sqrt(2*step)*np.random.normal(size=d)
         #if full gradient computed during burn-in, do acceptance-rejection step
