@@ -659,7 +659,7 @@ Then using the identity
 we obtain closed-form expression for the estimates $\widehat a_{r,k}(x)$ of functions $\bar a_{r,k}(x)$ in \eqref{eq:definition-bar-a}. Namely, for all $x \in \mathbb{R}^d$,
 \begin{eqnarray*}
 \widehat a_{r,\mathbf{k}} (x) &=&\CPE{\mathbf{H}_\mathbf{k}(\xi) \widehat{Q}_{r}(x - \gamma \mu(x) + \sqrt{\gamma}\xi)}{\TrainSet}
-= \sum_{\|\mathbf{s}\|\leq m} \beta_{\mathbf{s}} \prod_{i=1}^d P_{k_i,s_i}(x_i),
+= \sum_{\|\mathbf{s}\|\leq m} \beta_{\mathbf{s}} \prod_{i=1}^d P_{k_i,s_i}(x_i - \gamma \mu_i(x)),
 \end{eqnarray*}
 where for any integer $k,s$ $P_{k,s}$ 
 is a one-dimensional polynomial (in \(x\)) of degree at most \(s\) with analytically known coefficients. We estimate $Q_{r}$ only for $r < n_{\mathrm{trunc}}$ where the truncation level \(n_{\mathrm{trunc}}\) may depend on \(d\) and \(\gamma.\) It allows us to use a smaller amount of training trajectories to approximate $Q_{r}(x)$.
@@ -669,7 +669,7 @@ Finally  we construct a truncated version of the estimator \eqref{eq:29032018a3}
 \]
 where
 \begin{eqnarray*}
-\widehat M_{K,n,n_{\mathrm{trunc}}}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{0 < \|\mathbf{k}\| < K}\sum_{l=N+1}^{p} \widehat a_{p-l,\mathbf{k}}(X_{l-1})\phi_k(\xi_{l})\mathbbm{1}\{ | p-l | < n_{\mathrm{trunc}}\right].
+\widehat M_{K,n,n_{\mathrm{trunc}}}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{0 < \|\mathbf{k}\|\leq K}\sum_{l=N+1}^{p} \widehat a_{p-l,\mathbf{k}}(X_{l-1})\phi_k(\xi_{l})\mathbbm{1}\{ | p-l | < n_{\mathrm{trunc}}\}\right].
 \end{eqnarray*}
 
 \subsection{Gaussian mixtures}
