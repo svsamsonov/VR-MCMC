@@ -692,12 +692,15 @@ and
 \nabla U(x) = \Sigma^{-1}(x-\mu) +2\mu^\top\Sigma^{-1}\left(1 + \rme^{2 \mu^\top\Sigma^{-1} x}\right)^{-1},
 \]
 respectively.
-In our experiments we take $\mu = \left(0.5,0.5\right)$ and randomly generated positive-definite matrix $\Sigma$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) for \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i,\) we use ULA with constant step size $\gamma=0.1$ and sampled $\NtrainPath = 10$ independent training trajectories, each one of size $n = 10^4$ to estimate coefficients $a_{p-l,\mathbf{k}}.$ Then we solve the least squares  problems \eqref{eq:Qregr} using the first or second order polynomial basis  depending on $f$. Respectively, we set $K=1$ for linear functionals $f$ and $K=2$ for quadratic functionals. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 10^3$ and depict boxplots of the ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials, as they were used as regressors during computations of $\hat{a}_{p-l,\mathbf{k}}$. Next we compute the cost-variance ratios
-\[
+In our experiments we take $\mu = \left(0.5,0.5\right)$ and randomly generated positive-definite matrix $\Sigma$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) for \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i,\) we use ULA with constant step size $\gamma=0.1$ and sampled $\NtrainPath = 10^4$ independent training trajectories to estimate coefficients $a_{p-l,\mathbf{k}}.$ Then we solve the least squares  problems \eqref{eq:Qregr} using the first or second order polynomial basis  depending on $f$. Respectively, we set $K=1$ for linear functionals $f$ and $K=2$ for quadratic functionals. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 10^3$ and depict boxplots of the ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials, as they were used as regressors during computations of $\hat{a}_{p-l,\mathbf{k}}$. 
+\par
+Next we compute the cost-variance ratios
+\begin{eqnarray}
+\label{eq:cvR}
 \mathcal{R}(K,N,n,n_{\mathrm{trunc}})=\frac{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n,n_{\mathrm{trunc}} }^N(f)|\TrainSet]} 
-\]
-where variances in the above definition are computed using $24$ independent trajectories of the length $n=2\cdot10^3.$ Note that the cost of $\widehat \pi_{K,n,n_{\mathrm{trunc}}} $ is proportional to the number of nonzero coefficients in \eqref{eq:a-pol} times $n_{\mathrm{trunc}}$. In Figure~\ref{fig:G-costvar} cost-variances ratios are shown for for the case of  Gaussian distribution with parameters. In particular, in Figure~\ref{fig:subfig3}  a function $\mathcal{R}(1,2\cdot 10^3,2\cdot 10^3,n_{\mathrm{trunc}})$ is shown in dependence on $n_{\mathrm{trunc}}$ for the case of a linear functional $f$. In Figure~\ref{fig:subfig4} a similar plot of $\mathcal{R}(2,2\cdot 10^3,2\cdot 10^3,n_{\mathrm{trunc}})$ is shown for the case of a quadratic functional $f.$
-Figure~\ref{fig:GMM-costvar} presents the corresponding coast-variance ratios   for a mixture of two two-dimensional normal distributions as in \eqref{eq:gmm} with $\Sigma=I$ and $\mu=(0.5,0.5).$ 
+\end{eqnarray}
+where variances in the above definition are computed using $24$ independent trajectories each of  length $n=2\cdot10^3.$ Note that the cost of $\widehat \pi_{K,n,n_{\mathrm{trunc}}} $ is proportional to the number of nonzero coefficients in \eqref{eq:a-pol} times $n_{\mathrm{trunc}}$.  In Figure~\ref{fig:G-costvar} cost-variances ratios are shown for for the case of  Gaussian distribution with parameters. In particular, in Figure~\ref{fig:subfig3}  a function $\mathcal{R}(1,2\cdot 10^3,2\cdot 10^3,n_{\mathrm{trunc}})$ is shown in dependence on $n_{\mathrm{trunc}}$ for the case of  linear  $f$. In Figure~\ref{fig:subfig4} a similar plot of $\mathcal{R}(2,2\cdot 10^3,2\cdot 10^3,n_{\mathrm{trunc}})$ is shown for the case of  quadratic $f.$
+Figure~\ref{fig:GMM-costvar} presents the corresponding coast-variance ratios   for the mixture of two two-dimensional normal distributions as in \eqref{eq:gmm} with $\Sigma=I$ and $\mu=(0.5,0.5).$  In each case, in order estimate functions $(Q_r),$ we have used $T=10^4$ independent trajectories in the least-squares regression and polynomials of the same order as the order of $f.$
  \begin{figure}[tbh]
 \centering
 \subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
@@ -720,7 +723,7 @@ Figure~\ref{fig:GMM-costvar} presents the corresponding coast-variance ratios   
 \subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
 \includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gaussian.png}
 \label{fig:subfig4}}
-\caption{ Cost-variance ratios as a function of the truncation level for  two-dimensional standard Gaussian distribution and different test functions. \label{fig:G-costvar}}
+\caption{ Cost-variance ratios \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  two-dimensional standard Gaussian distribution and different test functions. \label{fig:G-costvar}}
 \end{figure}
 
 \begin{figure}[tbh]
@@ -732,7 +735,7 @@ Figure~\ref{fig:GMM-costvar} presents the corresponding coast-variance ratios   
 \subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
 \includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gmm.png}
 \label{fig:subfig6}}
-\caption{ Cost-variance ratios as a function of the truncation level for  a mixture of two-dimensional  Gaussian distribution and different test functions.
+\caption{ Cost-variance ratios  \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  a mixture of two-dimensional  Gaussian distribution and different test functions.
 \label{fig:GMM-costvar}}
 \end{figure}
 
