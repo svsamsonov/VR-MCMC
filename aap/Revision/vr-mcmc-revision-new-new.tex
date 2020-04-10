@@ -490,9 +490,10 @@ M_{K,n}^N(f) & :=\frac{1}{n}\sum_{ 0<\|\mathbf{k}\|\le K}\sum_{l=1}^{n}A_{n-l,\m
 \notag
 \end{align}
 with \(\|\mathbf{k}\|=\max_{i} k_i\) and 
-\begin{eqnarray*}
+\begin{eqnarray}
+\label{eq:A-ula}
 A_{q,\mathbf{k}}(y):=\sum_{r=0}^{ q } \bar{a}_{r,\mathbf{k}}(y).
-\end{eqnarray*}
+\end{eqnarray}
 For an estimator $\rho(f)\in\{\pi_n^N(f),\pi_{K,n}^N(f)\}$
 of $\pi(f)$ (see \eqref{eq:29032018a2} and \eqref{eq:29032018a3}), we shall be interested in the Mean Squared Error (MSE),
 which can be decomposed as the sum of the squared  bias
@@ -555,12 +556,12 @@ X_{k+1} = (1-2\gamma)X_k + \sqrt{\gamma}\xi_{k+1},\quad \xi_{k+1} \sim \mathcal{
 \end{eqnarray*}
 Thus, setting $X_0 = 0$, we obtain
 \begin{eqnarray*}
-\PVar_{0} \pi_n^0(f) &=& \PVar_{0}\left[\frac{1}{n}\sum\limits_{i=1}^{n}X_i\right] 
+\PVar_{0} [\pi_n^0(f)] &=& \PVar_{0}\left[\frac{1}{n}\sum\limits_{i=1}^{n}X_i\right] 
 = \frac{1}{n^2}\PVar\left[\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{i}\sqrt{\gamma}(1-2\gamma)^{i-j}\xi_{j}\right]
 \geq  \frac{1}{n\gamma} - \frac{2(1-2\gamma)}{n^2\gamma^2}.
 \end{eqnarray*}
 \end{remark}
-One of the main results of this paper is the following  upper bound for the functions $(A_{q,\mathbf{k}}).$
+One of the main results of this paper is the following  upper bound for the functions $(A_{q,\mathbf{k}})$ in \eqref{eq:A-ula}.
 \begin{thm}\label{th:mr}
 Assume {\bf (H1)} and {\bf (H2)}.
 Fix some $K\geq 1$ and suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K \times d $ times continuously differentiable
@@ -597,14 +598,14 @@ Let us sketch the main steps of the proof. First using integration by parts, we 
 \label{eq:Ask-part}
 A_{q,\mathbf{k}}(x)=\gamma^{|\mathbf{k}'|/2}\frac{\sqrt{(\mathbf{k}-\mathbf{k}')!}}{\sqrt{\mathbf{k}!}}\mathsf{E}\left[ \partial_{Z_1}^{\mathbf{k}'} F(x,Z_1,\ldots,Z_q) \mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_{1})\right],
 \end{eqnarray}
-where $F_q(x,Z_1,\ldots,Z_q)=\sum_{r=0}^q f(X^x_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
+where $F_q(x,Z_1,\ldots,Z_q):=\sum_{r=0}^q f(X^x_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
 stands for a weak partial derivative of the functional $F_s$ that also can be viewed as discretised version of Malliavin derivative. 
 Now by taking $\mathbf{k}'=\mathbf{k},$ we get
 \begin{eqnarray*}
 A^2_{q,\mathbf{k}}(x)\leq \gamma^{|\mathbf{k}|} \PVar \left( \sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X_{p}^x\right)
 \right),\quad q=0,\ldots,n-1.
 \end{eqnarray*}
-Also from \eqref{eq:Ask-part} we can derive
+Also from \eqref{eq:Ask-part} we can derive that
 \begin{eqnarray*}
 \sum_{\|\mathbf{k}\|\geq K+1} A^2_{q,\mathbf{k}}(x)\leq \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
 \left(\frac{\gamma}{2}\right)^{|I|K}
@@ -615,7 +616,7 @@ where
 \[
 \mathbf{\mathbf{K}}_{I}=K(\indi{I}(1),\ldots, \indi{I}(d)).
 \]
-Finally, we show  that under our smoothness assumption \eqref{eq:smooth-mu} it holds
+Finally, using the Gaussian Poincare inequality, we show  that under our smoothness assumption \eqref{eq:smooth-mu} it holds
 \begin{equation}
 \label{eq:varboundV}
 \PVar \left(\sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X^x_{p}\right)
@@ -625,7 +626,7 @@ for some positive constants $\varkappa, C_K$ not depending on $n$ and  $\gamma.$
 \section{Numerical analysis}
 \label{sec:num}
 In this section we illustrate the performance of the proposed variance reduction method for ULA.
-First we note that from  numerical point of view another representation of the coefficients \(a_{p,l,k}\)  turns out to be more useful.
+First we note that from  numerical point of view another equivalent representation of the coefficients \(a_{p,l,k}\)  turns out to be more useful.
 \begin{prop}
 Let $q\geq l, k\in \nset$. Then the coefficients \(a_{q,l,k}(x)\) in \eqref{eq:coeff_mart}  can be alternatively represented as
 \begin{eqnarray*}
@@ -639,7 +640,7 @@ In the case $\Phi_l=\Phi$ in \eqref{eq:ula_new} for all $l\geq 1,$ we have
 \end{equation}
 with  \(Q_{r}(x)=\mathsf{E}\left[f(X^x_{r})\right],\) $r\in \mathbb{N}.$
 \end{prop}
- We construct a polynomial approximation  for each \(Q_r(x)\) in \eqref{eq:definition-bar-a} in the form:
+First we construct a polynomial approximation  for each \(Q_r(x)\)  in the form:
 \begin{equation*}
 \widehat{Q}_{r}(x) = \sum_{\|\mathbf{s}\|\leq m} \widehat\beta_{\mathbf{s}} x^{\mathbf{s}},\quad s=(s_1,\ldots,s_d) \in \nset_0^d.
 \end{equation*}
