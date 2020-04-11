@@ -452,22 +452,13 @@ for a sequence  $(R_k)$ satisfying $\sum_{k=1}^\infty R^2_k\leq C$ with constant
 \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]\leq \frac{2Ce^{\varkappa n\gamma^2}}{n}. 
 \end{eqnarray*}
  Note that the above estimate is rather rough, as we ignore here the fact that the difference between $\widehat A_{n-l,k}$ and $A_{n-l,k}$ is small.
-<<<<<<< HEAD
 If the class of functions $\Psi$ is a linear one of dimension $\mathtt{D}_\Psi,$ then the cost of computing the coefficients $\widehat A_{l,k}$ for all $l=1,\ldots,n$ and $k=1,\ldots,K$ is of order  $ \mathtt{D}_\Psi K T^2 n$. Given $(\widehat A_{l,k})$ the cost of computing  $\widehat \pi_{K,n}^N$ is proportional to $\mathtt{D}_\Psi K n.$ At the same time the variance of the standard estimate $ \pi_{n}^N(f)$ is of order $1/(n\gamma)$ and this bound can not be improved, see Lemma~\ref{lem:variance} and Remark~\ref{rem:var-low}. Thus, the ratio of the corresponding cost-variances is of order
-\begin{eqnarray*}
-\frac{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]}{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}\leq C e^{\varkappa n\gamma^2} K \gamma \, T^2 \mathtt{D}_\Psi. 
-\end{eqnarray*}
-Thus, for any fixed $K\geq 1,$  our variance reduction method is advantageous if $\gamma\ll\min\{1/(\mathtt{D}_\Psi T^2),1/\sqrt{n}\}.$  Note that in order to achieve convergence of the corresponding MSE to zero, we need to let $\gamma\to 0$ as the invariant measure of the ULA with a constant time step $\gamma$ is not equal to $\pi.$\section{Analysis of variance reduced ULA}
-=======
-If the class of functions $\Psi$ is a linear one of dimension $\mathtt{D}_\Psi,$ then the cost of computing $\widehat \pi_{K,n}^N(f)$ is of order $ \mathtt{D}_\Psi K T^2 n$. At the same time the variance of the standard estimate $ \pi_{n}^N(f)$ is of order $1/(n\gamma)$ and this bound can not be improved, see Lemma~\ref{lem:variance} and Remark~\ref{rem:var-low}. Thus, the ratio of the corresponding cost-variances is of order
 \begin{equation}
 \label{eq:cost_theoretical}
 \frac{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]}{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}\leq C e^{\varkappa n\gamma^2} K \gamma \, T^2 \mathtt{D}_\Psi. 
 \end{equation}
-Thus, for any fixed $K\geq 1,$  our variance reduction method is advantageous if $\gamma\ll\min\{1/(\mathtt{D}_\Psi T^2),1/\sqrt{n}\}.$  
-\section{Analysis of variance reduced ULA}
->>>>>>> 172505d014076ade3cffaefcdaa99eea32f50423
-\label{sec:ula_analysis}
+Thus, for any fixed $K\geq 1,$  our variance reduction method is advantageous if $\gamma\ll\min\{1/(\mathtt{D}_\Psi T^2),1/\sqrt{n}\}.$  Note that in order to achieve convergence of the corresponding MSE to zero, we need to let $\gamma\to 0$ as the invariant measure of the ULA with a constant time step $\gamma$ is not equal to $\pi.$
+\section{Analysis of variance reduced ULA}\label{sec:ula_analysis}
 In this section we perform the convergence analysis of the ULA algorithm. We use the notations of Example~\ref{exam:langevin-algorithm}. For the sake of clarity and notational simplicity we restrict our attention to the constant time step, that is, we take $\gamma_k =\gamma$ for any $k \in \nset$.
 By $H_k$, $k\in\mathbb N_0$,
 we denote the normalized Hermite polynomial on $\mathbb R$, that is,
@@ -658,7 +649,6 @@ Then using the identity
 \xi^j = j! \sum_{r = 0}^{\lfloor j/2 \rfloor} \frac{1}{2^r  r! \sqrt{(j-2r)!}} H_{j-2r}(\xi),\quad \xi \in \mathbb{R},
 \]
 we obtain closed-form expression for the estimates $\widehat a_{r,k}(x)$ of functions $\bar a_{r,k}(x)$ in \eqref{eq:definition-bar-a}. Namely, for all $x \in \mathbb{R}^d$,
-<<<<<<< HEAD
 \begin{eqnarray}
 \nonumber
 \widehat a_{r,\mathbf{k}} (x) &=&\CPE{\mathbf{H}_\mathbf{k}(\xi) \widehat{Q}_{r}(x - \gamma \mu(x) + \sqrt{\gamma}\xi)}{\TrainSet}
@@ -667,13 +657,6 @@ we obtain closed-form expression for the estimates $\widehat a_{r,k}(x)$ of func
 \label{eq:a-pol}
 \sum_{\|\mathbf{s}\|\leq m} \beta_{\mathbf{s}} \prod_{i=1}^d P_{k_i,s_i}(x_i - \gamma \mu_i(x)),
 \end{eqnarray}
-=======
-\begin{equation}
-\label{eq:a_hat}
-\widehat a_{r,\mathbf{k}} (x) = \CPE{\mathbf{H}_\mathbf{k}(\xi) \widehat{Q}_{r}(x - \gamma \mu(x) + \sqrt{\gamma}\xi)}{\TrainSet}
-= \sum_{\|\mathbf{s}\|\leq m} \beta_{\mathbf{s}} \prod_{i=1}^d P_{k_i,s_i}(x_i - \gamma \mu_i(x)),
-\end{equation}
->>>>>>> 172505d014076ade3cffaefcdaa99eea32f50423
 where for any integer $k,s$ $P_{k,s}$ 
 is a one-dimensional polynomial (in \(x\)) of degree at most \(s\) with analytically known coefficients. We estimate $Q_{r}$ only for $r < n_{\mathrm{trunc}}$ where the truncation level \(n_{\mathrm{trunc}}\) may depend on \(d\) and \(\gamma.\) It allows us to use a smaller amount of training trajectories to approximate $Q_{r}(x)$.
 Finally  we construct a truncated version of the estimator \eqref{eq:29032018a3}:
@@ -727,20 +710,12 @@ by its empirical counterpart, computed over $24$ independent trajectories with $
 \end{figure}
 
 \subsection{Gaussian mixtures}
-<<<<<<< HEAD
  We consider  ULA with $\pi$  given by the mixture of two equally-weighted $2$-dimensional Gaussian distributions of the following form
 \begin{eqnarray}
 \label{eq:gmm}
 \pi(x) = \frac{1}{2\sqrt{(2\pi)^{d}|\Sigma|}} \left( \rme^{-\frac{(x-\mu)^T\Sigma^{-1}(x-\mu)}{2}} + \rme^{-\frac{(x+\mu)^T\Sigma^{-1}(x+\mu)}{2}}\right)
 \end{eqnarray}
 where $\rho \in (0,1), \mu \in \rset^d, \Sigma \in \rset^{2 \times 2}$ and $|\Sigma|$ is its determinant. The function $U(x)$ and its gradient are given by
-=======
- We consider a sample generated by ULA with $\pi$  given by the mixture of two equally-weighted $d$-dimensional Gaussian distributions of the following form
- \[
- \pi(x) = \frac{1}{2\sqrt{(2\pi)^{d}|\Sigma|}} \left( \rme^{-\frac{(x-\mu)^T\Sigma^{-1}(x-\mu)}{2}} + \rme^{-\frac{(x+\mu)^T\Sigma^{-1}(x+\mu)}{2}}\right)
- \]
-where $\mu \in \rset^d, \Sigma \in \rset^{d \times d}$ and $|\Sigma|$ is its determinant. The function $U(x)$ and its gradient are given by
->>>>>>> 172505d014076ade3cffaefcdaa99eea32f50423
 \[
 U(x) = \frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu) - \ln{\left(1 + \rme^{-2\mu^\top \Sigma^{-1}x}\right)}
 \]
@@ -749,20 +724,16 @@ and
 \nabla U(x) = \Sigma^{-1}(x-\mu) +2\mu^\top\Sigma^{-1}\left(1 + \rme^{2 \mu^\top\Sigma^{-1} x}\right)^{-1},
 \]
 respectively.
-<<<<<<< HEAD
-In our experiments we take $\mu = \left(0.5,0.5\right)$ and randomly generated positive-definite matrix $\Sigma$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) for \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i,\) we use ULA with constant step size $\gamma=0.1$ and sampled $\NtrainPath = 10^4$ independent training trajectories to estimate coefficients $a_{p-l,\mathbf{k}}.$ Then we solve the least squares  problems \eqref{eq:Qregr} using the first or second order polynomial basis  depending on $f$. Respectively, we set $K=1$ for linear functionals $f$ and $K=2$ for quadratic functionals. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 10^3$ and depict boxplots of the ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials, as they were used as regressors during computations of $\hat{a}_{p-l,\mathbf{k}}$. 
+In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and randomly generated positive-definite matrix $\Sigma$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) with \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i\) we used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 5 \times 10^4$ independent training trajectories, each one of size $n = 50$ with the burn-in period $n_{\text{burn}} = 100$. Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for $f(x)=\sum_{i=1}^d x_i$ and second order approximations for $f(x) = \sum_{i=1}^d x^2_i$ as described in the previous section. Hence we set $K = 1$ for $f(x)=\sum_{i=1}^d x_i$ or $K = 2$ for $f(x) = \sum_{i=1}^d x^2_i$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 2 \times 10^3$ and plot boxplots of the corresponding ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials in case of $K=1$ and second order polynomials for $K = 2$. 
 \par
-Next we compute the cost-variance ratios
-\begin{eqnarray}
-\label{eq:cvR}
-\mathcal{R}(K,N,n,n_{\mathrm{trunc}})=\frac{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n,n_{\mathrm{trunc}} }^N(f)|\TrainSet]} 
-\end{eqnarray}
-where variances in the above definition are computed using $24$ independent trajectories each of  length $n=2\cdot10^3.$ Note that the cost of $\widehat \pi_{K,n,n_{\mathrm{trunc}}} $ is proportional to the number of nonzero coefficients in \eqref{eq:a-pol} times $n_{\mathrm{trunc}}$.  In Figure~\ref{fig:G-costvar} cost-variances ratios are shown for for the case of  Gaussian distribution with parameters. In particular, in Figure~\ref{fig:subfig3}  a function $\mathcal{R}(1,2\cdot 10^3,2\cdot 10^3,n_{\mathrm{trunc}})$ is shown in dependence on $n_{\mathrm{trunc}}$ for the case of  linear  $f$. In Figure~\ref{fig:subfig4} a similar plot of $\mathcal{R}(2,2\cdot 10^3,2\cdot 10^3,n_{\mathrm{trunc}})$ is shown for the case of  quadratic $f.$
-Figure~\ref{fig:GMM-costvar} presents the corresponding coast-variance ratios   for the mixture of two two-dimensional normal distributions as in \eqref{eq:gmm} with $\Sigma=I$ and $\mu=(0.5,0.5).$  In each case, in order estimate functions $(Q_r),$ we have used $T=10^4$ independent trajectories in the least-squares regression and polynomials of the same order as the order of $f.$
-=======
-In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and randomly generated positive-definite matrix $\Sigma$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) with \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i\) we used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 5 \times 10^4$ independent training trajectories, each one of size $n = 50$ with the burn-in period $n_{\text{burn}} = 100$. Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for $f(x)=\sum_{i=1}^d x_i$ and second order approximations for $f(x) = \sum_{i=1}^d x^2_i$ as described in the previous section. Hence we set $K = 1$ for $f(x)=\sum_{i=1}^d x_i$ or $K = 2$ for $f(x) = \sum_{i=1}^d x^2_i$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 2 \times 10^3$ and plot boxplots of the corresponding ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials in case of $K=1$ and second order polynomials for $K = 2$.
 
->>>>>>> 172505d014076ade3cffaefcdaa99eea32f50423
+%Next we compute the cost-variance ratios
+%\begin{eqnarray}
+%\label{eq:cvR}
+%\mathcal{R}(K,N,n,n_{\mathrm{trunc}})=\frac{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n,n_{\mathrm{trunc}} }^N(f)|\TrainSet]} 
+%\end{eqnarray}
+%where variances in the above definition are computed using $24$ independent trajectories each of  length $n=2\cdot10^3.$ Note that the cost of $\widehat \pi_{K,n,n_{\mathrm{trunc}}} $ is proportional to the number of nonzero coefficients in \eqref{eq:a-pol} times $n_{\mathrm{trunc}}$.  In Figure~\ref{fig:G-costvar} cost-variances ratios are shown for for the case of  Gaussian distribution with parameters. In particular, in Figure~\ref{fig:subfig3}  a function $\mathcal{R}(1,2\cdot 10^3,2\cdot 10^3,n_{\mathrm{trunc}})$ is shown in dependence on $n_{\mathrm{trunc}}$ for the case of  linear  $f$. In Figure~\ref{fig:subfig4} a similar plot of $\mathcal{R}(2,2\cdot 10^3,2\cdot 10^3,n_{\mathrm{trunc}})$ is shown for the case of  quadratic $f.$
+%Figure~\ref{fig:GMM-costvar} presents the corresponding coast-variance ratios   for the mixture of two two-dimensional normal distributions as in \eqref{eq:gmm} with $\Sigma=I$ and $\mu=(0.5,0.5).$  In each case, in order estimate functions $(Q_r),$ we have used $T=10^4$ independent trajectories in the least-squares regression and polynomials of the same order as the order of $f.$
  \begin{figure}[tbh]
 \centering
 \subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
@@ -776,30 +747,30 @@ In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and rando
 \label{fig:GMM}}
 \end{figure}
 
-\begin{figure}[tbh]
-\centering
-\subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
-\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gaussian.png}
-\label{fig:subfig3}}
-\qquad
-\subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
-\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gaussian.png}
-\label{fig:subfig4}}
-\caption{ Cost-variance ratios \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  two-dimensional standard Gaussian distribution and different test functions. \label{fig:G-costvar}}
-\end{figure}
+%\begin{figure}[tbh]
+%\centering
+%\subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
+%\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gaussian.png}
+%\label{fig:subfig3}}
+%\qquad
+%\subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
+%\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gaussian.png}
+%\label{fig:subfig4}}
+%\caption{ Cost-variance ratios \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  two-dimensional standard Gaussian distribution and different test functions. \label{fig:G-costvar}}
+%\end{figure}
 
-\begin{figure}[tbh]
-\centering
-\subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
-\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gmm.png}
-\label{fig:subfig5}}
-\qquad
-\subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
-\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gmm.png}
-\label{fig:subfig6}}
-\caption{ Cost-variance ratios  \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  a mixture of two-dimensional  Gaussian distribution and different test functions.
-\label{fig:GMM-costvar}}
-\end{figure}
+%\begin{figure}[tbh]
+%\centering
+%\subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
+%\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gmm.png}
+%\label{fig:subfig5}}
+%\qquad
+%\subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
+%\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gmm.png}
+%\label{fig:subfig6}}
+%\caption{ Cost-variance ratios  \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  a mixture of two-dimensional  Gaussian distribution and different test functions.
+%\label{fig:GMM-costvar}}
+%\end{figure}
 
 
 \subsection{Banana shape distribution}
