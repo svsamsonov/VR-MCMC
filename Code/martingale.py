@@ -253,14 +253,13 @@ def test_traj(Potential,coefs_poly_regr,step,r_seed,lag,K_max,S_max,N_burn,N_tes
                 a_vals[-(func_order+1),k] = np.dot(a_cur,coefs_poly_regr[func_order,:])
             #OK, now I have coefficients of the polynomial, and I need to integrate it w.r.t. Gaussian measure
         #print("sum of coefficients",np.sum(np.abs(a_vals)))
-        if (i%100 == 0):
-            print(a_vals)
+        #print(a_vals)
         cvfs[i] = np.sum(a_vals*(poly_vals[:,i-num_lags+1:i+1].T))
         #save results
         test_stat_vanilla[i] = np.mean(f_vals_vanilla[1:(i+1)])
         test_stat_vr[i] = test_stat_vanilla[i] - np.sum(cvfs[1:(i+1)])/i
     end_time = time.time() - start_time
-    return test_stat_vanilla, test_stat_vr, end_time
+    return test_stat_vanilla, test_stat_vr
 
 def test_monte_carlo(r_seed,Potential,step,N_burn,N,d,return_noise, x0, fixed_start):
     """

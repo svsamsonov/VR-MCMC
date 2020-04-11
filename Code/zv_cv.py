@@ -1,10 +1,12 @@
 import numpy as np
 from baselines import set_function
 
-def ZVpolyOne(traj, traj_grad, f_target, params = None):
+def ZVpolyOne(traj, traj_grad, f_target, params):
     n, d = traj.shape
     if f_target == "sum":
         samples = traj.sum(axis = 1).reshape(-1,1)
+    elif f_target == "sum_comps":
+        samples = traj[:,params["ind"]].reshape(-1,1)
     elif f_target == "sum_squared":
         samples = np.square(traj).sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_4th":
@@ -28,6 +30,8 @@ def ZVpolyTwo(traj, traj_grad, f_target, params = None):
     n, d = traj.shape
     if f_target == "sum":
         samples = traj.sum(axis = 1).reshape(-1,1)
+    elif f_target == "sum_comps":
+        samples = traj[:,params["ind"]].reshape(-1,1)
     elif f_target == "sum_squared":
         samples = np.square(traj).sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_4th":
@@ -62,6 +66,8 @@ def CVpolyOne(traj,traj_grad, f_target, params = None):
     n, d = traj.shape
     if f_target == "sum":
         samples = traj.sum(axis = 1).reshape(-1,1)
+    elif f_target == "sum_comps":
+        samples = traj[:,params["ind"]].reshape(-1,1)
     elif f_target == "sum_squared":
         samples = np.square(traj).sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_4th":
@@ -83,6 +89,8 @@ def CVpolyTwo(traj, traj_grad, f_target, params = None):
     n, d = traj.shape
     if f_target == "sum":
         samples = traj.sum(axis = 1).reshape(-1,1)
+    elif f_target == "sum_comps":
+        samples = traj[:,params["ind"]].reshape(-1,1)
     elif f_target == "sum_squared":
         samples = np.square(traj).sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_4th":
@@ -124,6 +132,8 @@ def CVpolyTwo(traj, traj_grad, f_target, params = None):
 def Eval_ZVCV(traj,traj_grad, f_target, params = None):
     if f_target == "sum":
         samples = traj.sum(axis = 1).reshape(-1,1)
+    elif f_target == "sum_comps":
+        samples = traj[:,params["ind"]].reshape(-1,1)
     elif f_target == "sum_squared":
         samples = np.square(traj).sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_4th":
