@@ -351,7 +351,7 @@ $\bar a_{r,k}(y)=\mathsf{E}\left[f(X^y_{r})\phi_k\left(\xi_{1}\right)\right]$, $
 \section{Variance reduction}
 Next we show how  the representation \eqref{eq:mart_repr} can be used to  reduce the variance of MCMC algorithms.  For the sake of clarity, in the sequel we consider only the time homogeneous case ($\Phi_l = \Phi$ for all $l \in \nset$). Define
 \begin{equation}\label{eq:29032018a2}
-\pi_{n}^{N}(f)=\frac{1}{n}\sum_{p=N+1}^{N+n} f(X^x_{p}),
+\pi_{n}^{N}(f)= \frac{1}{n} \sum_{p=N+1}^{N+n} f(X^x_{p}),
 \end{equation}
 where $N\in\mathbb N_0$ is the length of the burn-in period and $n\in\mathbb N$ is
 the number of effective samples.
@@ -360,8 +360,14 @@ Fix some $K\in\mathbb N$ and denote
 \nonumber
 M_{K,n}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{k=1}^{K}\sum_{l=N+1}^{p} \bar a_{p-l,k}(X^x_{l-1})\phi_k(\xi_{l})\right]
 \\
-&=& \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\sum_{p=0}^{N+n-l}\bar{a}_{p,k}(X_{l-1}^{x})\phi_{k}(\xi_{l}).
+&=& \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}
+A_{N+n-1,k}(X_{l-1}^{x}) \phi_{k}(\xi_{l}),
 \label{eq:29032018a5}
+\end{eqnarray}
+where
+\begin{eqnarray}
+\label{eq:definition-A-s,k}
+A_{q,k}(y)=\sum_{r=0}^q \bar{a}_{r,k}(y),\quad q=0,\ldots,n-1.
 \end{eqnarray}
 Since \(X^x_{l-1}\) is independent of \(\xi_{l}\) and \(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq 0\), we obtain
 \[
@@ -378,11 +384,6 @@ should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_{
 \label{eq:expression-variance}
 \PVar[\pi_{K,n}^N(f)]=\frac{1}{n^2}\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X^x_{N+l-1})],
 \end{equation}
-where
-\begin{eqnarray}
-\label{eq:definition-A-s,k}
-A_{q,k}(y)=\sum_{r=0}^q \bar{a}_{r,k}(y),\quad q=0,\ldots,n-1.
-\end{eqnarray}
 Hence $\mathsf{Var}[\pi_{K,n}^N(f)]$ is small provided that the coefficients $A_{s,k}$ decay fast enough as $k\to \infty.$
 In   Section~\ref{sec:ula_analysis}   we provide a detailed  theoretical  analysis of  this decay  for   ULA   (see Example~\ref{exam:langevin-algorithm}).
 \par
@@ -394,12 +395,11 @@ $A_{q,k}$ for $q=0,\ldots,n-1,$ $k=1,\ldots,K. $ We first generate \(\NtrainPath
 \TrainSet=\Bigl\{(X^{(s)}_{1},\ldots,X^{(s)}_{N+n}),\quad s=1,\ldots,\NtrainPath\Bigr\}
 \]
 with $X^{(s)}_{0}=x,$ $s=1,\ldots,T.$
-Then we solve   the least squares optimization problems
+Then we solve  for $k=1,\ldots,K,$  the least squares optimization problems
 \begin{equation}\label{eq:06042018a1}
-\widetilde{A}_{q,k} \in \argmin_{\psi \in \Psi} \sum_{s = 1}^{T} \left| \sum_{r = 0}^{q}  f(X_{r+l_0}^{(s)})\phi_k(\xi^{(s)}_{l_0+1}) - \psi(X^{(s)}_{l_0})\right|^2
+\widetilde{A}_{q,k} \in \argmin_{\psi \in \Psi} \sum_{s = 1}^{T} \left| \sum_{r = 0}^{q}  f(X_{r+N}^{(s)})\phi_k(\xi^{(s)}_{N+1}) - \psi(X^{(s)}_{N})\right|^2
 \end{equation}
-for $k=1,\ldots,K,$ and some $l_0$ with $l_0+q\leq N+n,$
-where \(\Psi\) is a  class of  real-valued functions on \(\mathbb{R}^d\) and $\xi^{(s)}_{1},\ldots,\xi^{(s)}_{N+n}$ are iid random variables with distribution $P_\xi$ used to construct the $s$-th trajectory of $X.$   As usual in regression analysis (see Section~11 in \cite{gyorfi2006distribution}),  we  truncate  the least squares estimates $(\widetilde{A}_{q,k})$ and set
+where \(\Psi\) is a  class of  real-valued functions on \(\mathbb{R}^d\) and $\xi^{(s)}_{1},\ldots,\xi^{(s)}_{N+n}$ are i.i.d. random variables with distribution $P_\xi$ used to construct the $s$-th trajectory of $X.$   As usual in regression analysis (see \cite[Section~11]{gyorfi2006distribution}),  we  truncate  the least squares estimates $(\widetilde{A}_{q,k})$ and set
 \begin{eqnarray}
 \label{eq:trunc}
 \widehat{A}_{q,k}(y):=
@@ -412,7 +412,7 @@ W_k \,\mathrm{sign}(\widetilde{A}_{q,k}(y)), & \mathrm{otherwise}.
  for a sequence of positive real numbers $W_k,$ $k=1,\ldots,K.$
 Upon estimating  the functions \((A_{q,k})\), one can construct the empirical estimate  of \(M_{K,n}^N(f)\) in the form
 \begin{eqnarray*}
-\widehat M_{K,n}^N(f) := \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left[\widehat{A}_{N+n-l,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\right].
+\widehat M_{K,n}^N(f) := \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n} \widehat{A}_{N+n-l,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\,.
 \end{eqnarray*}
 Obviously, \(\mathsf{E}[\widehat M_{K,n}^N(f)|\TrainSet]=0\) and \(\widehat M_{K,n}^N(f)\) is a valid control variate in that it
 does not introduce any bias. By the Jensen inequality and orthonormality of \((\phi_k)_{k\geq 0},\)
@@ -432,23 +432,23 @@ Combining this with \eqref{eq:expression-variance} results in
 \\
 +\frac{1}{n^2}\sum_{k=1}^{K}\sum_{l=1}^{n}\PE\left[\left.|A_{n-l,k}(X^x_{N+l-1})-\widehat A_{n-l,k}(X^x_{N+l-1})|^2\right | \TrainSet \right].
 \end{multline}
-In the next section we analyze the case of ULA and show that under some rather mild conditions (convexity of the potential $U$ outside a ball around zero)
+In the next section we analyze the case of ULA algorithm and show that under some rather mild conditions (convexity of the potential $U$ outside a ball around zero)
 \begin{eqnarray*}
-\PE[A^2_{l,k}(X^x_{N+l-1})]\leq e^{\varkappa n\gamma^2}R^2_k ,\quad k=1,2,\ldots, \quad l=0,\ldots,n-1,
+\PE[A^2_{l,k}(X^x_{N+l-1})]\leq \rme^{\varkappa n\gamma^2}R^2_k ,\quad k \in \nset, \quad l=0,\ldots,n-1,
 \end{eqnarray*}
 for a sequence  $(R_k)$ satisfying $\sum_{k=1}^\infty R^2_k\leq C$ with constant $C$  not depending  on $\gamma$ and $n$ (see \eqref{eq:Aqk2}).  Hence if we take $W_k=R_k$ as truncation parameters in \eqref{eq:trunc}, then $\widehat A_{n-l,k}$ converges to
 \[
-\bar A_{q,k}:=\argmin_{\psi\in\Psi}\mathsf{E}[|A_{q,k}(X_{l_0})-\psi(X_{l_0})|]^2
+\bar A_{q,k}:=\argmin_{\psi\in\Psi}\mathsf{E}[|A_{q,k}(X_{N})-\psi(X_{N})|^2]
 \]
  as $T\to \infty,$ see Section~11 in \cite{gyorfi2006distribution}.  Moreover, it follows from \eqref{eq:PVarA} that
 \begin{eqnarray*}
-\PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]\leq \frac{2Ce^{\varkappa n\gamma^2}}{n}.
+\PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]\leq \frac{2C \rme^{\varkappa n\gamma^2}}{n}.
 \end{eqnarray*}
  Note that the above estimate is rather rough, as we ignore here the fact that the difference between $\widehat A_{n-l,k}$ and $A_{n-l,k}$ is small.
 If the class of functions $\Psi$ is a linear one of dimension $\mathtt{D}_\Psi,$ then the cost of computing the coefficients $\widehat A_{l,k}$ for all $l=1,\ldots,n$ and $k=1,\ldots,K$ is of order  $ \mathtt{D}_\Psi K T^2 n$. Given $(\widehat A_{l,k})$ the cost of computing  $\widehat \pi_{K,n}^N$ is proportional to $\mathtt{D}_\Psi K n.$ At the same time the variance of the standard estimate $ \pi_{n}^N(f)$ is of order $1/(n\gamma)$ and this bound can not be improved, see Lemma~\ref{lem:variance} and Remark~\ref{rem:var-low}. Thus, the ratio of the corresponding cost-variances is of order
 \begin{equation}
 \label{eq:cost_theoretical}
-\frac{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]}{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}\leq C e^{\varkappa n\gamma^2} K \gamma \, T^2 \mathtt{D}_\Psi.
+\frac{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]}{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}\leq C \rme^{\varkappa n\gamma^2} K \gamma \, T^2 \mathtt{D}_\Psi.
 \end{equation}
 Thus, for any fixed $K\geq 1,$  our variance reduction method is advantageous if $\gamma\ll\min\{1/(\mathtt{D}_\Psi T^2),1/\sqrt{n}\}.$  Note that in order to achieve convergence of the corresponding MSE to zero, we need to let $\gamma\to 0$ as the invariant measure of the ULA with a constant time step $\gamma$ is not equal to $\pi.$
 \section{Analysis of variance reduced ULA}\label{sec:ula_analysis}
@@ -557,12 +557,12 @@ and for all $x\in\mathbb R^d$ and  \(\mathbf{k}\) satisfying \(0<\|\mathbf{k}\|\
  Set $V(x) = 1 + \|x\|^2,$ then  it holds for $q=0,\ldots,n-1,$ and all $x$
 \begin{eqnarray}
 \label{eq:Aqk2}
-A^2_{q,\mathbf{k}}(x)\leq C_Ke^{\varkappa n\gamma^2}(1+V(x)),\quad 1\leq |\mathbf{k}|\leq K,
+A^2_{q,\mathbf{k}}(x)\leq C_K \rme^{\varkappa n\gamma^2}(1+V(x)),\quad 1\leq |\mathbf{k}|\leq K,
 \end{eqnarray}
  and
 \begin{eqnarray}
 \label{eq:Aqk2sum}
-\sum_{\|\mathbf{k}\|\geq K+1} A^2_{q,\mathbf{k}}(x)\leq C_{K}e^{\varkappa n\gamma^2}\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
+\sum_{\|\mathbf{k}\|\geq K+1} A^2_{q,\mathbf{k}}(x)\leq C_{K} \rme^{\varkappa n\gamma^2}\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
 \left(\frac{\gamma}{2}\right)^{|I|K-1}
 (1+V(x))
 \end{eqnarray}
