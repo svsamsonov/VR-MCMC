@@ -132,29 +132,16 @@ In this paper we propose an efficient variance reduction approach for  MCMC algo
 
 \section{Introduction}
 
-Monte Carlo integration typically has an error variance of the form
-$\sigma^{2}/n,$ where $n$ is a sample size and \(\sigma^2\) is the variance of  integrand. We can make the variance smaller
-by using a larger value of $n$.  Alternatively,
- we can  reduce $\sigma^2$ instead of increasing the sample size \(n\). To this end, one can try to construct
-a new Monte Carlo experiment with the same expectation as the original one
-but with a lower variance $\sigma^2$. Methods to achieve this are known as variance
-reduction techniques. Variance reduction plays an important role in
-Monte Carlo and Markov Chain Monte Carlo methods. Introduction to many of the variance reduction techniques can be found in \cite{rubinstein2016simulation}, \cite{GobetBook} and \cite{glasserman2013monte}. Recently one witnessed a revival of interest in efficient variance reduction methods  for MCMC algorithms, see for example \cite{dellaportas2012control}, \cite{mira2013zero}, \cite{brosse2018diffusion} and references therein.
-\par
-Suppose that we wish to compute $\pi(f):=\mathsf{E}\left[f(X)\right]$, where $X$
-is a random vector-valued in $\mathcal{X}\subseteq\mathbb{R}^{d}$ with a density $\pi$ and $f:$
-$\mathcal{X}\to\mathbb{R}$ with $f\in L^2(\pi)$.
-The idea of the control variates variance reduction method
- is to find a cheaply computable random variable $\zeta$ with $\mathsf{E}[\zeta]=0$ and \(\mathsf{E}[\zeta^2]<\infty,\)
-such that the variance of the r.v. $f(X)-\zeta$ is small.  The complexity of the problem of constructing classes $Z$ of control variates \(\zeta\) satisfying   $\mathsf{E}[\zeta]=0$ essentially depends on the degree of our knowledge on \(\pi.\)
+Monte Carlo and Markov Chain Monte Carlo algorithms play crucial role in modern numerical analysis, finding various applications in such research areas as Bayesian statistics. Suppose that we aim at computing $\pi(f):= \PE\left[f(X)\right]$, where $X$ is a random vector in $\mathcal{X} \subseteq \rset^d$ admitting a density $\pi$ and $f$ is a square-integrable function $f:\mathcal{X} \to \rset$, $f \in L^2(\pi)$. Typically it is not possible to compute $\pi(f)$ analytically, leading to the Monte Carlo methods as a popular solution. Given an independent identically distributed observations $X_1,\ldots,X_n$ form $\pi$, we might estimate $\pi(f)$ by $\hat{\pi}(f):=1/n\sum_{k=1}^{n}f(X_k)$. The variance of such estimate equals $\sigma^2(f)/n$  with $\sigma^2(f)$ being the variance of the integrand. The first way to obtain tighter estimate $\hat{\pi}(f)$ is simply to increase the sample size $n$. Unfortunately, this solution might be prohibitively costly, especially when the dimension $d$ is large enough or sampling from $\pi$ is complicated. An alternative approach is to decrease $\sigma^2(f)$ by constructing a new Monte-Carlo experiment with the same expectation as the original one, but with a lower variance. Methods to achieve this are known as variance
+reduction techniques. Introduction to many of them can be found in \cite{rubinstein2016simulation}, \cite{GobetBook} and \cite{glasserman2013monte}. Recently one witnessed a revival of interest in efficient variance reduction methods  for MCMC algorithms, see for example \cite{dellaportas2012control}, \cite{mira2013zero}, \cite{brosse2018diffusion} and references therein.
+\par  
+One of the popular approaches to variance reduction is the so called control variates method. We aim at constructing cheaply computable random variable $\zeta$ (control variate) with $\PE[\zeta] = 0$ and $\PE[\zeta^2] < \infty$, such that the variance of the r.v. $f(X) + \zeta$ is small. The complexity of the problem of constructing classes $Z$ of control variates \(\zeta\) satisfying   $\PE[\zeta]=0$ essentially depends on the degree of our knowledge on \(\pi.\)
 For example, if \(\pi\) is analytically known and satisfies some regularity conditions, one can apply the well-known technique of  polynomial interpolation to construct control variates enjoying  some optimality properties, see, for example, Section~3.2 in \cite{dimov2008monte}. Alternatively, if an orthonormal system in \(L^2(\pi)\) is analytically available, one can build control variates \(\zeta\) as a linear combination of the corresponding basis functions, see \cite{GobetCV}. Furthermore, if \(\pi\) is known only up to a normalizing constant (which is often the case in Bayesian statistics), one can apply the recent approach of control variates  depending only on the gradient \(\nabla \log \pi\)  using Schr\(\ddot{\text{o}}\)dinger-type Hamiltonian operator in  \cite{mira2013zero} and Stein operator in \cite{brosse2018diffusion}.
 In some situations \(\pi\) is not known analytically, but \(X\) can be represented as a function of  simple random variables with known distribution.
 Such  situation arises, for example, in the case of functionals of  discretized diffusion processes. In this case a Wiener chaos-type decomposition can be used to construct control variates with nice theoretical properties, see \cite{belomestny2018stratified}.
 Note that in order to compare different  variance reduction approaches, one has to analyze their complexity, that is, the number of numerical operations required to achieve a prescribed magnitude of the resulting variance.
-
-
-The situation becomes much more difficult in the case of MCMC algorithms, where one  has to work with a
-Markov chain \((X_p),\) \(p=0,1,2,\ldots,\) whose marginal distribution  converges  to \(\pi\) as time grows. One important class of the variance reduction methods in this case  is based on the Poisson equation for the corresponding  Markov chain. It was observed in~\cite{henderson1997variance}  that if a time-homogeneous Markov chain \((X_p)\) is stationary with stationary distribution \(\pi,\) then for any real-valued function \(G \in L^1(\pi) \) defined on the state space of the Markov chain \((X_p),\)  the function \(U(x) := G(x)-\mathsf{E}[G(X_{1})|X_0 = x]\) has zero mean with respect to \(\pi\).  The best choice for the function \(G\) corresponds to a solution of the Poisson equation  \(\mathsf{E}[G(X_{1})|X_0 = x]-G(x)=-f(x)+\pi(f)\).  Moreover, it is also related to the minimal asymptotic variance in the corresponding central limit theorem, see \cite{duncan2016variance} and \cite{mira2013zero}.   Although the Poisson equation involves the quantity of interest \(\pi(f)\)  and can not be  solved explicitly in most cases, this idea still can be used to construct some  approximations for the optimal zero-variance control variates. For example,  \cite{henderson1997variance} proposed to compute approximations for the solution of the Poisson equation for specific Markov chains with particular emphasis on models arising in stochastic network theory. In \cite{dellaportas2012control} and \cite{brosse2018diffusion}  series-type control variates are introduced and studied for reversible Markov chains. It is assumed in \cite{dellaportas2012control}  that the one-step conditional expectations  can be computed explicitly  for a set of basis functions. The authors in \cite{brosse2018diffusion} proposed another approach tailored to diffusion setting which does not require the computation of integrals of basis functions and only involves  applications of the underlying generator.
+\par
+Unfortunately it is not always possible to generate independent observations distributed according to $\pi$. To overcome this issue one might consider MCMC algorithms, where the exact samples from $\pi$ are replaced by \((X_p),\) \(p=0,1,2,\ldots,\) forming a Markov chain with a marginal distribution of $X_n$ converging to $\pi$ in a suitable metrics as $n$ grows. It is still possible to apply the control variates method in the similar manner to a simple Monte-Carlo case, yet the choice of the optimal control variate becomes much more difficult. Due to significant correlations between the elements of the Markov chain it might be not enough to minimize the marginal variances of \((X_p)_{p \geq 0}\) as it was in independent case. Instead one may choose the control variate by minimizing the corresponding asymptotic variance of the chain as it is suggested in~\cite{belomestny2019esvm}. At the same time it is possible to express the optimal control variate in terms of the solution of the Poisson equation for the corresponding Markov chain \((X_p)\). As it was observed in~\cite{henderson1997variance}, for a time-homogeneous Markov chain \(X_p\) with a stationary distribution \(\pi\), the function $U_{G}(x) := G(x)-\PE[G(X_{1})|X_0 = x]$ has a zero mean with respect to $\pi$ for arbitrary real-valued function \(G: \mathcal{X} \to \rset\), such that \(G  \in L^1(\pi)\). Hence, $U_{G}(x)$ is a valid control functional for a suitable choice of $G$, with the best $G$ given by a solution of the Poisson equation \(\PE [G(X_{1})|X_0 = x]-G(x)=-f(x)+\pi(f)\). For such $G$ we obtain $f(x) + U_G(x) = f(x) - f(x) + \pi(f) = \pi(f)$ leading to an ideal estimator with zero variance. Despite the fact that the Poisson equation involves the quantity of interest \(\pi(f)\)  and can not be  solved explicitly in most cases, this idea still can be used to construct some  approximations for the optimal zero-variance control variates. For example,  \cite{henderson1997variance} proposed to compute approximations for the solution of the Poisson equation for specific Markov chains with particular emphasis on models arising in stochastic network theory. In \cite{dellaportas2012control} and \cite{brosse2018diffusion}  series-type control variates are introduced and studied for reversible Markov chains. It is assumed in \cite{dellaportas2012control}  that the one-step conditional expectations  can be computed explicitly  for a set of basis functions. The authors in \cite{brosse2018diffusion} proposed another approach tailored to diffusion setting which does not require the computation of integrals of basis functions and only involves  applications of the underlying generator.
 \par
 In this paper we focus on the  Langevin type algorithms which got much attention recently, see \cite{dalalyan2017theoretical,durmus:moulines:2017, MR2353037, MR3861816, MR2977986} and references therein. We propose  a generic variance reduction method for these and other types algorithms, which is purely non-asymptotic and does not require that    the conditional expectations of the corresponding Markov chain can be computed  or that the generator is known analytically. Moreover, we do not need to assume stationarity or/and sampling under the invariant distribution \(\pi.\) We rigorously analyse the convergence of the method and study its complexity. It is shown that  our variance-reduced Langevin algorithm outperforms the standard Langevin algorithms in terms of complexity.
 \par
@@ -245,14 +232,14 @@ Given \(X_p=x\)\;
 \begin{eqnarray*}
 X_{p+1}=
 \begin{cases}
-Y_p, & \texttt{ with probability } \alpha(x,Y_p),
+Y_p, & \texttt{ with probability } \alpha_p(x,Y_p),
 \\
-x, &  \texttt{ with probability } 1-\alpha(x,Y_p),
+x, &  \texttt{ with probability } 1-\alpha_p(x,Y_p),
 \end{cases}
 \end{eqnarray*}
 where
 \begin{eqnarray*}
-\alpha(x,y)=\min\left\{1,\frac{\pi(y)}{\pi(x)}\frac{q_p(x|y)}{q_p(y|x)}\right\}.
+\alpha_p(x,y)=\min\left\{1,\frac{\pi(y)}{\pi(x)}\frac{q_p(x|y)}{q_p(y|x)}\right\}.
 \end{eqnarray*}
 \end{enumerate}
 \end{algorithm}
@@ -306,7 +293,7 @@ where \(\Gamma_n=\gamma_1+\ldots+\gamma_n\) and \((\gamma_n)_{n\geq 1}\) is a no
 \end{eqnarray*}
 Due to typically high correlation between \(X_0,X_1,\ldots\)  variance reduction is of crucial importance here.
 As a matter of fact, in many cases there is no explicit formula for the invariant measure and this makes the use of gradient  based  variance reduction techniques (see e.g. \cite{mira2013zero}) impossible in this case.
-On the contrary, our method can be directly used to reduce the variance of the ergodic estimator \(\pi_n^\gamma\) without explicit knowledge of \(\pi.\)
+%On the contrary, our method can be directly used to reduce the variance of the ergodic estimator \(\pi_n^\gamma\) without explicit knowledge of \(\pi.\)
 \end{example}
 \section{Martingale representation}
 \label{seq:mart_repr}
@@ -377,15 +364,15 @@ Fix some $K\in\mathbb N$ and denote
 \nonumber
 M_{K,n}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{k=1}^{K}\sum_{l=N+1}^{p} \bar a_{p-l,k}(X^x_{l-1})\phi_k(\xi_{l})\right]
 \\
-&=& \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left[\sum_{p=0}^{N+n-l}\bar{a}_{p,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\right].
+&=& \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\sum_{p=0}^{N+n-l}\bar{a}_{p,k}(X_{l-1}^{x})\phi_{k}(\xi_{l}).
 \label{eq:29032018a5}
 \end{eqnarray}
 Since \(X^x_{l-1}\) is independent of \(\xi_{l}\) and \(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq 0\), we obtain
 \[
 \PE[g(X^x_{l-1})\phi_{k}\left(\xi_{l}\right)] = \mathsf{E}[g(X^x_{l-1})\CPE{\phi_{k}\left(\xi_{l}\right)}{\mathcal{G}_{l-1}]} = 0
 \]
-for any integrable function $g.$  Hence the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
-The representation \eqref{eq:coeff_mart} suggests that the variance of  the   estimator
+for any  function $g.$  Hence the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
+The representation \eqref{eq:coeff_mart} suggests also that the variance of  the   estimator
 \begin{equation}
 \label{eq:29032018a3}
 \pi_{K,n}^N(f)=\pi_n^N(f)-M_{K,n}^N(f)
@@ -403,7 +390,7 @@ A_{q,k}(y)=\sum_{r=0}^q \bar{a}_{r,k}(y),\quad q=0,\ldots,n-1.
 Hence $\mathsf{Var}[\pi_{K,n}^N(f)]$ is small provided that the coefficients $A_{s,k}$ decay fast enough as $k\to \infty.$
 In   Section~\ref{sec:ula_analysis}   we provide a detailed  theoretical  analysis of  this decay  for   ULA   (see Example~\ref{exam:langevin-algorithm}).   
 \par
-The coefficients \((\bar a_{l,k})\) need to be estimated before one can apply the proposed variance reduction approach. This amounts to solving a nonparametric regression problem.
+The coefficients \((\bar a_{l,k})\) need to be estimated before one can apply the proposed variance reduction approach. One way to estimate them is to use nonparametric regression.
 We first present a generic regression algorithm and then in Section~\ref{sec:num} give further implementation details. Our algorithm starts with estimating the functions 
 $A_{q,k}$ for $q=0,\ldots,n-1,$ $k=1,\ldots,K. $ We first generate \(\NtrainPath\)  paths  of the chain \(X\)
 (the so-called ``training paths''):
@@ -415,11 +402,11 @@ Then we solve   the least squares optimization problems
 \begin{equation}\label{eq:06042018a1}
 \widetilde{A}_{q,k} \in \argmin_{\psi \in \Psi} \sum_{s = 1}^{T} \left| \sum_{r = 0}^{q}  f(X_{r+l_0}^{(s)})\phi_k(\xi^{(s)}_{l_0+1}) - \psi(X^{(s)}_{l_0})\right|^2
 \end{equation}
-for some $l_0$ with $l_0+q\leq N+n,$
+for $k=1,\ldots,K,$ and some $l_0$ with $l_0+q\leq N+n,$
 where \(\Psi\) is a  class of  real-valued functions on \(\mathbb{R}^d\) and $\xi^{(s)}_{1},\ldots,\xi^{(s)}_{N+n}$ are iid random variables with distribution $P_\xi$ used to construct the $s$-th trajectory of $X.$   As usual in regression analysis (see Section~11 in \cite{gyorfi2006distribution}),  we  truncate  the least squares estimates $(\widetilde{A}_{q,k})$ and set  
 \begin{eqnarray}
 \label{eq:trunc}
-\widehat{A}_{q,k}(y)=
+\widehat{A}_{q,k}(y):=
 \begin{cases}
 \widetilde{A}_{q,k}(y), & |\widetilde{A}_{q,k}(y)|\leq W_k,
 \\
@@ -429,7 +416,7 @@ W_k \,\mathrm{sign}(\widetilde{A}_{q,k}(y)), & \mathrm{otherwise}.
  for a sequence of positive real numbers $W_k,$ $k=1,\ldots,K.$
 Upon estimating  the functions \((A_{q,k})\), one can construct the empirical estimate  of \(M_{K,n}^N(f)\) in the form
 \begin{eqnarray*}
-\widehat M_{K,n}^N(f) = \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left[\widehat{A}_{N+n-l,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\right].
+\widehat M_{K,n}^N(f) := \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left[\widehat{A}_{N+n-l,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\right].
 \end{eqnarray*}
 Obviously, \(\mathsf{E}[\widehat M_{K,n}^N(f)|\TrainSet]=0\) and \(\widehat M_{K,n}^N(f)\) is a valid control variate in that it
 does not introduce any bias. By the Jensen inequality and orthonormality of \((\phi_k)_{k\geq 0},\)
@@ -443,56 +430,58 @@ Set
 \widehat\pi_{K,n}^N(f):=\pi_n^N(f)-\widehat{M}_{K,n}^N(f)
 \end{eqnarray*}
 Combining this with \eqref{eq:expression-variance} results in 
-\begin{multline*}
+\begin{multline}
+\label{eq:PVarA}
 \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]=\frac{1}{n^2}\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X^x_{N+l-1})]
 \\
 +\frac{1}{n^2}\sum_{k=1}^{K}\sum_{l=1}^{n}\PE\left[\left.|A_{n-l,k}(X^x_{N+l-1})-\widehat A_{n-l,k}(X^x_{N+l-1})|^2\right | \TrainSet \right].
-\end{multline*}
+\end{multline}
 In the next section we analyze the case of ULA and show that under some rather mild conditions (convexity of the potential $U$ outside a ball around zero)
 \begin{eqnarray*}
 \PE[A^2_{l,k}(X^x_{N+l-1})]\leq e^{\varkappa n\gamma^2}R^2_k ,\quad k=1,2,\ldots, \quad l=0,\ldots,n-1,
 \end{eqnarray*}
 for a sequence  $(R_k)$ satisfying $\sum_{k=1}^\infty R^2_k\leq C$ with constant $C$  not depending  on $\gamma$ and $n$ (see \eqref{eq:Aqk2}).  Hence if we take $W_k=R_k$ as truncation parameters in \eqref{eq:trunc}, then $\widehat A_{n-l,k}$ converges to 
 \[
-\bar A_{q,k}=\argmin_{\psi\in\Psi}\mathsf{E}[|A_{q,k}(X_{l_0})-\psi(X_{l_0})|]^2
+\bar A_{q,k}:=\argmin_{\psi\in\Psi}\mathsf{E}[|A_{q,k}(X_{l_0})-\psi(X_{l_0})|]^2
 \]
- as $T\to \infty,$ see Section~11 in \cite{gyorfi2006distribution}.  Moreover,
+ as $T\to \infty,$ see Section~11 in \cite{gyorfi2006distribution}.  Moreover, it follows from \eqref{eq:PVarA} that
 \begin{eqnarray*}
 \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]\leq \frac{2Ce^{\varkappa n\gamma^2}}{n}. 
 \end{eqnarray*}
  Note that the above estimate is rather rough, as we ignore here the fact that the difference between $\widehat A_{n-l,k}$ and $A_{n-l,k}$ is small.
-If the class of functions $\Psi$ is a linear one of dimension $\mathtt{D}_\Psi,$ then the cost of computing $\widehat \pi_{K,n}^N(f)$ is of order $ \mathtt{D}_\Psi K T^2 n$. At the same time the variance of the standard estimate $ \pi_{n}^N(f)$ is of order $1/(n\gamma)$ and this bound can not be improved, see Lemma~\ref{lem:variance} and Remark~\ref{rem:var-low}. Thus, the ratio of the corresponding cost-variances is of order
-\begin{eqnarray*}
+If the class of functions $\Psi$ is a linear one of dimension $\mathtt{D}_\Psi,$ then the cost of computing the coefficients $\widehat A_{l,k}$ for all $l=1,\ldots,n$ and $k=1,\ldots,K$ is of order  $ \mathtt{D}_\Psi K T^2 n$. Given $(\widehat A_{l,k})$ the cost of computing  $\widehat \pi_{K,n}^N$ is proportional to $\mathtt{D}_\Psi K n.$ At the same time the variance of the standard estimate $ \pi_{n}^N(f)$ is of order $1/(n\gamma)$ and this bound can not be improved, see Lemma~\ref{lem:variance} and Remark~\ref{rem:var-low}. Thus, the ratio of the corresponding cost-variances is of order
+\begin{equation}
+\label{eq:cost_theoretical}
 \frac{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]}{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}\leq C e^{\varkappa n\gamma^2} K \gamma \, T^2 \mathtt{D}_\Psi. 
-\end{eqnarray*}
-Thus, for any fixed $K\geq 1,$  our variance reduction method is advantageous if $\gamma\ll\min\{1/(\mathtt{D}_\Psi T^2),1/\sqrt{n}\}.$  
-\section{Analysis of variance reduced ULA}
-\label{sec:ula_analysis}
+\end{equation}
+Thus, for any fixed $K\geq 1,$  our variance reduction method is advantageous if $\gamma\ll\min\{1/(\mathtt{D}_\Psi T^2),1/\sqrt{n}\}.$  Note that in order to achieve convergence of the corresponding MSE to zero, we need to let $\gamma\to 0$ as the invariant measure of the ULA with a constant time step $\gamma$ is not equal to $\pi.$
+\section{Analysis of variance reduced ULA}\label{sec:ula_analysis}
 In this section we perform the convergence analysis of the ULA algorithm. We use the notations of Example~\ref{exam:langevin-algorithm}. For the sake of clarity and notational simplicity we restrict our attention to the constant time step, that is, we take $\gamma_k =\gamma$ for any $k \in \nset$.
 By $H_k$, $k\in\mathbb N_0$,
 we denote the normalized Hermite polynomial on $\mathbb R$, that is,
 $$
-H_k(x)=\frac{(-1)^k}{\sqrt{k!}}\rme^{x^2/2}\frac{\partial^k}{\partial x^k}\rme^{-x^2/2},
+H_k(x):=\frac{(-1)^k}{\sqrt{k!}}\rme^{x^2/2}\frac{\partial^k}{\partial x^k}\rme^{-x^2/2},
 \quad x\in\mathbb R.
 $$
 For a multi-index $\mathbf{k}=(k_i)\in\mathbb N_0^d$,
 $\mathbf{H}_\mathbf{k}$ denotes the normalized Hermite polynomial on $\mathbb R^d$, that is,
 $$
-\mathbf{H}_\mathbf{k}(\mathbf{x})=\prod_{i=1}^d H_{k_i}(x_i),\quad \mathbf{x}=(x_i)\in\mathbb R^d.
+\mathbf{H}_\mathbf{k}(\mathbf{x}):=\prod_{i=1}^d H_{k_i}(x_i),\quad \mathbf{x}=(x_i)\in\mathbb R^d.
 $$
 In what follows, we also use the notation
 $|\mathbf{k}|=\sum_{i=1}^d k_i$ for $\mathbf{k}=(k_i)\in\mathbb N_0^d$,
 and we set $\mathcal G_p=\sigma(Z_1,\ldots,Z_p)$, $p\in\mathbb N$, and $\mathcal G_0=\mathrm{triv}$.
 Given $N$ and $n$ as above, for $K\in\mathbb N$, denote
 \begin{align}
-M_{K,n}^N(f) & =\sum_{ 0<\|\mathbf{k}\|\le K}\frac{1}{n}\sum_{l=1}^{n}A_{n-l,\mathbf{k}}(X_{N+l-1})\mathbf{H}_\mathbf{k}(Z_{N+l})
+M_{K,n}^N(f) & :=\frac{1}{n}\sum_{ 0<\|\mathbf{k}\|\le K}\sum_{l=1}^{n}A_{n-l,\mathbf{k}}(X_{N+l-1})\mathbf{H}_\mathbf{k}(Z_{N+l})
 \label{eq:29032018a5}
 \notag
 \end{align}
 with \(\|\mathbf{k}\|=\max_{i} k_i\) and 
-\begin{eqnarray*}
-A_{q,\mathbf{k}}(y)=\sum_{r=0}^{ q } \bar{a}_{r,\mathbf{k}}(y).
-\end{eqnarray*}
+\begin{eqnarray}
+\label{eq:A-ula}
+A_{q,\mathbf{k}}(y):=\sum_{r=0}^{ q } \bar{a}_{r,\mathbf{k}}(y).
+\end{eqnarray}
 For an estimator $\rho(f)\in\{\pi_n^N(f),\pi_{K,n}^N(f)\}$
 of $\pi(f)$ (see \eqref{eq:29032018a2} and \eqref{eq:29032018a3}), we shall be interested in the Mean Squared Error (MSE),
 which can be decomposed as the sum of the squared  bias
@@ -504,7 +493,7 @@ and the  variance:
 \end{equation}
 Our analysis is carried out under the following two assumptions:
 \begin{description}
-\item[(H1)][\textbf{Lipschitz continuity}] The potential $U$ is differentiable and $\nabla U$ is Lipschitz, that is, there exists $L < \infty$ such that
+\item[(H1)][\textbf{Lipschitz continuity}] The potential $U$ is differentiable and $\nabla U$ is Lipschitz continuous, that is, there exists $L < \infty$ such that
 \begin{eqnarray*}
 \| \nabla U(x)-\nabla U(y) \| \leq L \|x-y\|, \quad x,y\in \rset^d.
 \end{eqnarray*}
@@ -555,12 +544,12 @@ X_{k+1} = (1-2\gamma)X_k + \sqrt{\gamma}\xi_{k+1},\quad \xi_{k+1} \sim \mathcal{
 \end{eqnarray*}
 Thus, setting $X_0 = 0$, we obtain
 \begin{eqnarray*}
-\PVar_{0} \pi_n^0(f) &=& \PVar_{0}\left[\frac{1}{n}\sum\limits_{i=1}^{n}X_i\right] 
+\PVar_{0} [\pi_n^0(f)] &=& \PVar_{0}\left[\frac{1}{n}\sum\limits_{i=1}^{n}X_i\right] 
 = \frac{1}{n^2}\PVar\left[\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{i}\sqrt{\gamma}(1-2\gamma)^{i-j}\xi_{j}\right]
 \geq  \frac{1}{n\gamma} - \frac{2(1-2\gamma)}{n^2\gamma^2}.
 \end{eqnarray*}
 \end{remark}
-One of the main results of this paper is the following  upper bound for the functions $(A_{q,\mathbf{k}}).$
+One of the main results of this paper is the following  upper bound for the functions $(A_{q,\mathbf{k}})$ in \eqref{eq:A-ula}.
 \begin{thm}\label{th:mr}
 Assume {\bf (H1)} and {\bf (H2)}.
 Fix some $K\geq 1$ and suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K \times d $ times continuously differentiable
@@ -597,14 +586,14 @@ Let us sketch the main steps of the proof. First using integration by parts, we 
 \label{eq:Ask-part}
 A_{q,\mathbf{k}}(x)=\gamma^{|\mathbf{k}'|/2}\frac{\sqrt{(\mathbf{k}-\mathbf{k}')!}}{\sqrt{\mathbf{k}!}}\mathsf{E}\left[ \partial_{Z_1}^{\mathbf{k}'} F(x,Z_1,\ldots,Z_q) \mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_{1})\right],
 \end{eqnarray}
-where $F_q(x,Z_1,\ldots,Z_q)=\sum_{r=0}^q f(X^x_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
+where $F_q(x,Z_1,\ldots,Z_q):=\sum_{r=0}^q f(X^x_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
 stands for a weak partial derivative of the functional $F_s$ that also can be viewed as discretised version of Malliavin derivative. 
 Now by taking $\mathbf{k}'=\mathbf{k},$ we get
 \begin{eqnarray*}
 A^2_{q,\mathbf{k}}(x)\leq \gamma^{|\mathbf{k}|} \PVar \left( \sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X_{p}^x\right)
 \right),\quad q=0,\ldots,n-1.
 \end{eqnarray*}
-Also from \eqref{eq:Ask-part} we can derive
+Also from \eqref{eq:Ask-part} we can derive that
 \begin{eqnarray*}
 \sum_{\|\mathbf{k}\|\geq K+1} A^2_{q,\mathbf{k}}(x)\leq \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
 \left(\frac{\gamma}{2}\right)^{|I|K}
@@ -615,7 +604,7 @@ where
 \[
 \mathbf{\mathbf{K}}_{I}=K(\indi{I}(1),\ldots, \indi{I}(d)).
 \]
-Finally, we show  that under our smoothness assumption \eqref{eq:smooth-mu} it holds
+Finally, using the Gaussian Poincare inequality, we show  that under our smoothness assumption \eqref{eq:smooth-mu} it holds
 \begin{equation}
 \label{eq:varboundV}
 \PVar \left(\sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X^x_{p}\right)
@@ -625,7 +614,7 @@ for some positive constants $\varkappa, C_K$ not depending on $n$ and  $\gamma.$
 \section{Numerical analysis}
 \label{sec:num}
 In this section we illustrate the performance of the proposed variance reduction method for ULA.
-First we note that from  numerical point of view another representation of the coefficients \(a_{p,l,k}\)  turns out to be more useful.
+First we note that from  numerical point of view another equivalent representation of the coefficients \(a_{p,l,k}\)  turns out to be more useful.
 \begin{prop}
 Let $q\geq l, k\in \nset$. Then the coefficients \(a_{q,l,k}(x)\) in \eqref{eq:coeff_mart}  can be alternatively represented as
 \begin{eqnarray*}
@@ -639,7 +628,7 @@ In the case $\Phi_l=\Phi$ in \eqref{eq:ula_new} for all $l\geq 1,$ we have
 \end{equation}
 with  \(Q_{r}(x)=\mathsf{E}\left[f(X^x_{r})\right],\) $r\in \mathbb{N}.$
 \end{prop}
- We construct a polynomial approximation  for each \(Q_r(x)\) in \eqref{eq:definition-bar-a} in the form:
+First we construct a polynomial approximation  for each \(Q_r(x)\)  in the form:
 \begin{equation*}
 \widehat{Q}_{r}(x) = \sum_{\|\mathbf{s}\|\leq m} \widehat\beta_{\mathbf{s}} x^{\mathbf{s}},\quad s=(s_1,\ldots,s_d) \in \nset_0^d.
 \end{equation*}
@@ -657,10 +646,14 @@ Then using the identity
 \xi^j = j! \sum_{r = 0}^{\lfloor j/2 \rfloor} \frac{1}{2^r  r! \sqrt{(j-2r)!}} H_{j-2r}(\xi),\quad \xi \in \mathbb{R},
 \]
 we obtain closed-form expression for the estimates $\widehat a_{r,k}(x)$ of functions $\bar a_{r,k}(x)$ in \eqref{eq:definition-bar-a}. Namely, for all $x \in \mathbb{R}^d$,
-\begin{eqnarray*}
+\begin{eqnarray}
+\nonumber
 \widehat a_{r,\mathbf{k}} (x) &=&\CPE{\mathbf{H}_\mathbf{k}(\xi) \widehat{Q}_{r}(x - \gamma \mu(x) + \sqrt{\gamma}\xi)}{\TrainSet}
-= \sum_{\|\mathbf{s}\|\leq m} \beta_{\mathbf{s}} \prod_{i=1}^d P_{k_i,s_i}(x_i - \gamma \mu_i(x)),
-\end{eqnarray*}
+\\
+&=& 
+\label{eq:a-pol}
+\sum_{\|\mathbf{s}\|\leq m} \beta_{\mathbf{s}} \prod_{i=1}^d P_{k_i,s_i}(x_i - \gamma \mu_i(x)),
+\end{eqnarray}
 where for any integer $k,s$ $P_{k,s}$ 
 is a one-dimensional polynomial (in \(x\)) of degree at most \(s\) with analytically known coefficients. We estimate $Q_{r}$ only for $r < n_{\mathrm{trunc}}$ where the truncation level \(n_{\mathrm{trunc}}\) may depend on \(d\) and \(\gamma.\) It allows us to use a smaller amount of training trajectories to approximate $Q_{r}(x)$.
 Finally  we construct a truncated version of the estimator \eqref{eq:29032018a3}:
@@ -669,23 +662,80 @@ Finally  we construct a truncated version of the estimator \eqref{eq:29032018a3}
 \]
 where
 \begin{eqnarray*}
-\widehat M_{K,n,n_{\mathrm{trunc}}}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{0 < \|\mathbf{k}\|\leq K}\sum_{l=N+1}^{p} \widehat a_{p-l,\mathbf{k}}(X_{l-1})\phi_k(\xi_{l})\mathbbm{1}\{ | p-l | < n_{\mathrm{trunc}}\}\right].
+\widehat M_{K,n,n_{\mathrm{trunc}}}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{0 < \|\mathbf{k}\|\leq K}\sum_{l=N+1}^{p} \widehat a_{p-l,\mathbf{k}}(X_{l-1})\mathbf{H}_\mathbf{k}(\xi_{l})\mathbbm{1}\{ | p-l | < n_{\mathrm{trunc}}\}\right].
 \end{eqnarray*}
 
-\subsection{Gaussian mixtures}
- We consider a sample generated by ULA with $\pi$  given by the mixture of two equally-weighted $d$-dimensional Gaussian distributions of the following form
+\subsection{Comparison with vanilla ULA}
+In this subsection we aim at comparing cost of variance reduction, achieved by the proposed algorithm, to the cost of vanilla ULA algorithm. We consider samples, generated by ULA with $\pi$ being either the standard normal distribution in dimension $d$ or the mixture of two $d-$dimensional standard Gaussians of the form
  \[
- \pi(x) = \frac{1}{2\sqrt{(2\pi)^{d}|\Sigma|}} \left( \rme^{-\frac{(x-\mu)^T\Sigma^{-1}(x-\mu)}{2}} + \rme^{-\frac{(x+\mu)^T\Sigma^{-1}(x+\mu)}{2}}\right)
+ \pi(x) = \frac{1}{2\sqrt{(2\pi)^{d}}} \left( \rme^{-\frac{\|x-\mu\|^2}{2}} + \rme^{-\frac{\|x+\mu\|^2}{2}}\right)
  \]
-where $\rho \in (0,1), \mu \in \rset^d, \Sigma \in \rset^{d \times d}$ and $|\Sigma|$ is its determinant. The function $U(x)$ and its gradient are given by
+ where $d = 2$ and $\mu = (0.5,0.5)$. For both examples, we aimed at estimating $\pi(f)$ with $f(x)=\sum_{i=1}^d x_i$ and $f(x) = \sum_{i=1}^d x^2_i$. We used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 5 \times 10^4$ independent training trajectories, each one with the burn-in period $n_{\text{burn}} = 100$. Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for $f(x)=\sum_{i=1}^d x_i$ and second order polynomial approximations for $f(x) = \sum_{i=1}^d x^2_i$ as described in the previous section. We set $K=1$ or $K=2$ for $f(x)=\sum_{i=1}^d x_i$ or $f(x)=\sum_{i=1}^d x^2_i$ respectively. Then we estimate the cost-variance ratio
+\begin{eqnarray}
+\label{eq:cvR}
+\mathcal{R}(K,N,n,n_{\mathrm{trunc}})=\frac{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n,n_{\mathrm{trunc}} }^N(f)|\TrainSet]} 
+\end{eqnarray}
+by its empirical counterpart, computed over $24$ independent trajectories with $n = 2\times 10^3$ and $N = 2 \times 10^3$. Since for fixed $K$ the cost of computing $\pi_{n}^N(f)$ is proportional to computing function $f$, we set for $K = 1$
+ \begin{equation*}
+ \mathrm{cost}(\widehat \pi_{K,n}^N) = \mathrm{cost}(\pi_{n}^N) \times n_{\mathrm{trunc}} \times 2
+ \end{equation*}
+ since there are only $2$ non-zero functions among $a_{r,\mathbf{k}}(x)$ for fixed $r$. Note that in this case each $a_{r,\mathbf{k}}(x)$  is a linear function, which can be computed at the same cost as $f$. Similarly, for $K = 2$ we set
+  \begin{equation*}
+ \mathrm{cost}(\widehat \pi_{K,n}^N) = \mathrm{cost}(\pi_{n}^N) \times n_{\mathrm{trunc}} \times 8
+ \end{equation*}
+since there are at most $8$ non-zero functions among $a_{r,\mathbf{k}}(x)$ for fixed $r$. Variance reduction costs for Gaussian potential and different $n_{\mathrm{trunc}}$  are summarized in Figure~\ref{fig:gaus_cost}, and for the Gaussian mixture - in Figure~\ref{fig:gmm_cost}. Note that for both examples the proposed algorithm allows us to obtain a sufficient gain in variance reduction cost.  
+ 
+%Next we compute the cost-variance ratios
+%\begin{eqnarray}
+%\label{eq:cvR}
+%\mathcal{R}(K,N,n,n_{\mathrm{trunc}})=\frac{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n,n_{\mathrm{trunc}} }^N(f)|\TrainSet]} 
+%\end{eqnarray}
+%where variances in the above definition are computed using $24$ independent trajectories each of  length $n=2\cdot10^3.$ Note that the cost of $\widehat \pi_{K,n,n_{\mathrm{trunc}}} $ is proportional to the number of nonzero coefficients in \eqref{eq:a-pol} times $n_{\mathrm{trunc}}$.  In Figure~\ref{fig:G-costvar} cost-variances ratios are shown for for the case of  Gaussian distribution with parameters. In particular, in Figure~\ref{fig:subfig3}  a function $\mathcal{R}(1,2\cdot 10^3,2\cdot 10^3,n_{\mathrm{trunc}})$ is shown in dependence on $n_{\mathrm{trunc}}$ for the case of  linear  $f$. In Figure~\ref{fig:subfig4} a similar plot of $\mathcal{R}(2,2\cdot 10^3,2\cdot 10^3,n_{\mathrm{trunc}})$ is shown for the case of  quadratic $f.$
+%Figure~\ref{fig:GMM-costvar} presents the corresponding coast-variance ratios   for the mixture of two two-dimensional normal distributions as in \eqref{eq:gmm} with $\Sigma=I$ and $\mu=(0.5,0.5).$  In each case, in order estimate functions $(Q_r),$ we have used $T=10^4$ independent trajectories in the least-squares regression and polynomials of the same order as the order of $f.$
+ 
+\begin{figure}[tbh]
+\centering
+\subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
+\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gaussian.png}
+\label{fig:subfig1}}
+\qquad
+\subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
+\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gaussian.png}
+\label{fig:subfig2}}
+\caption{Cost-variance ratios \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  two-dimensional standard Gaussian distribution and different test functions.
+\label{fig:gaus_cost}}
+\end{figure}
+
+\begin{figure}[tbh]
+\centering
+\subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
+\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gmm.png}
+\label{fig:subfig1}}
+\qquad
+\subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
+\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gmm.png}
+\label{fig:subfig2}}
+\caption{Cost-variance ratios  \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for a mixture of two-dimensional Gaussian distributions and different test functions.
+\label{fig:gmm_cost}}
+\end{figure}
+
+\subsection{Gaussian mixtures}
+ We consider  ULA with $\pi$  given by the mixture of two equally-weighted $2$-dimensional Gaussian distributions of the following form
+\begin{eqnarray}
+\label{eq:gmm}
+\pi(x) = \frac{1}{2\sqrt{(2\pi)^{d}|\Sigma|}} \left( \rme^{-\frac{(x-\mu)^T\Sigma^{-1}(x-\mu)}{2}} + \rme^{-\frac{(x+\mu)^T\Sigma^{-1}(x+\mu)}{2}}\right)
+\end{eqnarray}
+where $\rho \in (0,1), \mu \in \rset^d, \Sigma \in \rset^{2 \times 2}$ and $|\Sigma|$ is its determinant. The function $U(x)$ and its gradient are given by
 \[
-U(x) = \frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu) - \ln{\left(1 + \rme^{-2\mu^\top \Sigma^{-1}x}\right)}, \quad
+U(x) = \frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu) - \ln{\left(1 + \rme^{-2\mu^\top \Sigma^{-1}x}\right)}
 \]
+and
 \[
 \nabla U(x) = \Sigma^{-1}(x-\mu) +2\mu^\top\Sigma^{-1}\left(1 + \rme^{2 \mu^\top\Sigma^{-1} x}\right)^{-1},
 \]
 respectively.
-In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and randomly generated positive-definite matrix $\Sigma$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) with \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i\) we used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 10$ independent training trajectories, each one of size $n = 10^4$.  Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for the coefficients \(\hat{a}_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 1$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 10^3$ and plot boxplots of the ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials, since they are used as regressors during computations of $\hat{a}_{p-l,\mathbf{k}}$.
+In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and randomly generated positive-definite matrix $\Sigma$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) with \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i\) we used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 5 \times 10^4$ independent training trajectories, each one of size $n = 50$ with the burn-in period $n_{\text{burn}} = 100$. Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for $f(x)=\sum_{i=1}^d x_i$ and second order approximations for $f(x) = \sum_{i=1}^d x^2_i$ as described in the previous section. Hence we set $K = 1$ for $f(x)=\sum_{i=1}^d x_i$ or $K = 2$ for $f(x) = \sum_{i=1}^d x^2_i$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 2 \times 10^3$ and plot boxplots of the corresponding ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials in case of $K=1$ and second order polynomials for $K = 2$. 
+\par
 
  \begin{figure}[tbh]
 \centering
@@ -700,6 +750,32 @@ In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and rando
 \label{fig:GMM}}
 \end{figure}
 
+%\begin{figure}[tbh]
+%\centering
+%\subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
+%\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gaussian.png}
+%\label{fig:subfig3}}
+%\qquad
+%\subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
+%\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gaussian.png}
+%\label{fig:subfig4}}
+%\caption{ Cost-variance ratios \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  two-dimensional standard Gaussian distribution and different test functions. \label{fig:G-costvar}}
+%\end{figure}
+
+%\begin{figure}[tbh]
+%\centering
+%\subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
+%\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gmm.png}
+%\label{fig:subfig5}}
+%\qquad
+%\subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
+%\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gmm.png}
+%\label{fig:subfig6}}
+%\caption{ Cost-variance ratios  \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  a mixture of two-dimensional  Gaussian distribution and different test functions.
+%\label{fig:GMM-costvar}}
+%\end{figure}
+
+
 \subsection{Banana shape distribution}
 The “Banana-shape” distribution, proposed by \cite{haario1999adaptive}, can be obtained from a d-dimensional Gaussian vector with zero mean and covariance $\mathrm{diag}(p,1,\ldots,1)$ by applying transformation $\varphi_b(x) : \rset^d \rightarrow \rset^d$ of the form
 \[
@@ -707,9 +783,9 @@ The “Banana-shape” distribution, proposed by \cite{haario1999adaptive}, can 
 \]
 where $p > 0$ and $b > 0$ are parameters; $b$ accounts for the curvature of density’s level sets. The potential $U$ is given by
 \[
-U(x_1, . . . , x_d) = \frac{x_1^2}{2} + (x_2 + bx_1^2 - pb)^2 + \sum\limits_{k=3}^{d}\frac{x_k^2}{2}
+U(x_1,\ldots, x_d) = \frac{x_1^2}{2} + \frac{(x_2 + bx_1^2 - pb)^2}{2} + \sum\limits_{k=3}^{d}\frac{x_k^2}{2}
 \]
-The quantity of interest is the expectation of $f(x) = x_2$. We set $p = 100, b = 0.1$ and consider $d=8$. We solve the least squares  problems \eqref{eq:Qregr} using the second-order polynomial approximations for the coefficients \(\hat{a}_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 2$. We use $T=10$ independent training trajectories, each of size $n=10^4$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 10^3$ and plot boxplots of the ergodic averages in Figure~\ref{fig:banana_shape}.
+The quantity of interest is the expectation of $f(x) = x_2$. We set $p = 100, b = 0.1$ and consider $d=8$. We solve the least squares  problems \eqref{eq:Qregr} using the second-order polynomial approximations for the coefficients \(\hat{a}_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 2$. We use $T= 5 \times 10^4$ independent training trajectories, each of size $n=50$ with the burn-in $n_{\text{burn}} = 100$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 2 \times 10^3$ and plot boxplots of the ergodic averages in Figure~\ref{fig:banana_shape}.
 
 \begin{figure}[h]
 \begin{center}
