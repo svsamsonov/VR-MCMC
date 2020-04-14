@@ -203,9 +203,9 @@ standard Gaussian random vectors. If
 $\mu= \nabla U$
 for some continuously differentiable function $U,$ then Markov chain~\eqref{eq:chain} can be used to approximately sample from the density
 \begin{equation}\label{eq:stationary_distr}
-\pi(x)= Z^{-1} \rme^{-U(x)/2}, \quad Z= \int_{\mathbb{R}^{d}} \rme^{-U(x)/2}\, \rmd x,  
+\pi(x)= Z^{-1} \rme^{-U(x)/2}, \quad Z= \int_{\mathbb{R}^{d}} \rme^{-U(x)/2}\, \rmd x,
 \end{equation}
-provided that \(Z < \infty\). 
+provided that \(Z < \infty\).
 This method is usually referred to as Unadjusted Langevin Algorithm (ULA).
 Denote by \(W\) the standard \(\mathbb{R}^m\)-valued Brownian motion.
 The Markov chain~\eqref{eq:chain}
@@ -344,7 +344,7 @@ Let \((X^x_{p})_{p\geq 0}\) be a homogeneous Markov chain of the form \eqref{eq:
 \begin{eqnarray*}
 f(X^x_{q})=\mathsf{E}\left[\left.f(X^x_{q})\right|\mathcal G_{j}\right]+\sum_{k=1}^{\infty}\sum_{l=j+1}^{q}\bar a_{q-l,k}(X^x_{l-1})\phi_k\left(\xi_{l}\right)
 \end{eqnarray*}
-where for all $y \in \rset^d$, 
+where for all $y \in \rset^d$,
 \begin{equation}
 \label{eq:definition-bar-a-0}
 \bar a_{r,k}(y)=\mathsf{E}\left[f(X^y_{r})\phi_k\left(\xi_{1}\right)\right] \,, \text{for $r, k\in \mathbb{N}$.}
@@ -404,7 +404,7 @@ should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_{
 Hence $\mathsf{Var}[\pi_{K,n}^N(f)]$ is small provided that the coefficients $A_{s,k}$ decay fast enough as $k\to \infty.$
 In   Section~\ref{sec:ula_analysis}   we provide a detailed  theoretical  analysis of  this decay  for   ULA   (see Example~\ref{exam:langevin-algorithm}).
 \par
-The coefficients \((\bar a_{l,k})\) need to be estimated before one can apply the proposed variance reduction approach. 
+The coefficients \((\bar a_{l,k})\) need to be estimated before one can apply the proposed variance reduction approach.
 One way to estimate them is to use nonparametric regression.
 %%%%% Old Version
 %We first present a generic regression algorithm and then in Section~\ref{sec:num} give further implementation details. Our algorithm starts with estimating the functions
@@ -435,7 +435,7 @@ One way to estimate them is to use nonparametric regression.
 %\end{eqnarray*}
 %%%% Old Version
 We present a generic regression algorithm and then in Section~\ref{sec:num} give further implementation details. Our algorithm starts with estimating the functions
-$Q_r$ for $r=0,\ldots,n-1,$, defined in \eqref{eq:definition-bar-a}. 
+$Q_r$ for $r=0,\ldots,n-1,$, defined in \eqref{eq:definition-bar-a}.
 We first generate \(\NtrainPath\)  paths  of the chain \(X\)
 (the so-called ``training paths''):
 \[
@@ -447,11 +447,11 @@ Then we solve  the least squares optimization problems
 \hat{Q}_{r} \in \argmin_{\psi \in \Psi} \sum_{s = 1}^{T} \left|   f(X_{r+N}^{(s)}) - \psi(X^{(s)}_{N})\right|^2
 \end{equation}
 where \(\Psi\) is a  class of  real-valued functions on \(\mathbb{R}^d\).
-We then set 
+We then set
 \begin{equation}
 \label{eq:definition-hat-a-A}
 \hat{a}_{r,k}(x)= \int \hat{Q}_r(\Phi(x,z)) \phi_k(z) P_\xi(\rmd z) \quad \text{and}
-\quad 
+\quad
 \hat{A}_{q,k}(x) = \sum_{r=0}^q \hat{a}_{r,k}(x) \eqsp,
 \end{equation}
 and construct the empirical estimate  of \(M_{K,n}^N(f)\) in the form
@@ -660,7 +660,7 @@ First we construct a polynomial approximation  for each \(Q_r(x)\)  in the form:
 \begin{equation*}
 \widehat{Q}_{r}(x) = \sum_{\|\mathbf{s}\|\leq m} \widehat\beta_{\mathbf{s}} x^{\mathbf{s}},\quad s=(s_1,\ldots,s_d) \in \nset_0^d.
 \end{equation*}
-The coefficients \(\widehat \beta_{\mathbf{s}}\in \mathbb{R}\) are obtained using a modified least-squares criteria based on $T$ independent training trajectories \(\bigl\{\bigl(X_1^{(s)},\ldots,X_{N+n}^{(s)}\bigr)\bigr\}_{s=1}^{T}\). More precisely  we define $\widehat{Q}_0(x) = f(x)$ and for \(1 \leq r \leq n-1,\) we set 
+The coefficients \(\widehat \beta_{\mathbf{s}}\in \mathbb{R}\) are obtained using a modified least-squares criteria based on $T$ independent training trajectories \(\bigl\{\bigl(X_1^{(s)},\ldots,X_{N+n}^{(s)}\bigr)\bigr\}_{s=1}^{T}\). More precisely  we define $\widehat{Q}_0(x) = f(x)$ and for \(1 \leq r \leq n-1,\) we set
 \begin{eqnarray}
 \label{eq:Qregr}
 \widehat{Q}_r = \argmin_{\psi \in \Psi_m} \sum_{s = 1}^{T}  \left| f(X_{N+r}^{(s)}) - \psi(X_{N}^{(s)})\right|^2
@@ -743,18 +743,18 @@ since there are at most $8$ non-zero functions among $a_{r,\mathbf{k}}(x)$ for f
 \end{figure}
 
 \subsection{Gaussian mixtures}
- We consider  ULA with $\pi$  given by the mixture of two equally-weighted $2$-dimensional Gaussian distributions of the following form
+ We consider  ULA with $\pi$  given by the mixture of two equally-weighted $d$-dimensional Gaussian distributions of the following form
 \begin{eqnarray}
 \label{eq:gmm}
 \pi(x) = \frac{1}{2\sqrt{(2\pi)^{d}|\Sigma|}} \left( \rme^{-(1/2)(x-\mu)^T\Sigma^{-1}(x-\mu)} + \rme^{-(1/2)(x+\mu)^T\Sigma^{-1}(x+\mu)}\right)
 \end{eqnarray}
-where $\rho \in (0,1)$, $\mu \in \rset^2$, $\Sigma$ is a symmetric positive definite $2 \times 2$ matrix and $|\Sigma|$ is its determinant. The function $U(x)$ and its gradient are given by
+where  $\mu \in \rset^d$, $\Sigma$ is a positive-definite $d \times d$ matrix and $|\Sigma|$ is its determinant. The function $U(x)$ and its gradient are given by
 \[
 U(x) = \frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu) - \ln{\left(1 + \rme^{-2\mu^\top \Sigma^{-1}x}\right)}
 \]
 and
 \[
-\nabla U(x) = \Sigma^{-1}(x-\mu) +2\mu^\top\Sigma^{-1}\left(1 + \rme^{2 \mu^\top\Sigma^{-1} x}\right)^{-1},
+\nabla U(x) = \Sigma^{-1}(x-\mu) +2 \left(1 + \rme^{2 \mu^\top\Sigma^{-1} x}\right)^{-1} \Sigma^{-1}\mu ,
 \]
 respectively.
 In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and randomly generated positive-definite matrix $\Sigma$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) with \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i\) we used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 5 \times 10^4$ independent training trajectories, each one of size $n = 50$ with the burn-in period $n_{\text{burn}} = 100$. Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for $f(x)=\sum_{i=1}^d x_i$ and second order approximations for $f(x) = \sum_{i=1}^d x^2_i$ as described in the previous section. Hence we set $K = 1$ for $f(x)=\sum_{i=1}^d x_i$ or $K = 2$ for $f(x) = \sum_{i=1}^d x^2_i$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 2 \times 10^3$ and plot boxplots of the corresponding ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials in case of $K=1$ and second order polynomials for $K = 2$.
@@ -800,15 +800,15 @@ In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and rando
 
 
 \subsection{Banana shape distribution}
-The “Banana-shape” distribution, proposed by \cite{haario1999adaptive}, can be obtained from a d-dimensional Gaussian vector with zero mean and covariance $\mathrm{diag}(p,1,\ldots,1)$ by applying transformation $\varphi_b(x) : \rset^d \rightarrow \rset^d$ of the form
+The “Banana-shape” distribution, proposed by \cite{haario1999adaptive}, can be obtained from a $d$-dimensional Gaussian vector with zero mean and covariance $\mathrm{diag}(p,1,\ldots,1)$ by applying transformation $\varphi_b(x) : \rset^d \rightarrow \rset^d$ of the form
 \[
-\varphi(x_1,\ldots,x_n) = (x_1, x_2 + bx^2_1 - pb,x_3,\ldots,x_d)
+\varphi_b(x_1,\ldots,x_n) = (x_1, x_2 + bx^2_1 - pb,x_3,\ldots,x_d)
 \]
 where $p > 0$ and $b > 0$ are parameters; $b$ accounts for the curvature of density’s level sets. The potential $U$ is given by
 \[
-U(x_1,\ldots, x_d) = \frac{x_1^2}{2} + \frac{(x_2 + bx_1^2 - pb)^2}{2} + \sum\limits_{k=3}^{d}\frac{x_k^2}{2}
+U(x_1,\ldots, x_d) = \frac{x_1^2}{2} + \frac{(x_2 + bx_1^2 - pb)^2}{2} + \frac{1}{2} \sum_{k=3}^{d} x_k^2 \eqsp.
 \]
-The quantity of interest is the expectation of $f(x) = x_2$. We set $p = 100, b = 0.1$ and consider $d=8$. We solve the least squares  problems \eqref{eq:Qregr} using the second-order polynomial approximations for the coefficients \(\hat{a}_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 2$. We use $T= 5 \times 10^4$ independent training trajectories, each of size $n=50$ with the burn-in $n_{\text{burn}} = 100$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 2 \times 10^3$ and plot boxplots of the ergodic averages in Figure~\ref{fig:banana_shape}.
+The quantity of interest is the expectation of $f(x) = x_2$. We set $p = 100, b = 0.1$ and consider $d=8$. We solve the least squares  problems \eqref{eq:Qregr} using the second-order polynomial approximations for the coefficients \(\hat{a}_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 2$. We use $T= 5 \times 10^4$ independent training trajectories, each of size $n=50$ with the burn-in $n_{\text{burn}} = 100$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 2 \times 10^3$ and display boxplots of the ergodic averages in Figure~\ref{fig:banana_shape}.
 
 \begin{figure}[h]
 \begin{center}
@@ -819,11 +819,11 @@ The quantity of interest is the expectation of $f(x) = x_2$. We set $p = 100, b 
 \end{figure}
 
 \subsection{Binary Logistic Regression}
-Second experiment considers the problem of logistic regression. Let $\mathsf{Y} = \left(\mathsf{Y}_1,\ldots,\mathsf{Y}_n\right) \in \{0,1\}^m$ be binary response variables, $\mathsf{X} \in \rset^{m \times d}$ be a feature matrix and $\theta \in \rset^d$ - vector of regression parameters. We define log-likelihood of $i$-th observation as
+In this section, we consider  logistic regression. Let $\mathsf{Y} = \left(\mathsf{Y}_1,\ldots,\mathsf{Y}_n\right) \in \{0,1\}^m$ be binary response variables, $\mathsf{X} \in \rset^{m \times d}$ be a feature matrix and $\theta \in \rset^d$ - vector of regression parameters. We define log-likelihood of $i$-th observation as
 \[
-\ell(\mathsf{Y}_i | \theta, \mathsf{X}_i) = \mathsf{Y}_i \mathsf{X}_i^T\theta - \ln{\left(1 + \rme^{\mathsf{X}_i^T\theta}\right)}
+\ell(\mathsf{Y}_i | \theta, \mathsf{X}_i) = \mathsf{Y}_i \mathsf{X}_i^T\theta - \ln{(1 + \rme^{\mathsf{X}_i^T\theta})}
 \]
-In order to estimate $\theta$ according to given data, the Bayesian approach introduces prior distribution $\pi_0(\theta)$ and inferences the posterior density $\pi(\theta| \mathsf{Y}, \mathsf{X})$ using Bayes' rule.
+In order to estimate $\theta$ according to given data, the Bayesian approach introduces prior distribution $\pi_0(\theta)$ and consider the posterior density $\pi(\theta| \mathsf{Y}, \mathsf{X})$ using Bayes' rule.
 
 \begin{figure}[h]
 \begin{center}
@@ -847,6 +847,8 @@ To demonstrate the performance of the proposed control variates approach in the 
 
 \section{Proofs}
 \label{sec:proofs}
+
+
 \subsection{Proof of Theorem~\ref{thm:main-repr}}
 The expansion obviously holds for $p = q=1$ and $j=0$.
 Indeed, since $\left(\phi_{k}\right)_{k \geq 0}$ is a complete orthonormal system in \(L^2(\mathbb{R}^d, P_{\xi})\), it holds in \(L^2(\mathsf{P})\) that
@@ -894,7 +896,10 @@ a_{m+1,l,k}(y) = \mathsf{E}\left[f(X^y_{l-1,m+1})\phi_{k}(\xi_{l})\right]
 Formulas \eqref{eq:1-step-decomp}
 and~\eqref{eq:28082017a1} conclude the induction step for $q = m+1$ and all $j < q$ and hence the proof.
 
+
 \subsection{Proof of Lemma~\ref{lem:variance}}
+In the sequel, the notation $A(\gamma,n,x) \lesssim B(\gamma,n,x)$ means that there exist $\gamma_0 > 0$, and $C < \infty$ such that for all  $\gamma \in (0,\gamma_0]$, $x \in \rset^d$, $n \in \nset$, $A(\gamma,n,x) \leq C B(\gamma,n,x)$.
+
 Under assumptions {\bf (H1)} and {\bf (H2)} the Markov chain $(X^x_{p})_{p \in \nset_0}$ is $V-$geometrically ergodic with $V(x) = 1+\|x\|^2$ and $\rho = \rme^{-\kappa\gamma}$ with $\kappa$ specified in Lemma~\ref{lem:v_ergodicity}. Due to lemma~\ref{lem:covariance},
 \[
 \PVar[\pi_n^N(f)]\lesssim \frac{1}{n(1-\rho^{1/2})}
@@ -942,10 +947,7 @@ where $\bar a_{p,\mathbf{k}}$ is defined in \eqref{eq:definition-bar-a}.
 \end{lem}
 
 \begin{proof}
-Let $\boldsymbol{\varphi}(z)=(2\pi)^{-d/2} \exp(-|z|^2/2)$,
-$z\in\mathbb R^d$, denote the density of a $d$-dimensional
-standard Gaussian random vector.
-We first remark that, for the normalized Hermite polynomial $\mathbf H_{\mathbf k}$ on $\mathbb R^d$,
+Note that for the normalized Hermite polynomial $\mathbf H_{\mathbf k}$ on $\mathbb R^d$,
 $\mathbf k\in\mathbb N_0^d$, it holds
 $$
 \mathbf{H}_{\mathbf{k}}(z)\boldsymbol{\varphi}(z)
@@ -1350,7 +1352,7 @@ where we denote
 \[
 \zeta_{l,j}(u)=\mathsf{E}\left[\rme^{-u\gamma\sum_{k=l}^{j}\mu'(X^x_{k-1})}\right],\quad u>0.
 \]
-Note that $\mu^{\prime}(x)$ is bounded due  our assumptions and from Theorem~1 in \cite{delyon1999small} and Lemma~\ref{lem:v_ergodicity} in Appendix~\ref{sec:appendix} it follows that
+Note that $\mu^{\prime}(x)$ is bounded due  our assumptions and from \cite[Theorem~1]{delyon1999small} and Lemma~\ref{lem:v_ergodicity} in Appendix~\ref{sec:appendix} it follows that
 \[
 \mathsf{E}\left[\rme^{-u\gamma\left(\sum_{k=l}^{j}[\mu'(X^x_{k-1})-\pi_\gamma(\mu')]\right)}\right]\leq C_1 \rme^{\varkappa n\gamma^2}(1+V(x)),\quad u\gamma\leq \gamma_0,
 \]
@@ -1389,15 +1391,7 @@ Thus the final bound follows:
 
 \appendix
 \section{Bounds for moments of  ULA}\label{sec:appendix}
-First let us introduce some definitions
-\begin{definition}
-\label{def:drift}
-We say that the Markov kernel $Q_{\gamma}$ satisfies Foster-Lyapunov drift condition if there exist a measurable function $V: X \rightarrow [1; +\infty)$, real numbers $\lambda \in (0,1)$ and $C > 0$ such that for any $x \in X$,
-\begin{equation}
-\label{eq:lyapunov}
-Q_{\gamma}V(x) \leq \lambda^{\gamma} V(x) + \gamma C
-\end{equation}
-\end{definition}
+
 
 \begin{definition}
 \label{def:v_ergodicity}
@@ -1408,21 +1402,36 @@ d_V(\delta_xQ^{1,n},\pi) \leq C\rho^n V(x)
 \end{equation}
 \end{definition}
 
-Note that conditions {\bf (H1)} and {\bf (H2)} imply (\cite[Lemma~16]{brosse2018diffusion}) that for some $K_2 > 0$ it holds
+In all the sequel, without loss of generality, we assume that $\nabla U(0)=0$ and we set
 \begin{equation}
-\label{eq:H3}
-\ps{\nabla U(x)}{x} \geq \frac{m}{2}\|x\|^2, \quad \|x\| \geq K_2
+\label{eq:definition-V}
+V(x) = 1 + \|x\|^2 \eqsp.
 \end{equation}
-
-Now we shall show that conditions {\bf (H1)} and {\bf (H2)} are sufficient to show that ULA kernel $Q_\gamma$ satisfies the drift condition \eqref{eq:lyapunov}
-
+\begin{lem}
+  \label{lem:quadratic_behaviour}
+  Assume {\bf (H1)} and {\bf (H2)}. Then there exists $K_2 \geq 0$ such that for any $ \| x \| \geq K_2$ $\ps{\nabla U(x)}{x} \geq (m/2) \| x \|^2$.
+\end{lem}
+\begin{proof}
+  Using {\bf (H1)} and {\bf (H2)}, we have for any $x \in \rset^d$, $\| x \|\geq K_1$,
+  \begin{align*}
+    \ps{\nabla U(x)}{x}
+    &= \int_{0}^{K_1/\| x \|} D^2 U(t x ) [x^{\otimes 2}] \rmd t + \int_{K_1/\| x \|} ^ 1 D^2 U(t x ) [x^{\otimes 2}] \rmd t\\
+    & \geq m \|x \|^2 \{1- K_1 (1 +L/m)   / \| x \| \}\eqsp,
+  \end{align*}
+which proves the first statement. The second statement is obvious.
+\end{proof}
 \begin{lem}
 \label{lem:drift}
- Assume that {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$. 
- Then the kernel $Q_\gamma$ from \eqref{eq:ula_kernel} satisfies drift condition \eqref{eq:lyapunov} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L}$ with drift function $V(x) = 1 + \|x\|^2$,   $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = \frac{25K_2^2}{8} + d + m$ with $K_2$ from \eqref{eq:H3}, $m$ from {\bf (H2)}.
+ Assume that {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$.
+ Then, for any $\gamma \in (0,\bar{\gamma}]$ with $\overline{\gamma} = m/4$  the kernel $Q_\gamma$ from \eqref{eq:ula_kernel} satisfies drift condition
+ \begin{equation}
+\label{eq:lyapunov}
+Q_{\gamma}V(x) \leq \lambda^{\gamma} V(x) + \gamma C
+\end{equation}
+with   $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = 25K_2^2/8 + d + m$ with $K_2$ from \eqref{eq:H3}, $m$ from {\bf (H2)}.
 \end{lem}
 
-\begin{proof} Let $V(x) = 1 + \|x\|^2$, then
+\begin{proof} 
 $$
 Q_{\gamma}V(x) = \int\limits_{\rset^d}V(y)Q_{\gamma}(x,dy) = \int\limits_{\rset^d}\frac{(1+\|y\|^2)}{(2\pi\gamma)^{\frac{d}{2}}}\exp{\left(-\frac{\|y-x+\gamma\nabla U(x)\|^2}{2\gamma}\right)}\,dy =
 $$
