@@ -1428,22 +1428,17 @@ which proves the first statement. The second statement is obvious.
 \label{eq:lyapunov}
 Q_{\gamma}V(x) \leq \lambda^{\gamma} V(x) + \gamma C
 \end{equation}
-with   $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = 25K_2^2/8 + d + m$ with $K_2$ from \eqref{eq:H3}, $m$ from {\bf (H2)}.
+with   $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = 25K_2^2/8 + d + m$ with $K_2$ from Lemma~\ref{lem:quadratic_behaviour}, and $m$ from {\bf (H2)}.
 \end{lem}
 
 \begin{proof} 
-$$
-Q_{\gamma}V(x) = \int\limits_{\rset^d}V(y)Q_{\gamma}(x,dy) = \int\limits_{\rset^d}\frac{(1+\|y\|^2)}{(2\pi\gamma)^{\frac{d}{2}}}\exp{\left(-\frac{\|y-x+\gamma\nabla U(x)\|^2}{2\gamma}\right)}\,dy =
-$$
-
-$$
-=1 + \frac{1}{(2\pi\gamma)^{\frac{d}{2}}}\int\limits_{\mathbb{R}^d}\|z + x - \gamma \nabla U(x)\|^2 \exp{\left(-\frac{\|z\|^2}{2\gamma}\right)}\,dz
-$$
-Let us first consider the case $x \notin B(0,K_2)$. Note that
-$$
-\|z+x-\gamma \nabla U(x)\|^2 = \|z\|^2 + 2 \langle z, x - \gamma \nabla U(x) \rangle + \|x - \gamma \nabla U(x)\|^2
-$$
-and the linear term vanishes after integration, moreover, for $Z \sim \mathcal{N}(0,\gamma I_d)$, it holds $\mathbb{E}\|Z\|^2 = \gamma d$. It remains to notice that due to \eqref{eq:H3},
+Note first that
+\[
+Q_{\gamma}V(x) = 
+1+ \| x - \gamma \nabla U(x) \|^2 + \gamma d
+\]
+Let us first consider the case $x \notin B(0,K_2)$.  
+It remains to notice that, by Lemma~\ref{lem:quadratic_behaviour}, we get
 \[
 \|x - \gamma \nabla U(x) \|^2 = \|x\|^2 - 2\gamma \langle \nabla U(x), x\rangle + \gamma^2 \|\nabla U(x)\|^2 \leq \left(1 - \gamma m + 2\gamma^2 L^2\right)\|x\|^2
 \]
@@ -1451,7 +1446,7 @@ Since $\gamma < \frac{m}{4L}$, we obtain
 $$
 Q_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma d + (\gamma m - 2\gamma^2 L^2) \leq \exp^{-\frac{\gamma m}{2}}V(x) + \gamma (d + m)
 $$
-Now let $x \in B(0,K_2)$. Then simply using $\|x-\gamma \nabla U(x)\|^2 \leq 2(1+L\gamma)^2\|x\|^2$, we obtain
+Consider now the case $x \in B(0,K_2)$. Then simply using $\|x-\gamma \nabla U(x)\|^2 \leq 2(1+L\gamma)^2\|x\|^2$, we obtain
 $$
 Q_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma\left((m - 2\gamma L^2)(1+\|x\|^2) + d + 2(1+L\gamma)^2\|x\|^2\right) \leq
 $$
