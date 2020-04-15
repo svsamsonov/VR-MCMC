@@ -1,7 +1,7 @@
 import numpy as np
-from baselines import set_function
+from baselines import set_function, Spectral_var
 
-def ZVpolyOne(traj, traj_grad, f_target, params):
+def ZVpolyOne(traj, traj_grad, f_target, params, W_spec):
     n, d = traj.shape
     if f_target == "sum":
         samples = traj.sum(axis = 1).reshape(-1,1)
@@ -24,9 +24,10 @@ def ZVpolyOne(traj, traj_grad, f_target, params):
     paramZV1 = -np.dot(A,covariance[:d, d:])
     ZV1 = samples - np.dot(traj_grad, paramZV1)
     mean_ZV1 = np.mean(ZV1, axis = 0)
-    return mean_ZV1
+    var_ZV1 = Spectral_var(ZV1[:,0],W_spec)
+    return mean_ZV1, var_ZV1
 
-def ZVpolyTwo(traj, traj_grad, f_target, params = None):
+def ZVpolyTwo(traj, traj_grad, f_target, params, W_spec):
     n, d = traj.shape
     if f_target == "sum":
         samples = traj.sum(axis = 1).reshape(-1,1)
@@ -60,9 +61,10 @@ def ZVpolyTwo(traj, traj_grad, f_target, params = None):
     paramZV2 = - np.dot(A,B)
     ZV2 = samples + np.dot(Lpoisson, paramZV2)
     mean_ZV2 = np.mean(ZV2, axis = 0)
-    return mean_ZV2
+    var_ZV2 = Spectral_var(ZV2[:,0],W_spec)
+    return mean_ZV2, var_ZV2
 
-def CVpolyOne(traj,traj_grad, f_target, params = None):
+def CVpolyOne(traj,traj_grad, f_target, params, W_spec):
     n, d = traj.shape
     if f_target == "sum":
         samples = traj.sum(axis = 1).reshape(-1,1)
@@ -83,9 +85,10 @@ def CVpolyOne(traj,traj_grad, f_target, params = None):
     paramCV1 = covariance[:d, d:]
     CV1 = samples - np.dot(traj_grad, paramCV1)
     mean_CV1 = np.mean(CV1, axis = 0)
-    return mean_CV1
+    var_CV1 = Spectral_var(CV1[:,0],W_spec)
+    return mean_CV1, var_CV1
 
-def CVpolyTwo(traj, traj_grad, f_target, params = None):
+def CVpolyTwo(traj, traj_grad, f_target, params, W_spec):
     n, d = traj.shape
     if f_target == "sum":
         samples = traj.sum(axis = 1).reshape(-1,1)
@@ -127,9 +130,10 @@ def CVpolyTwo(traj, traj_grad, f_target, params = None):
     paramCV2 = np.dot(A,B)
     CV2 = samples + np.dot(Lpoisson, paramCV2)
     mean_CV2 = np.mean(CV2, axis = 0)
-    return mean_CV2
+    var_CV2 = Spectral_var(CV2[:,0],W_spec)
+    return mean_CV2,var_CV2
 
-def Eval_ZVCV(traj,traj_grad, f_target, params = None):
+def Eval_ZVCV(traj,traj_grad, f_target, params, W_spec):
     if f_target == "sum":
         samples = traj.sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_comps":
@@ -145,13 +149,13 @@ def Eval_ZVCV(traj,traj_grad, f_target, params = None):
         samples = set_function(f_target,traj,[0],params)
         traj = traj[0]
         samples = samples[0]
-    print(samples.shape)
     mean_vanilla = np.mean(samples)
-    mean_ZV1 = ZVpolyOne(traj,traj_grad,f_target,params)
-    mean_ZV2 = ZVpolyTwo(traj,traj_grad,f_target,params)
-    mean_CV1 = CVpolyOne(traj,traj_grad,f_target,params)
-    mean_CV2 = CVpolyTwo(traj,traj_grad,f_target,params)
-    return (mean_vanilla,mean_ZV1, mean_ZV2, mean_CV1, mean_CV2)
+    vars_vanilla = Spectral_var(samples[:,0],W_spec)
+    mean_ZV1, var_ZV1 = ZVpolyOne(traj,traj_grad,f_target,params,W_spec)
+    mean_ZV2, var_ZV2 = ZVpolyTwo(traj,traj_grad,f_target,params,W_spec)
+    mean_CV1, var_CV1 = CVpolyOne(traj,traj_grad,f_target,params,W_spec)
+    mean_CV2, var_CV2 = CVpolyTwo(traj,traj_grad,f_target,params,W_spec)
+    return (mean_vanilla,mean_ZV1, mean_ZV2, mean_CV1, mean_CV2), (vars_vanilla, var_ZV1, var_ZV2, var_CV1, var_CV2)
     
     
     
