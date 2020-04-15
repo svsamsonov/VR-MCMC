@@ -50,9 +50,9 @@
 \newtheorem{definition}{Definition}
 \newtheorem{lem}[thm]{Lemma}
 \newtheorem{prop}[thm]{Proposition}
-\newtheorem{remark}{Remark}
-\newtheorem{cor}{Corollary}
-\newtheorem{example}{Example}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{example}[thm]{Example}
 \newenvironment{proof}{{\noindent \bf Proof }}
  {{\hspace*{\fill}\proofendsign\par\bigskip}}
 \def\TV{\operatorname{TV}}
@@ -75,8 +75,8 @@
 \begin{document}
 
 \begin{frontmatter}
-\title{Variance reduction for MCMC methods via martingale representations}
-\runtitle{Variance reduction for MCMC}
+\title{Variance reduction for Markov chains via martingale representations}
+\runtitle{Variance reduction for Markov chains}
 %\thankstext{T1}{This research was }
 
 
@@ -113,7 +113,7 @@ National University Higher School of Economics, Moscow, Russia
 \end{aug}
 
 \begin{abstract}
-In this paper we propose an efficient variance reduction approach for  MCMC algorithms relying on a novel discrete time martingale representation for Markov chains. Our approach is fully non-asymptotic and does not require any type of ergodicity or special product structure of the underlying density.  By rigorously analyzing the  convergence properties of the proposed algorithm, we show that it's complexity is indeed asymptotically smaller than one of the original MCMC algorithm. The numerical performance of the new method is illustrated  in the case of Gaussian mixtures and Bayesian regression models.
+In this paper we propose an efficient variance reduction approach for  additive functionals of Markov chains relying on a novel discrete time martingale representation. Our approach is fully non-asymptotic and does not require the knowledge of the stationary distribution (and even any type of ergodicity) or specific structure of the underlying density.  By rigorously analyzing the  convergence properties of the proposed algorithm, we show that its complexity is indeed asymptotically smaller than one of the naive algorithm. The numerical performance of the new method is illustrated for Markov Chain Monte Carlo (MCMC) methods.
 \end{abstract}
 
 \begin{keyword}[class=MSC]
@@ -131,37 +131,23 @@ In this paper we propose an efficient variance reduction approach for  MCMC algo
 \end{frontmatter}
 
 \section{Introduction}
-
-Monte Carlo integration typically has an error variance of the form
-$\sigma^{2}/n,$ where $n$ is a sample size and \(\sigma^2\) is the variance of  integrand. We can make the variance smaller
-by using a larger value of $n$.  Alternatively,
- we can  reduce $\sigma^2$ instead of increasing the sample size \(n\). To this end, one can try to construct
-a new Monte Carlo experiment with the same expectation as the original one
-but with a lower variance $\sigma^2$. Methods to achieve this are known as variance
-reduction techniques. Variance reduction plays an important role in
-Monte Carlo and Markov Chain Monte Carlo methods. Introduction to many of the variance reduction techniques can be found in \cite{rubinstein2016simulation}, \cite{GobetBook} and \cite{glasserman2013monte}. Recently one witnessed a revival of interest in efficient variance reduction methods  for MCMC algorithms, see for example \cite{dellaportas2012control}, \cite{mira2013zero}, \cite{brosse2018diffusion} and references therein.
+Markov chains and Markov Chain Monte Carlo algorithms play crucial role in modern numerical analysis, finding various applications in such research areas as Bayesian inference, reinforcement learning, online learning. As an illustration, suppose that we aim at computing $\pi(f):= \PE\left[f(X)\right]$, where $X$ is a random vector in $\mathcal{X} \subseteq \rset^d$ admitting a density $\pi$ and $f$ is a square-integrable function $f:\mathcal{X} \to \rset$, $f \in L^2(\pi)$. Typically it is not possible to compute $\pi(f)$ analytically, leading to the Monte Carlo methods as a popular solution. Given an independent identically distributed observations $X_1,\ldots,X_n$ from $\pi$, we might estimate $\pi(f)$ by $\hat{\pi}(f):=1/n\sum_{k=1}^{n}f(X_k)$. The variance of such estimate equals $\sigma^2(f)/n$  with $\sigma^2(f)$ being the variance of the integrand. The first way to obtain tighter estimate $\hat{\pi}(f)$ is simply to increase the sample size $n$. Unfortunately, this solution might be prohibitively costly, especially when the dimension $d$ is large enough or sampling from $\pi$ is complicated. An alternative approach is to decrease $\sigma^2(f)$ by constructing a new Monte-Carlo experiment with the same expectation as the original one, but with a lower variance. Methods to achieve this are known as variance
+reduction techniques. Introduction to many of them can be found in \cite{rubinstein2016simulation}, \cite{GobetBook} and \cite{glasserman2013monte}. Recently one witnessed a revival of interest in efficient variance reduction methods  for Markov chains, mostly with applications to MCMC algorithms; see for example \cite{dellaportas2012control}, \cite{mira2013zero}, \cite{oates:girolami:chopin:2016}, \cite{south:mira:drovandi:2018}, \cite{brosse2018diffusion} and references therein.
 \par
-Suppose that we wish to compute $\pi(f):=\mathsf{E}\left[f(X)\right]$, where $X$
-is a random vector-valued in $\mathcal{X}\subseteq\mathbb{R}^{d}$ with a density $\pi$ and $f:$
-$\mathcal{X}\to\mathbb{R}$ with $f\in L^2(\pi)$.
-The idea of the control variates variance reduction method
- is to find a cheaply computable random variable $\zeta$ with $\mathsf{E}[\zeta]=0$ and \(\mathsf{E}[\zeta^2]<\infty,\)
-such that the variance of the r.v. $f(X)-\zeta$ is small.  The complexity of the problem of constructing classes $Z$ of control variates \(\zeta\) satisfying   $\mathsf{E}[\zeta]=0$ essentially depends on the degree of our knowledge on \(\pi.\)
-For example, if \(\pi\) is analytically known and satisfies some regularity conditions, one can apply the well-known technique of  polynomial interpolation to construct control variates enjoying  some optimality properties, see, for example, Section~3.2 in \cite{dimov2008monte}. Alternatively, if an orthonormal system in \(L^2(\pi)\) is analytically available, one can build control variates \(\zeta\) as a linear combination of the corresponding basis functions, see \cite{GobetCV}. Furthermore, if \(\pi\) is known only up to a normalizing constant (which is often the case in Bayesian statistics), one can apply the recent approach of control variates  depending only on the gradient \(\nabla \log \pi\)  using Schr\(\ddot{\text{o}}\)dinger-type Hamiltonian operator in  \cite{mira2013zero} and Stein operator in \cite{brosse2018diffusion}.
+One of the popular approaches to variance reduction is the control variates method. We aim at constructing cheaply computable random variable $\zeta$ (control variate) with $\PE[\zeta] = 0$ and $\PE[\zeta^2] < \infty$, such that the variance of the r.v. $f(X) + \zeta$ is small. The complexity of the problem of constructing classes $Z$ of control variates \(\zeta\) satisfying   $\PE[\zeta]=0$ essentially depends on the degree of our knowledge on \(\pi.\)
+For example, if \(\pi\) is analytically known and satisfies some regularity conditions, one can apply the well-known technique of  polynomial interpolation to construct control variates enjoying  some optimality properties, see, for example \cite[Section~3.2]{dimov2008monte}. Alternatively, if an orthonormal system in \(L^2(\pi)\) is analytically available, one can build control variates \(\zeta\) as a linear combination of the corresponding basis functions, see \cite{GobetCV}. Furthermore, if \(\pi\) is known only up to a normalizing constant (which is often the case in Bayesian statistics), one can apply the recent approach of control variates  depending only on the gradient \(\nabla \log \pi\)  using Schr\(\ddot{\text{o}}\)dinger-type Hamiltonian operator in  \cite{assaraf1999zero}, \cite{mira2013zero}, and Stein operator in \cite{brosse2018diffusion}.
 In some situations \(\pi\) is not known analytically, but \(X\) can be represented as a function of  simple random variables with known distribution.
 Such  situation arises, for example, in the case of functionals of  discretized diffusion processes. In this case a Wiener chaos-type decomposition can be used to construct control variates with nice theoretical properties, see \cite{belomestny2018stratified}.
 Note that in order to compare different  variance reduction approaches, one has to analyze their complexity, that is, the number of numerical operations required to achieve a prescribed magnitude of the resulting variance.
-
-
-The situation becomes much more difficult in the case of MCMC algorithms, where one  has to work with a
-Markov chain \((X_p),\) \(p=0,1,2,\ldots,\) whose marginal distribution  converges  to \(\pi\) as time grows. One important class of the variance reduction methods in this case  is based on the Poisson equation for the corresponding  Markov chain. It was observed in~\cite{henderson1997variance}  that if a time-homogeneous Markov chain \((X_p)\) is stationary with stationary distribution \(\pi,\) then for any real-valued function \(G \in L^1(\pi) \) defined on the state space of the Markov chain \((X_p),\)  the function \(U(x) := G(x)-\mathsf{E}[G(X_{1})|X_0 = x]\) has zero mean with respect to \(\pi\).  The best choice for the function \(G\) corresponds to a solution of the Poisson equation  \(\mathsf{E}[G(X_{1})|X_0 = x]-G(x)=-f(x)+\pi(f)\).  Moreover, it is also related to the minimal asymptotic variance in the corresponding central limit theorem, see \cite{duncan2016variance} and \cite{mira2013zero}.   Although the Poisson equation involves the quantity of interest \(\pi(f)\)  and can not be  solved explicitly in most cases, this idea still can be used to construct some  approximations for the optimal zero-variance control variates. For example,  \cite{henderson1997variance} proposed to compute approximations for the solution of the Poisson equation for specific Markov chains with particular emphasis on models arising in stochastic network theory. In \cite{dellaportas2012control} and \cite{brosse2018diffusion}  series-type control variates are introduced and studied for reversible Markov chains. It is assumed in \cite{dellaportas2012control}  that the one-step conditional expectations  can be computed explicitly  for a set of basis functions. The authors in \cite{brosse2018diffusion} proposed another approach tailored to diffusion setting which does not require the computation of integrals of basis functions and only involves  applications of the underlying generator.
+\par
+Unfortunately it is not always possible to generate independent observations distributed according to $\pi$. To overcome this issue one might consider MCMC algorithms, where the exact samples from $\pi$ are replaced by \((X_p),\) \(p=0,1,2,\ldots,\) forming a Markov chain with a marginal distribution of $X_n$ converging to $\pi$ in a suitable metrics as $n$ grows. It is still possible to apply the control variates method in the similar manner to a simple Monte-Carlo case, yet the choice of the optimal control variate becomes much more difficult. Due to significant correlations between the elements of the Markov chain it might be not enough to minimize the marginal variances of \((X_p)_{p \geq 0}\) as it was in independent case. Instead one may choose the control variate by minimizing the corresponding asymptotic variance of the chain as it is suggested in~\cite{belomestny2019esvm}. At the same time it is possible to express the optimal control variate in terms of the solution of the Poisson equation for the corresponding Markov chain \((X_p)\). As it was observed in~\cite{henderson1997variance,henderson2004}, for a time-homogeneous Markov chain \(X_p\) with a stationary distribution \(\pi\), the function $U_{G}(x) := G(x)-\PE[G(X_{1})|X_0 = x]$ has a zero mean with respect to $\pi$ for arbitrary real-valued function \(G: \mathcal{X} \to \rset\), such that \(G  \in L^1(\pi)\). Hence, $U_{G}(x)$ is a valid control functional for a suitable choice of $G$, with the best $G$ given by a solution of the Poisson equation \(\PE [G(X_{1})|X_0 = x]-G(x)=-f(x)+\pi(f)\). For such $G$ we obtain $f(x) + U_G(x) = f(x) - f(x) + \pi(f) = \pi(f)$ leading to an ideal estimator with zero variance. Despite the fact that the Poisson equation involves the quantity of interest \(\pi(f)\)  and can not be  solved explicitly in most cases, this idea still can be used to construct some  approximations for the optimal zero-variance control variates. For example,  \cite{henderson1997variance} proposed to compute approximations for the solution of the Poisson equation for specific Markov chains with particular emphasis on models arising in stochastic network theory. In \cite{dellaportas2012control} and \cite{brosse2018diffusion}  series-type control variates are introduced and studied for reversible Markov chains. It is assumed in \cite{dellaportas2012control}  that the one-step conditional expectations  can be computed explicitly  for a set of basis functions. The authors in \cite{brosse2018diffusion} proposed another approach tailored to diffusion setting which does not require the computation of integrals of basis functions and only involves  applications of the underlying generator.
 \par
 In this paper we focus on the  Langevin type algorithms which got much attention recently, see \cite{dalalyan2017theoretical,durmus:moulines:2017, MR2353037, MR3861816, MR2977986} and references therein. We propose  a generic variance reduction method for these and other types algorithms, which is purely non-asymptotic and does not require that    the conditional expectations of the corresponding Markov chain can be computed  or that the generator is known analytically. Moreover, we do not need to assume stationarity or/and sampling under the invariant distribution \(\pi.\) We rigorously analyse the convergence of the method and study its complexity. It is shown that  our variance-reduced Langevin algorithm outperforms the standard Langevin algorithms in terms of complexity.
 \par
 The paper is organized as follows.  In Section~\ref{sec:setup} we set up the problem and introduce some notations. Section~\ref{seq:mart_repr} contains a novel martingale representation and shows how this representation can be used for variance reduction. In Section~\ref{sec:ula_analysis} we analyze the performance of the proposed variance reduction algorithm in the case of Unadjusted Langevin Algorithm (ULA).  Finally, numerical examples are presented in Section~\ref{sec:num}.
 
 \paragraph{Notations. }\label{par:notations}
-We use the notations $\nset=\{1,2,\ldots\}$ and $\nset_0=\mathbb N\cup\{0\}$. We denote $\boldsymbol{\varphi}(z)=(2\pi)^{-d/2} \exp\{-|z|^2/2\}$, $z\in\mathbb R^d$ probability density function of the $d-$dimensional standard normal distribution. For $x \in \rset^d$ and $r>0$ let $B_r(x) = \{y \in \rset^d | \|y - x\| < r\}$ where $\|\cdot\|$ is a standard Euclidean norm. For the twice differentiable function $g: \rset^d \rightarrow \rset$ we denote by $D^2g(x)$ its Hessian at point $x$. For $m\in\mathbb N$, a smooth function
+We use the notations $\nset=\{1,2,\ldots\}$ and $\nset_0=\mathbb N\cup\{0\}$. We denote $\boldsymbol{\varphi}(z)=(2\pi)^{-d/2} \exp(-|z|^2/2)$, $z\in\mathbb R^d$ probability density function of the $d-$dimensional standard normal distribution. For $x \in \rset^d$ and $r>0$ let $B_r(x) = \{y \in \rset^d | \|y - x\| < r\}$ where $\|\cdot\|$ is a standard Euclidean norm. For the twice differentiable function $g: \rset^d \rightarrow \rset$ we denote by $D^2g(x)$ its Hessian at point $x$. For $m\in\mathbb N$, a smooth function
 $h\colon\mathbb R^{d\times m}\to\mathbb R$
 with arguments being denoted
 $(y_1,\ldots,y_m)$, $y_i\in\mathbb R^d$, $i=1,\ldots,m$,
@@ -182,9 +168,9 @@ In the particular case $m=1$ we drop the subscript $y_1$ in that notation. For p
 \tvnorm{\mu-\nu}=\sup_{A \in \mathcal{B}(\rset^d)}
 |\mu(A)-\nu(A)| \eqsp.
 \]
-where $\mathcal{B}(\rset^d)$ is a Borel $\sigma$-algebra of $\rset^d$. For a bounded Borel function $f: \rset^d \rightarrow \rset$ denote $\mathrm{osc}(f):=\sup_{x\in\mathbb R^d}f(x)-\inf_{x\in\mathbb R^d}f(x)$. Given a function $V: \rset^d \rightarrow \rset$, for a function $f: \rset^d \rightarrow \rset$ we define $\|f\|_{V} = \sup_{x \in \rset^d}\frac{|f(x)|}{V(x)}$ and the corresponding $V-$norm between probability measures $\mu$ and $\nu$ on $\mathcal{B}(\rset^d)$ as
+where $\mathcal{B}(\rset^d)$ is a Borel $\sigma$-algebra of $\rset^d$. For a bounded Borel function $f: \rset^d \rightarrow \rset$ denote $\mathrm{osc}(f):=\sup_{x\in\mathbb R^d}f(x)-\inf_{x\in\mathbb R^d}f(x)$. Given a function $V: \rset^d \rightarrow \rset$, for a function $f: \rset^d \rightarrow \rset$ we define $\|f\|_{V} = \sup_{x \in \rset^d} |f(x)|/V(x)$ and the corresponding $V-$norm between probability measures $\mu$ and $\nu$ on $\mathcal{B}(\rset^d)$ as
 \[
-d_V(\mu, \nu) = \|\mu - \nu\|_{V} = \sup_{\|f\|_{V} \leq 1} \left[\int\limits_{\rset^d}f(x)\,d\mu(x) - \int\limits_{\rset^d}f(x)\,d\nu(x)\right]  \eqsp.
+d_V(\mu, \nu) = \|\mu - \nu\|_{V} = \sup_{\|f\|_{V} \leq 1} \left[\int\nolimits_{\rset^d}f(x)\,d\mu(x) - \int\nolimits_{\rset^d}f(x)\,d\nu(x)\right]  \eqsp.
 \]
 
 
@@ -202,7 +188,7 @@ X_{p}=\Phi_{p}(X_{p-1},\xi_{p}),\quad p=1,2,\ldots ,\quad X_{0}=x,
 for some i.i.d.  random vectors \(\xi_p\in \mathbb{R}^m\) with distribution \(P_{\xi}\)
 and some Borel-measurable
 functions $\Phi_{p}\colon\mathcal{X}\times\mathbb{R}^{m}\to\mathcal{X}.$
-In fact, this is quite general class of Markov chains (see Theorem~1.3.6 in ~\cite{moulines2018})
+In fact, this is quite general class of Markov chains (see \cite[Theorem~1.3.6]{moulines2018})
 and many well-known MCMC algorithms can be represented in the form \eqref{eq:chain_gen}.
 Let us consider two popular examples.
 \begin{example}[Unadjusted Langevin Algorithm]
@@ -217,11 +203,12 @@ standard Gaussian random vectors. If
 $\mu= \nabla U$
 for some continuously differentiable function $U,$ then Markov chain~\eqref{eq:chain} can be used to approximately sample from the density
 \begin{equation}\label{eq:stationary_distr}
-\pi(x)= \mathrm{const}\,\rme^{-\frac{U(x)}{2}}, \quad \mathrm{const}= \left. 1 \middle /{\int_{\mathbb{R}^{d}} \rme^{-\frac{U(x)}{2}}\, \rmd x,} \right.
+\pi(x)= Z^{-1} \rme^{-U(x)/2}, \quad Z= \int_{\mathbb{R}^{d}} \rme^{-U(x)/2}\, \rmd x,
 \end{equation}
-provided that \(\int_{\mathbb{R}^{d}} \rme^{-\frac{U(x)}{2}}\,\rmd x\) is finite. This method is usually referred to as
-Unadjusted Langevin Algorithm (ULA).
-In fact the Markov chain~\eqref{eq:chain}
+provided that \(Z < \infty\).
+This method is usually referred to as Unadjusted Langevin Algorithm (ULA).
+Denote by \(W\) the standard \(\mathbb{R}^m\)-valued Brownian motion.
+The Markov chain~\eqref{eq:chain}
 arises as the Euler-Maruyama discretization
 of the Langevin diffusion
 \[
@@ -245,14 +232,14 @@ Given \(X_p=x\)\;
 \begin{eqnarray*}
 X_{p+1}=
 \begin{cases}
-Y_p, & \texttt{ with probability } \alpha(x,Y_p),
+Y_p, & \texttt{ with probability } \alpha_p(x,Y_p),
 \\
-x, &  \texttt{ with probability } 1-\alpha(x,Y_p),
+x, &  \texttt{ with probability } 1-\alpha_p(x,Y_p),
 \end{cases}
 \end{eqnarray*}
 where
 \begin{eqnarray*}
-\alpha(x,y)=\min\left\{1,\frac{\pi(y)}{\pi(x)}\frac{q_p(x|y)}{q_p(y|x)}\right\}.
+\alpha_p(x,y)=\min\left\{1,\frac{\pi(y)}{\pi(x)}\frac{q_p(x|y)}{q_p(y|x)}\right\}.
 \end{eqnarray*}
 \end{enumerate}
 \end{algorithm}
@@ -261,12 +248,9 @@ support to eventually reach any region
 of the state space \(\mathcal{X}\) with positive mass
 under \(\pi\), then this transition is irreducible and $\pi$ is a maximal irreducibility measure \cite{mengersen:tweedie:1996}. The  Metropolis-Adjusted Langevin algorithm (MALA) takes  \eqref{eq:chain} as proposal, that is,
 \begin{eqnarray*}
-q_p(y|x)=(\gamma_{p+1})^{-d/2}\boldsymbol{\varphi}\Bigl([y-x+\gamma_{p+1}\mu(x)]/\sqrt{\gamma_{p+1}}\Bigr),
+q_p(y|x)=(\gamma_{p+1})^{-d/2}\boldsymbol{\varphi}\Bigl([y-x+\gamma_{p+1}\mu(x)]/\sqrt{\gamma_{p+1}}\Bigr) \,.
 \end{eqnarray*}
-where
-$\boldsymbol{\varphi}(z)=(2\pi)^{-d/2} \exp\{-|z|^2/2\}$,
-$z\in\mathbb R^d$, denotes the density of a $d$-dimensional
-standard Gaussian random vector.  The MALA algorithms usually provide noticeable speed-ups in convergence for most problems. It is not difficult to see that the MALA chain can be compactly represented in the form
+The MALA algorithms usually provide noticeable speed-ups in convergence for most problems. It is not difficult to see that the MALA chain can be compactly represented in the form
 \begin{align*}
 X_{p+1} &=X_p+\mathbbm{1}\bigl(U_{p+1}\leq \alpha(X_{p},Y_{p})\bigr)(Y_{p}-X_p),  \,
 Y_{p}&=X_p-\gamma_{p+1}\mu(X_p)+\sqrt{\gamma_{p+1}}Z_{p+1},
@@ -282,7 +266,7 @@ where \((U_{p})_{p\geq 1}\) is an i.i.d. sequence of uniformly distributed on \(
 \label{eq:sde-inv}
 \rmd X_t=b(X_t)\, \rmd t+\sigma(X_t)\, \rmd W_t,\quad t\geq 0,	
 \end{eqnarray}
-where \(W\) is a standard \(\mathbb{R}^m\)-valued Brownian motion, \(b:\) \(\mathbb{R}^d\to \mathbb{R}^d\) and \(\sigma:\) \(\mathbb{R}^d\times \mathbb{R}^m \to \mathbb{R}^d\) are locally Lipschitz continuous functions with at most linear growth.
+where \(b:\) \(\mathbb{R}^d\to \mathbb{R}^d\) and \(\sigma:\) \(\mathbb{R}^d\times \mathbb{R}^m \to \mathbb{R}^d\) are locally Lipschitz continuous functions with at most linear growth.
 The process \((X_t)_{t\geq 0}\) is a Markov
 process and let \(L\) denote its infinitesimal generator defined by
 \begin{equation*}
@@ -306,7 +290,7 @@ where \(\Gamma_n=\gamma_1+\ldots+\gamma_n\) and \((\gamma_n)_{n\geq 1}\) is a no
 \end{eqnarray*}
 Due to typically high correlation between \(X_0,X_1,\ldots\)  variance reduction is of crucial importance here.
 As a matter of fact, in many cases there is no explicit formula for the invariant measure and this makes the use of gradient  based  variance reduction techniques (see e.g. \cite{mira2013zero}) impossible in this case.
-On the contrary, our method can be directly used to reduce the variance of the ergodic estimator \(\pi_n^\gamma\) without explicit knowledge of \(\pi.\)
+%On the contrary, our method can be directly used to reduce the variance of the ergodic estimator \(\pi_n^\gamma\) without explicit knowledge of \(\pi.\)
 \end{example}
 \section{Martingale representation}
 \label{seq:mart_repr}
@@ -316,7 +300,7 @@ In this section we give a general discrete-time martingale representation for  M
 \end{equation*}
 with \(\xi \sim P_{\xi}.\)
 Notice that this implies that the random variables
-$\phi_k(\xi)$, $k\ge1$, are centered. As an example, we can take  multivariate Hermite polynomials for the ULA algorithm and a tensor product of shifted Legendre polynomials for "uniform part" and Hermite polynomials for "Gaussian part"  of the random variable $\xi = (u, z)^T$ in MALA, as the shifted Legendre polynomials are orthogonal with respect to the Lebesgue measure on \([0,1].\)  
+$\phi_k(\xi)$, $k\ge1$, are centered. As an example, we can take  multivariate Hermite polynomials for the ULA algorithm and a tensor product of shifted Legendre polynomials for "uniform part" and Hermite polynomials for "Gaussian part"  of the random variable $\xi = (u, z)^T$ in MALA, as the shifted Legendre polynomials are orthogonal with respect to the Lebesgue measure on \([0,1].\)
 \par
 Let  $(\xi_p)_{p \in \nset}$ be i.i.d. $m-$dimensional random vectors. We denote by $(\mathcal{G}_p)_{p \in \nset_0}$  the filtration generated by $(\xi_p)_{p \in \nset}$ with the convention $\mathcal{G}_0=\mathrm{triv}$. For  $x \in \rset^d, y \in \rset^{m}$ and $k \in \nset,$ let $\Phi_k(x,y)$ be a function mapping $\rset^{d+m}$ to $\rset^d$. Then we set for $l \le p$
 \begin{equation}
@@ -328,7 +312,7 @@ with the functions \(G_{l,p}:\) \(\rset^{d + m\times(p-l+1)}\to \rset^{d}\) defi
 \label{eq:definition-G-p-l}
 G_{l,p}(x,y_l,\ldots,y_p):=\Phi_p(\cdot,y_{p})\circ\Phi_{p-1}(\cdot,y_{p-1})\circ\dots\circ\Phi_{l}(x,y_{l}).
 \end{equation}
-Note that $\left(X^x_{0,p}\right)_{p \in \nset_0}$ is a Markov chain with values in $\rset^d$ of the form \eqref{eq:chain_gen}, starting at $X_0 = x$. In the sequel we write $X^x_{p}$ and $G_{p}$ as a shorthand notation for $X^x_{0,p}$ and $G_{0,p}$, respectively. 
+Note that $\left(X^x_{0,p}\right)_{p \in \nset_0}$ is a Markov chain with values in $\rset^d$ of the form \eqref{eq:chain_gen}, starting at $X_0 = x$. In the sequel we write $X^x_{p}$ and $G_{p}$ as a shorthand notation for $X^x_{0,p}$ and $G_{0,p}$, respectively.
 
 \begin{thm}\label{thm:main-repr}
 For all $p \in \nset,$ $q \leq p$, $j < q \leq p$, any Borel bounded functions $f: \rset^d \rightarrow \rset$ and all $x \in \rset^d$ the following representation holds in \(L^2(\mathsf{P})\)
@@ -350,7 +334,7 @@ a_{q,l,k}(y)=\mathsf{E}\left[f(X^y_{l-1,q})\phi_k\left(\xi_{l}\right)\right], \q
 \label{def:f_2_p}
 \mathsf{E}\left[\left |f(\Phi_{i_n}(\cdot,\xi_{i_n})\circ\Phi_{i_{n-1}}(\cdot,\xi_{i_{n-1}})\circ\dots\circ\Phi_{i_{1}}(y,\xi_{i_{1}}))\right|^{2}\right]<\infty
 \end{equation}
-Then the statement of Theorem~\ref{thm:main-repr} remains valid for $f \in \mathcal{F}_2^p$. 
+Then the statement of Theorem~\ref{thm:main-repr} remains valid for $f \in \mathcal{F}_2^p$.
 \end{remark}
 
 If  all the functions $\Phi_l,$ $l\geq 1,$ in \eqref{eq:ula_new} are equal, then the condition \eqref{def:f_2_p} reduces to $\PE \left[ f^2(X_q^y)\right] < \infty$ for all $q \leq p$ and $y \in \rset^d$. Let us denote this class of functions by $\mathcal{F}_{2,\text{hom}}^p$.
@@ -360,15 +344,31 @@ Let \((X^x_{p})_{p\geq 0}\) be a homogeneous Markov chain of the form \eqref{eq:
 \begin{eqnarray*}
 f(X^x_{q})=\mathsf{E}\left[\left.f(X^x_{q})\right|\mathcal G_{j}\right]+\sum_{k=1}^{\infty}\sum_{l=j+1}^{q}\bar a_{q-l,k}(X^x_{l-1})\phi_k\left(\xi_{l}\right)
 \end{eqnarray*}
-where for all $y \in \rset^d$
-\begin{eqnarray*}
-\bar a_{r,k}(y)=\mathsf{E}\left[f(X^y_{r})\phi_k\left(\xi_{1}\right)\right], \quad r, k\in \mathbb{N}.
-\end{eqnarray*}
+where for all $y \in \rset^d$,
+\begin{equation}
+\label{eq:definition-bar-a-0}
+\bar a_{r,k}(y)=\mathsf{E}\left[f(X^y_{r})\phi_k\left(\xi_{1}\right)\right] \,, \text{for $r, k\in \mathbb{N}$.}
+\end{equation}
 \end{cor}
+Another equivalent representation of the coefficients \(a_{p,l,k}\)  turns out to be more useful to construct estimators:
+\begin{prop}
+Let $q\geq l, k\in \nset$. Then the coefficients \(a_{q,l,k}\) in \eqref{eq:coeff_mart}  can be alternatively represented as
+\begin{eqnarray*}
+a_{q,l,k}(x)=\mathsf{E}\left[\phi_k\left(\xi\right)Q_{q,l}\left(\Phi_l(x,\xi)\right)\right]
+\end{eqnarray*}
+with \(Q_{q,l}(x)=\mathsf{E}\left[f(X^x_{l,q})\right],\) \(q\geq l.\)
+In the homogeneous case $\Phi_l=\Phi$, the coefficients $\bar{a}_{r,k}$ in \eqref{eq:definition-bar-a-0} are given respectively  for all $l\geq 1,$ by
+\begin{equation}
+\label{eq:definition-bar-a}
+\bar a_{r,k}(x)=\mathsf{E}\left[\phi_k\left(\xi\right)Q_{r}\left(\Phi(x,\xi)\right)\right] \,
+\quad \text{with  \(Q_{r}(x)=\mathsf{E}\left[f(X^x_{r})\right],\) $r\in \mathbb{N}.$}
+\end{equation}
+\end{prop}
+
 \section{Variance reduction}
 Next we show how  the representation \eqref{eq:mart_repr} can be used to  reduce the variance of MCMC algorithms.  For the sake of clarity, in the sequel we consider only the time homogeneous case ($\Phi_l = \Phi$ for all $l \in \nset$). Define
 \begin{equation}\label{eq:29032018a2}
-\pi_{n}^{N}(f)=\frac{1}{n}\sum_{p=N+1}^{N+n} f(X^x_{p}),
+\pi_{n}^{N}(f)= \frac{1}{n} \sum_{p=N+1}^{N+n} f(X^x_{p}),
 \end{equation}
 where $N\in\mathbb N_0$ is the length of the burn-in period and $n\in\mathbb N$ is
 the number of effective samples.
@@ -377,15 +377,21 @@ Fix some $K\in\mathbb N$ and denote
 \nonumber
 M_{K,n}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{k=1}^{K}\sum_{l=N+1}^{p} \bar a_{p-l,k}(X^x_{l-1})\phi_k(\xi_{l})\right]
 \\
-&=& \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left[\sum_{p=0}^{N+n-l}\bar{a}_{p,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\right].
+&=& \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}
+A_{N+n-l,k}(X_{l-1}^{x}) \phi_{k}(\xi_{l}),
 \label{eq:29032018a5}
+\end{eqnarray}
+where
+\begin{eqnarray}
+\label{eq:definition-A-s,k}
+A_{q,k}(y)=\sum_{r=0}^q \bar{a}_{r,k}(y),\quad q=0,\ldots,n-1.
 \end{eqnarray}
 Since \(X^x_{l-1}\) is independent of \(\xi_{l}\) and \(\mathsf{E}[\phi_k(\xi_{l})]=0,\) \(k\neq 0\), we obtain
 \[
 \PE[g(X^x_{l-1})\phi_{k}\left(\xi_{l}\right)] = \mathsf{E}[g(X^x_{l-1})\CPE{\phi_{k}\left(\xi_{l}\right)}{\mathcal{G}_{l-1}]} = 0
 \]
-for any integrable function $g.$  Hence the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
-The representation \eqref{eq:coeff_mart} suggests that the variance of  the   estimator
+for any  function $g \in L^2(\pi).$  Hence the r.v.  \(M_{K,n}^N(f)\) has zero mean and can be viewed as a control variate.
+The representation \eqref{eq:coeff_mart} suggests also that the variance of  the   estimator
 \begin{equation}
 \label{eq:29032018a3}
 \pi_{K,n}^N(f)=\pi_n^N(f)-M_{K,n}^N(f)
@@ -395,42 +401,64 @@ should be small for \(K\) large enough. Indeed, since $\PE[ \phi_k(\xi_l) \phi_{
 \label{eq:expression-variance}
 \PVar[\pi_{K,n}^N(f)]=\frac{1}{n^2}\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X^x_{N+l-1})],
 \end{equation}
-where 
-\begin{eqnarray}
-\label{eq:definition-A-s,k}
-A_{q,k}(y)=\sum_{r=0}^q \bar{a}_{r,k}(y),\quad q=0,\ldots,n-1.
-\end{eqnarray}
 Hence $\mathsf{Var}[\pi_{K,n}^N(f)]$ is small provided that the coefficients $A_{s,k}$ decay fast enough as $k\to \infty.$
-In   Section~\ref{sec:ula_analysis}   we provide a detailed  theoretical  analysis of  this decay  for   ULA   (see Example~\ref{exam:langevin-algorithm}).   
+In   Section~\ref{sec:ula_analysis}   we provide a detailed  theoretical  analysis of  this decay  for   ULA   (see Example~\ref{exam:langevin-algorithm}).
 \par
-The coefficients \((\bar a_{l,k})\) need to be estimated before one can apply the proposed variance reduction approach. This amounts to solving a nonparametric regression problem.
-We first present a generic regression algorithm and then in Section~\ref{sec:num} give further implementation details. Our algorithm starts with estimating the functions 
-$A_{q,k}$ for $q=0,\ldots,n-1,$ $k=1,\ldots,K. $ We first generate \(\NtrainPath\)  paths  of the chain \(X\)
+The coefficients \((\bar a_{l,k})\) need to be estimated before one can apply the proposed variance reduction approach.
+One way to estimate them is to use nonparametric regression.
+%%%%% Old Version
+%We first present a generic regression algorithm and then in Section~\ref{sec:num} give further implementation details. Our algorithm starts with estimating the functions
+%$A_{q,k}$ for $q=0,\ldots,n-1,$ $k=1,\ldots,K. $ We first generate \(\NtrainPath\)  paths  of the chain \(X\)
+%(the so-called ``training paths''):
+%\[
+%\TrainSet=\Bigl\{(X^{(s)}_{1},\ldots,X^{(s)}_{N+n}),\quad s=1,\ldots,\NtrainPath\Bigr\}
+%\]
+%with $X^{(s)}_{0}=x,$ $s=1,\ldots,T.$
+%Then we solve  for $k=1,\ldots,K,$  the least squares optimization problems
+%\begin{equation}\label{eq:06042018a1}
+%\widetilde{A}_{q,k} \in \argmin_{\psi \in \Psi} \sum_{s = 1}^{T} \left| \sum_{r = 0}^{q}  f(X_{r+N}^{(s)})\phi_k(\xi^{(s)}_{N+1}) - \psi(X^{(s)}_{N})\right|^2
+%\end{equation}
+%where \(\Psi\) is a  class of  real-valued functions on \(\mathbb{R}^d\) and $\xi^{(s)}_{1},\ldots,\xi^{(s)}_{N+n}$ are i.i.d. random variables with distribution $P_\xi$ used to construct the $s$-th trajectory of $X.$   As usual in regression analysis (see \cite[Section~11]{gyorfi2006distribution}),  we  truncate  the least squares estimates $(\widetilde{A}_{q,k})$ and set
+%\begin{eqnarray}
+%\label{eq:trunc}
+%\widehat{A}_{q,k}(y):=
+%\begin{cases}
+%\widetilde{A}_{q,k}(y), & |\widetilde{A}_{q,k}(y)|\leq W_k,
+%\\
+%W_k \,\mathrm{sign}(\widetilde{A}_{q,k}(y)), & \mathrm{otherwise}.
+%\end{cases}
+%\end{eqnarray}
+% for a sequence of positive real numbers $W_k,$ $k=1,\ldots,K.$
+%Upon estimating  the functions \((A_{q,k})\), one can construct the empirical estimate  of \(M_{K,n}^N(f)\) in the form
+%\begin{eqnarray*}
+%\widehat M_{K,n}^N(f) := \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n} \widehat{A}_{N+n-l,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\,.
+%\end{eqnarray*}
+%%%% Old Version
+We present a generic regression algorithm and then in Section~\ref{sec:num} give further implementation details. Our algorithm starts with estimating the functions
+$Q_r$ for $r=0,\ldots,n-1,$, defined in \eqref{eq:definition-bar-a}.
+We first generate \(\NtrainPath\)  paths  of the chain \(X\)
 (the so-called ``training paths''):
 \[
 \TrainSet=\Bigl\{(X^{(s)}_{1},\ldots,X^{(s)}_{N+n}),\quad s=1,\ldots,\NtrainPath\Bigr\}
 \]
 with $X^{(s)}_{0}=x,$ $s=1,\ldots,T.$
-Then we solve   the least squares optimization problems
+Then we solve  the least squares optimization problems
 \begin{equation}\label{eq:06042018a1}
-\widetilde{A}_{q,k} \in \argmin_{\psi \in \Psi} \sum_{s = 1}^{T} \left| \sum_{r = 0}^{q}  f(X_{r+l_0}^{(s)})\phi_k(\xi^{(s)}_{l_0+1}) - \psi(X^{(s)}_{l_0})\right|^2
+\hat{Q}_{r} \in \argmin_{\psi \in \Psi} \sum_{s = 1}^{T} \left|   f(X_{r+N}^{(s)}) - \psi(X^{(s)}_{N})\right|^2
 \end{equation}
-for some $l_0$ with $l_0+q\leq N+n,$
-where \(\Psi\) is a  class of  real-valued functions on \(\mathbb{R}^d\) and $\xi^{(s)}_{1},\ldots,\xi^{(s)}_{N+n}$ are iid random variables with distribution $P_\xi$ used to construct the $s$-th trajectory of $X.$   As usual in regression analysis (see Section~11 in \cite{gyorfi2006distribution}),  we  truncate  the least squares estimates $(\widetilde{A}_{q,k})$ and set  
-\begin{eqnarray}
-\label{eq:trunc}
-\widehat{A}_{q,k}(y)=
-\begin{cases}
-\widetilde{A}_{q,k}(y), & |\widetilde{A}_{q,k}(y)|\leq W_k,
-\\
-W_k \,\mathrm{sign}(\widetilde{A}_{q,k}(y)), & \mathrm{otherwise}. 
-\end{cases}
-\end{eqnarray}
- for a sequence of positive real numbers $W_k,$ $k=1,\ldots,K.$
-Upon estimating  the functions \((A_{q,k})\), one can construct the empirical estimate  of \(M_{K,n}^N(f)\) in the form
+where \(\Psi\) is a  class of  real-valued functions on \(\mathbb{R}^d\).
+We then set
+\begin{equation}
+\label{eq:definition-hat-a-A}
+\hat{a}_{r,k}(x)= \int \hat{Q}_r(\Phi(x,z)) \phi_k(z) P_\xi(\rmd z) \quad \text{and}
+\quad
+\hat{A}_{q,k}(x) = \sum_{r=0}^q \hat{a}_{r,k}(x) \eqsp,
+\end{equation}
+and construct the empirical estimate  of \(M_{K,n}^N(f)\) in the form
 \begin{eqnarray*}
-\widehat M_{K,n}^N(f) = \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n}\left[\widehat{A}_{N+n-l,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\right].
+\widehat M_{K,n}^N(f) := \frac{1}{n}\sum_{k=1}^{K}\sum_{l=N+1}^{N+n} \widehat{A}_{N+n-l,k}(X_{l-1}^{x})\phi_{k}(\xi_{l})\,.
 \end{eqnarray*}
+
 Obviously, \(\mathsf{E}[\widehat M_{K,n}^N(f)|\TrainSet]=0\) and \(\widehat M_{K,n}^N(f)\) is a valid control variate in that it
 does not introduce any bias. By the Jensen inequality and orthonormality of \((\phi_k)_{k\geq 0},\)
 \begin{multline*}
@@ -442,69 +470,71 @@ Set
 \begin{eqnarray*}
 \widehat\pi_{K,n}^N(f):=\pi_n^N(f)-\widehat{M}_{K,n}^N(f)
 \end{eqnarray*}
-Combining this with \eqref{eq:expression-variance} results in 
-\begin{multline*}
+Combining this with \eqref{eq:expression-variance} results in
+\begin{multline}
+\label{eq:PVarA}
 \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]=\frac{1}{n^2}\sum_{k=K+1}^{\infty}\sum_{l=1}^{n}\PE[A^2_{n-l,k}(X^x_{N+l-1})]
 \\
 +\frac{1}{n^2}\sum_{k=1}^{K}\sum_{l=1}^{n}\PE\left[\left.|A_{n-l,k}(X^x_{N+l-1})-\widehat A_{n-l,k}(X^x_{N+l-1})|^2\right | \TrainSet \right].
-\end{multline*}
-In the next section we analyze the case of ULA and show that under some rather mild conditions (convexity of the potential $U$ outside a ball around zero)
+\end{multline}
+In the next section we analyze the case of ULA algorithm and show that under some rather mild conditions (convexity of the potential $U$ outside a ball around zero)
 \begin{eqnarray*}
-\PE[A^2_{l,k}(X^x_{N+l-1})]\leq e^{\varkappa n\gamma^2}R^2_k ,\quad k=1,2,\ldots, \quad l=0,\ldots,n-1,
+\PE[A^2_{l,k}(X^x_{N+l-1})]\leq \rme^{\varkappa n\gamma^2}R^2_k ,\quad k \in \nset, \quad l=0,\ldots,n-1,
 \end{eqnarray*}
-for a sequence  $(R_k)$ satisfying $\sum_{k=1}^\infty R^2_k\leq C$ with constant $C$  not depending  on $\gamma$ and $n$ (see \eqref{eq:Aqk2}).  Hence if we take $W_k=R_k$ as truncation parameters in \eqref{eq:trunc}, then $\widehat A_{n-l,k}$ converges to 
+for a sequence  $(R_k)$ satisfying $\sum_{k=1}^\infty R^2_k\leq C$ with constant $C$  not depending  on $\gamma$ and $n$ (see \eqref{eq:Aqk2}).  Hence if we take $W_k=R_k$ as truncation parameters in \eqref{eq:trunc}, then $\widehat A_{n-l,k}$ converges to
 \[
-\bar A_{q,k}=\argmin_{\psi\in\Psi}\mathsf{E}[|A_{q,k}(X_{l_0})-\psi(X_{l_0})|]^2
+\bar A_{q,k}:=\argmin_{\psi\in\Psi}\mathsf{E}[|A_{q,k}(X_{N})-\psi(X_{N})|^2]
 \]
- as $T\to \infty,$ see Section~11 in \cite{gyorfi2006distribution}.  Moreover,
+ as $T\to \infty,$ see Section~11 in \cite{gyorfi2006distribution}.  Moreover, it follows from \eqref{eq:PVarA} that
 \begin{eqnarray*}
-\PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]\leq \frac{2Ce^{\varkappa n\gamma^2}}{n}. 
+\PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]\leq \frac{2C \rme^{\varkappa n\gamma^2}}{n}.
 \end{eqnarray*}
  Note that the above estimate is rather rough, as we ignore here the fact that the difference between $\widehat A_{n-l,k}$ and $A_{n-l,k}$ is small.
-If the class of functions $\Psi$ is a linear one of dimension $\mathtt{D}_\Psi,$ then the cost of computing $\widehat \pi_{K,n}^N(f)$ is of order $ \mathtt{D}_\Psi K T^2 n$. At the same time the variance of the standard estimate $ \pi_{n}^N(f)$ is of order $1/(n\gamma)$ and this bound can not be improved, see Lemma~\ref{lem:variance} and Remark~\ref{rem:var-low}. Thus, the ratio of the corresponding cost-variances is of order
-\begin{eqnarray*}
-\frac{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]}{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}\leq C e^{\varkappa n\gamma^2} K \gamma \, T^2 \mathtt{D}_\Psi. 
-\end{eqnarray*}
-Thus, for any fixed $K\geq 1,$  our variance reduction method is advantageous if $\gamma\ll\min\{1/(\mathtt{D}_\Psi T^2),1/\sqrt{n}\}.$  
-\section{Analysis of variance reduced ULA}
-\label{sec:ula_analysis}
+If the class of functions $\Psi$ is a linear one of dimension $\mathtt{D}_\Psi,$ then the cost of computing the coefficients $\widehat A_{l,k}$ for all $l=1,\ldots,n$ and $k=1,\ldots,K$ is of order  $ \mathtt{D}_\Psi K T^2 n$. Given $(\widehat A_{l,k})$ the cost of computing  $\widehat \pi_{K,n}^N$ is proportional to $\mathtt{D}_\Psi K n.$ At the same time the variance of the standard estimate $ \pi_{n}^N(f)$ is of order $1/(n\gamma)$ and this bound can not be improved, see Lemma~\ref{lem:variance} and Remark~\ref{rem:var-low}. Thus, the ratio of the corresponding cost-variances is of order
+\begin{equation}
+\label{eq:cost_theoretical}
+\frac{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]}{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}\leq C \rme^{\varkappa n\gamma^2} K \gamma \, T^2 \mathtt{D}_\Psi.
+\end{equation}
+Thus, for any fixed $K\geq 1,$  our variance reduction method is advantageous if $\gamma\ll\min\{1/(\mathtt{D}_\Psi T^2),1/\sqrt{n}\}.$  Note that in order to achieve convergence of the corresponding MSE to zero, we need to let $\gamma\to 0$ as the invariant measure of the ULA with a constant time step $\gamma$ is not equal to $\pi.$
+\section{Analysis of variance reduced ULA}\label{sec:ula_analysis}
 In this section we perform the convergence analysis of the ULA algorithm. We use the notations of Example~\ref{exam:langevin-algorithm}. For the sake of clarity and notational simplicity we restrict our attention to the constant time step, that is, we take $\gamma_k =\gamma$ for any $k \in \nset$.
 By $H_k$, $k\in\mathbb N_0$,
 we denote the normalized Hermite polynomial on $\mathbb R$, that is,
 $$
-H_k(x)=\frac{(-1)^k}{\sqrt{k!}}\rme^{x^2/2}\frac{\partial^k}{\partial x^k}\rme^{-x^2/2},
+H_k(x):=\frac{(-1)^k}{\sqrt{k!}}\rme^{x^2/2}\frac{\partial^k}{\partial x^k}\rme^{-x^2/2},
 \quad x\in\mathbb R.
 $$
 For a multi-index $\mathbf{k}=(k_i)\in\mathbb N_0^d$,
 $\mathbf{H}_\mathbf{k}$ denotes the normalized Hermite polynomial on $\mathbb R^d$, that is,
 $$
-\mathbf{H}_\mathbf{k}(\mathbf{x})=\prod_{i=1}^d H_{k_i}(x_i),\quad \mathbf{x}=(x_i)\in\mathbb R^d.
+\mathbf{H}_\mathbf{k}(\mathbf{x}):=\prod_{i=1}^d H_{k_i}(x_i),\quad \mathbf{x}=(x_i)\in\mathbb R^d.
 $$
 In what follows, we also use the notation
 $|\mathbf{k}|=\sum_{i=1}^d k_i$ for $\mathbf{k}=(k_i)\in\mathbb N_0^d$,
 and we set $\mathcal G_p=\sigma(Z_1,\ldots,Z_p)$, $p\in\mathbb N$, and $\mathcal G_0=\mathrm{triv}$.
 Given $N$ and $n$ as above, for $K\in\mathbb N$, denote
 \begin{align}
-M_{K,n}^N(f) & =\sum_{ 0<\|\mathbf{k}\|\le K}\frac{1}{n}\sum_{l=1}^{n}A_{n-l,\mathbf{k}}(X_{N+l-1})\mathbf{H}_\mathbf{k}(Z_{N+l})
+M_{K,n}^N(f) & :=\frac{1}{n}\sum_{ 0<\|\mathbf{k}\|\le K}\sum_{l=1}^{n}A_{n-l,\mathbf{k}}(X_{N+l-1})\mathbf{H}_\mathbf{k}(Z_{N+l})
 \label{eq:29032018a5}
 \notag
 \end{align}
-with \(\|\mathbf{k}\|=\max_{i} k_i\) and 
-\begin{eqnarray*}
-A_{q,\mathbf{k}}(y)=\sum_{r=0}^{ q } \bar{a}_{r,\mathbf{k}}(y).
-\end{eqnarray*}
-For an estimator $\rho(f)\in\{\pi_n^N(f),\pi_{K,n}^N(f)\}$
+with \(\|\mathbf{k}\|=\max_{i} k_i\) and
+\begin{eqnarray}
+\label{eq:A-ula}
+A_{q,\mathbf{k}}(y):=\sum_{r=0}^{ q } \bar{a}_{r,\mathbf{k}}(y).
+\end{eqnarray}
+For an estimator $\rho_n^N(f)\in\{\pi_n^N(f),\pi_{K,n}^N(f)\}$
 of $\pi(f)$ (see \eqref{eq:29032018a2} and \eqref{eq:29032018a3}), we shall be interested in the Mean Squared Error (MSE),
 which can be decomposed as the sum of the squared  bias
 and the  variance:
 \begin{equation}
 \label{eq:29032018a4}
-\mathrm{MSE}\left[\rho(f)\right] = \PE\left[\left\{\rho(f)-\pi(f)\right\}^2\right]
-=\left\{\PE[\rho(f)]-\pi(f)\right\}^2 +\PVar[\rho(f)].
+\mathrm{MSE}\left[\rho_n^N(f)\right] = \PE\left[\left\{\rho_n^N(f)-\pi(f)\right\}^2\right]
+=\left\{\PE[\rho_n^N(f)]-\pi(f)\right\}^2 +\PVar[\rho_n^N(f)].
 \end{equation}
 Our analysis is carried out under the following two assumptions:
 \begin{description}
-\item[(H1)][\textbf{Lipschitz continuity}] The potential $U$ is differentiable and $\nabla U$ is Lipschitz, that is, there exists $L < \infty$ such that
+\item[(H1)][\textbf{Lipschitz continuity}] The potential $U$ is differentiable and $\nabla U$ is Lipschitz continuous, that is, there exists $L < \infty$ such that
 \begin{eqnarray*}
 \| \nabla U(x)-\nabla U(y) \| \leq L \|x-y\|, \quad x,y\in \rset^d.
 \end{eqnarray*}
@@ -519,7 +549,7 @@ for $\gamma>0$, define the Markov kernel $Q_\gamma$ associated to one step of th
 \label{eq:ula_kernel}
 \kerULA_{\gamma}(x,A)=\int_{A} \frac{1}{(2 \pi \gamma)^{d/2}} \text{ exp} \left\{ -\frac{1}{2\gamma} \left\| y - x + \gamma \nabla U(x)\right\|^2\right\} \rmd y
 \end{equation}
-for any $A \in \mathcal{B}(\rset^d)$. Note that for a homogeneous Markov chain $\left(X^x_{p}\right)_{p \in \nset_0}$ of the form \eqref{eq:chain} with constant step size $\gamma$, $\mathsf{P}(X_n^x \in A) = \kerULA^n_{\gamma}(x,A)$. 
+for any $A \in \mathcal{B}(\rset^d)$. Note that for a homogeneous Markov chain $\left(X^x_{p}\right)_{p \in \nset_0}$ of the form \eqref{eq:chain} with constant step size $\gamma$, $\mathsf{P}(X_n^x \in A) = \kerULA^n_{\gamma}(x,A)$.
 Due to the martingale transform structure
 of $M_{K,n}^N(f)$,
 we have
@@ -527,40 +557,43 @@ we have
 \mathsf E\left[M_{K,n}^N(f)\right]=0.
 \]
 Hence both estimators
-$\pi_n^N(f)$ and $\pi_{K,n}^N(f)$ have the same  bias. Under assumptions {\bf (H1)} and {\bf (H2)}, the corresponding Markov chain has a unique stationary distribution $\pi_\gamma$, which is different from $\pi$. From \cite[Theorem~10]{durmus:moulines:2017} 
-%and Lemma~\ref{lem:v_ergodicity} 
-it follows that
+$\pi_n^N(f)$ and $\pi_{K,n}^N(f)$ have the same  bias. Under assumptions {\bf (H1)} and {\bf (H2)}, the corresponding Markov chain has a unique stationary distribution $\pi_\gamma$, which is different from $\pi$. From \cite[Theorem~10]{durmus:moulines:2017},
+%and Lemma~\ref{lem:v_ergodicity}
+it follows that there exist $\gamma_0 > 0$ and $C < \infty$ such that for all $\gamma \in (0,\gamma_0]$, we get
 \begin{equation}
 \label{eq:bias_2}
 \tvnorm{\pi - \pi_\gamma} \leq  C\sqrt{\gamma}
 \end{equation}
-for some constant $C>0.$ Let us now derive an upper bound for the variance of the classical estimator~\eqref{eq:29032018a2} for ULA-based chain. 
-
-\begin{lem} 
+ Let us now derive an upper bound for the variance of the classical estimator~\eqref{eq:29032018a2} for ULA-based chain. Define
+ \begin{equation}
+ \label{eq:definition-V}
+ V(x) = 1+ \|x\|^2 \,.
+ \end{equation}
+\begin{lem}
 \label{lem:variance}
-Let $f$ be a bounded Borel function and $(X^x_{p})_{p \in \nset_0}$ be a Markov chain generated by ULA with constant step size $\gamma$, satisfying {\bf (H1)} and {\bf (H2)}. Assume also that $n\gamma > c_0$ for some fixed $c_0>0,$ then it holds
-
+Assume {\bf (H1)} and {\bf (H2)}.
+Let $f$ be a bounded Borel function and $(X^x_{p})_{p \in \nset_0}$ be a Markov chain generated by ULA with constant step size $\gamma$.
+Let $c_0>0$. Then, there exist $C < \infty$ and $\gamma_0 > 0$, such that for all $n \in \nset$, $\gamma \in (0,\gamma_0]$ satisfying $n\gamma > c_0$, and $x \in \rset^d$,
 \begin{equation}
 \label{eq:var-mc}
-\PVar[\pi_n^N(f)]\lesssim \frac{V(x)}{n\gamma} \eqsp,
+\PVar\left[\pi_n^N(f)\right]\leq C (n \gamma)^{-1} V(x) \eqsp.
 \end{equation}
-with $V(x) = 1+ \|x\|^2$ where $\lesssim$ stands for inequality up to a constant not depending on $\gamma$ and $n$.
 \end{lem}
 \begin{remark}
 \label{rem:var-low}
-The bound in Lemma~\ref{lem:variance} is sharp and can not be improved even in the case of a normal distribution $\pi.$
+The bound in Lemma~\ref{lem:variance} is sharp and cannot be improved even in the case of a normal distribution $\pi.$
 Indeed,  ULA for the standard normal distribution takes form
 \begin{eqnarray*}
 X_{k+1} = (1-2\gamma)X_k + \sqrt{\gamma}\xi_{k+1},\quad \xi_{k+1} \sim \mathcal{N}(0,1)
 \end{eqnarray*}
 Thus, setting $X_0 = 0$, we obtain
 \begin{eqnarray*}
-\PVar_{0} \pi_n^0(f) &=& \PVar_{0}\left[\frac{1}{n}\sum\limits_{i=1}^{n}X_i\right] 
+\PVar_{0} [\pi_n^0(f)] &=& \PVar_{0}\left[\frac{1}{n}\sum\limits_{i=1}^{n}X_i\right]
 = \frac{1}{n^2}\PVar\left[\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{i}\sqrt{\gamma}(1-2\gamma)^{i-j}\xi_{j}\right]
 \geq  \frac{1}{n\gamma} - \frac{2(1-2\gamma)}{n^2\gamma^2}.
 \end{eqnarray*}
 \end{remark}
-One of the main results of this paper is the following  upper bound for the functions $(A_{q,\mathbf{k}}).$
+One of the main results of this paper is the following  upper bound for the functions $(A_{q,\mathbf{k}})$ in \eqref{eq:A-ula}.
 \begin{thm}\label{th:mr}
 Assume {\bf (H1)} and {\bf (H2)}.
 Fix some $K\geq 1$ and suppose additionally that a bounded function $f$ and $\mu=\nabla U$ are $K \times d $ times continuously differentiable
@@ -569,123 +602,163 @@ and for all $x\in\mathbb R^d$ and  \(\mathbf{k}\) satisfying \(0<\|\mathbf{k}\|\
 \label{eq:smooth-mu}
 |\partial^{\mathbf{k}} f(x)|\le  B_f, \quad |\partial^{\mathbf{k}} \mu (x)|\leq B_\mu \eqsp.
 \end{equation}
- Set $V(x) = 1 + \|x\|^2,$ then  it holds for $q=0,\ldots,n-1,$ and all $x$
+Then, there exist $\gamma_0 > 0$, $C_K < \infty$, and $\varkappa > 0$  such that, for all $\gamma \in (0,\gamma_0]$, $n \in \nset$, and $x \in \rset^d$,
 \begin{eqnarray}
 \label{eq:Aqk2}
-A^2_{q,\mathbf{k}}(x)\leq C_Ke^{\varkappa n\gamma^2}(1+V(x)),\quad 1\leq |\mathbf{k}|\leq K,
+A^2_{q,\mathbf{k}}(x)\leq C_K \rme^{\varkappa n\gamma^2}\{1+V(x)\} \,,\quad 1\leq |\mathbf{k}|\leq K, \quad \text{for all  $q=0,\ldots,n-1,$}
 \end{eqnarray}
- and 
+and
 \begin{eqnarray}
 \label{eq:Aqk2sum}
-\sum_{\|\mathbf{k}\|\geq K+1} A^2_{q,\mathbf{k}}(x)\leq C_{K}e^{\varkappa n\gamma^2}\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
-\left(\frac{\gamma}{2}\right)^{|I|K-1}
-(1+V(x))
+\sum_{\|\mathbf{k}\|\geq K+1} A^2_{q,\mathbf{k}}(x)\leq C_{K} \rme^{\varkappa n\gamma^2}\sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
+\left(\frac{\gamma}{2}\right)^{|I|K-1} \, \{1+V(x)\} \eqsp,
 \end{eqnarray}
-with some positive constants $\varkappa, C_K$ not depending on $n$ and  $\gamma.$  The sum in \eqref{eq:Aqk2} runs over all nonempty subsets $I$ of the set $\{1,\ldots,d\}$ 
+where the sum in \eqref{eq:Aqk2} runs over all nonempty subsets $I$ of the set $\{1,\ldots,d\}$.
 \end{thm}
 \begin{cor}
-Under assumptions of Theorem~\ref{th:mr},
+Under assumptions of Theorem~\ref{th:mr}, there exist $\gamma_0 > 0$, $\tilde{C} < \infty$ and $\varkappa > 0$ such that for all $n \in \nset$, $\gamma \in (0,\gamma_0]$, $n\in \nset$, and $x \in \rset^d$,
 \begin{eqnarray}
 \label{eq:var-bound}
-\PVar\left(\pi_{K,n}^{N}(f)\right)\lesssim n^{-1} \gamma^{K-1}  e^{\varkappa n\gamma^2}
-\eqsp,
+\PVar\left[\pi_{K,n}^{N}(f)\right] \leq \tilde{C}  n^{-1} \gamma^{K-1}  \rme^{\varkappa n\gamma^2}
+\eqsp.
 \end{eqnarray}
-where $\lesssim$ stands for inequality up to a constant not depending  on $n,$ $N$ and $\gamma$.
 \end{cor}
 Let us sketch the main steps of the proof. First using integration by parts, we prove that
 \begin{eqnarray}
 \label{eq:Ask-part}
 A_{q,\mathbf{k}}(x)=\gamma^{|\mathbf{k}'|/2}\frac{\sqrt{(\mathbf{k}-\mathbf{k}')!}}{\sqrt{\mathbf{k}!}}\mathsf{E}\left[ \partial_{Z_1}^{\mathbf{k}'} F(x,Z_1,\ldots,Z_q) \mathbf{H}_{\mathbf{k}-\mathbf{k}'}(Z_{1})\right],
 \end{eqnarray}
-where $F_q(x,Z_1,\ldots,Z_q)=\sum_{r=0}^q f(X^x_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
-stands for a weak partial derivative of the functional $F_s$ that also can be viewed as discretised version of Malliavin derivative. 
+where $F_q(x,Z_1,\ldots,Z_q):=\sum_{r=0}^q f(X^x_r)$ and $\partial_{Z_1}^{\mathbf{k}'}$
+stands for a weak partial derivative of the functional $F_s$ that also can be viewed as discretised version of Malliavin derivative.
 Now by taking $\mathbf{k}'=\mathbf{k},$ we get
 \begin{eqnarray*}
 A^2_{q,\mathbf{k}}(x)\leq \gamma^{|\mathbf{k}|} \PVar \left( \sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X_{p}^x\right)
 \right),\quad q=0,\ldots,n-1.
 \end{eqnarray*}
-Also from \eqref{eq:Ask-part} we can derive
+Also from \eqref{eq:Ask-part} we can derive that
 \begin{eqnarray*}
 \sum_{\|\mathbf{k}\|\geq K+1} A^2_{q,\mathbf{k}}(x)\leq \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
 \left(\frac{\gamma}{2}\right)^{|I|K}
 \PVar \left( \sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X_{p}^x\right)
 \right),
 \end{eqnarray*}
-where 
+where
 \[
 \mathbf{\mathbf{K}}_{I}=K(\indi{I}(1),\ldots, \indi{I}(d)).
 \]
-Finally, we show  that under our smoothness assumption \eqref{eq:smooth-mu} it holds
+Finally, using the Gaussian Poincare inequality, we show  that under our smoothness assumption \eqref{eq:smooth-mu} it holds
 \begin{equation}
 \label{eq:varboundV}
 \PVar \left(\sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X^x_{p}\right)
-\right)\leq C_{K}\gamma^{-1}e^{\varkappa n\gamma^2}(1+V(x)),\quad q=0,\ldots,n-1,
+\right)\leq C_{K}\gamma^{-1}\rme^{\varkappa n\gamma^2}(1+V(x)),\quad q=0,\ldots,n-1,
 \end{equation}
-for some positive constants $\varkappa, C_K$ not depending on $n$ and  $\gamma.$ 
+for some positive constants $\varkappa, C_K$ not depending on $n$ and  $\gamma.$
 \section{Numerical analysis}
 \label{sec:num}
 In this section we illustrate the performance of the proposed variance reduction method for ULA.
-First we note that from  numerical point of view another representation of the coefficients \(a_{p,l,k}\)  turns out to be more useful.
-\begin{prop}
-Let $q\geq l, k\in \nset$. Then the coefficients \(a_{q,l,k}(x)\) in \eqref{eq:coeff_mart}  can be alternatively represented as
-\begin{eqnarray*}
-a_{q,l,k}(x)=\mathsf{E}\left[\phi_k\left(\xi\right)Q_{q,l}\left(\Phi_l(x,\xi)\right)\right]
-\end{eqnarray*}
-with \(Q_{q,l}(x)=\mathsf{E}\left[f(X^x_{l,q})\right],\) \(q\geq l.\)
-In the case $\Phi_l=\Phi$ in \eqref{eq:ula_new} for all $l\geq 1,$ we have
-\begin{equation}
-\label{eq:definition-bar-a}
-\bar a_{r,k}(x)=\mathsf{E}\left[\phi_k\left(\xi\right)Q_{r}\left(\Phi(x,\xi)\right)\right]
-\end{equation}
-with  \(Q_{r}(x)=\mathsf{E}\left[f(X^x_{r})\right],\) $r\in \mathbb{N}.$
-\end{prop}
- We construct a polynomial approximation  for each \(Q_r(x)\) in \eqref{eq:definition-bar-a} in the form:
+First we construct a polynomial approximation  for each \(Q_r(x)\)  in the form:
 \begin{equation*}
 \widehat{Q}_{r}(x) = \sum_{\|\mathbf{s}\|\leq m} \widehat\beta_{\mathbf{s}} x^{\mathbf{s}},\quad s=(s_1,\ldots,s_d) \in \nset_0^d.
 \end{equation*}
-The coefficients \(\widehat \beta_{\mathbf{s}}\in \mathbb{R}\) are obtained using a modified least-squares criteria based on $T$ independent training trajectories \(\bigl\{\bigl(X_1^{(s)},\ldots,X_{N+n}^{(s)}\bigr)\bigr\}_{s=1}^{T}\). More precisely  we define $\widehat{Q}_0(x) = f(x)$ and
+The coefficients \(\widehat \beta_{\mathbf{s}}\in \mathbb{R}\) are obtained using a modified least-squares criteria based on $T$ independent training trajectories \(\bigl\{\bigl(X_1^{(s)},\ldots,X_{N+n}^{(s)}\bigr)\bigr\}_{s=1}^{T}\). More precisely  we define $\widehat{Q}_0(x) = f(x)$ and for \(1 \leq r \leq n-1,\) we set
 \begin{eqnarray}
 \label{eq:Qregr}
-\widehat{Q}_r = \argmin_{\psi \in \Psi_m} \sum_{s = 1}^{T}  \left| f(X_{l_0+r}^{(s)}) - \psi(X_{l_0}^{(s)})\right|^2
+\widehat{Q}_r = \argmin_{\psi \in \Psi_m} \sum_{s = 1}^{T}  \left| f(X_{N+r}^{(s)}) - \psi(X_{N}^{(s)})\right|^2
 \end{eqnarray}
-for \(1 \leq l_0+r \leq n-1,\) where $\Psi_m$ is a class of polynomials 
-\[
- \psi(x) = \sum_{\|\mathbf{s}\|\leq m} \alpha_{\mathbf{s}} x^{\mathbf{s}}, \quad \alpha_{\mathbf{s}}\in \mathbb{R}.
-\] 
-Then using the identity
+ where $\Psi_m$ is a class of polynomials $ \psi(x) = \sum_{\|\mathbf{s}\|\leq m} \alpha_{\mathbf{s}} x^{\mathbf{s}}$ with $\alpha_{\mathbf{s}}\in \mathbb{R}$. Then using the identity
 \[
 \xi^j = j! \sum_{r = 0}^{\lfloor j/2 \rfloor} \frac{1}{2^r  r! \sqrt{(j-2r)!}} H_{j-2r}(\xi),\quad \xi \in \mathbb{R},
 \]
-we obtain closed-form expression for the estimates $\widehat a_{r,k}(x)$ of functions $\bar a_{r,k}(x)$ in \eqref{eq:definition-bar-a}. Namely, for all $x \in \mathbb{R}^d$,
-\begin{eqnarray*}
-\widehat a_{r,\mathbf{k}} (x) &=&\CPE{\mathbf{H}_\mathbf{k}(\xi) \widehat{Q}_{r}(x - \gamma \mu(x) + \sqrt{\gamma}\xi)}{\TrainSet}
-= \sum_{\|\mathbf{s}\|\leq m} \beta_{\mathbf{s}} \prod_{i=1}^d P_{k_i,s_i}(x_i - \gamma \mu_i(x)),
-\end{eqnarray*}
-where for any integer $k,s$ $P_{k,s}$ 
-is a one-dimensional polynomial (in \(x\)) of degree at most \(s\) with analytically known coefficients. We estimate $Q_{r}$ only for $r < n_{\mathrm{trunc}}$ where the truncation level \(n_{\mathrm{trunc}}\) may depend on \(d\) and \(\gamma.\) It allows us to use a smaller amount of training trajectories to approximate $Q_{r}(x)$.
+we obtain closed-form expression for the estimates $\widehat a_{r,k}(x)$ of functions $\bar a_{r,k}(x)$ in \eqref{eq:definition-bar-a}. Namely, for all $x=(x^1,\dots,x^d) \in \mathbb{R}^d$,
+\begin{align}
+\nonumber
+\widehat a_{r,\mathbf{k}} (x) &= \int \mathbf{H}_\mathbf{k}(z) \widehat{Q}_{r}(x - \gamma \mu(x) + \sqrt{\gamma}z) P_\xi(\rmd z)
+\\
+&=
+\label{eq:a-pol}
+\sum_{\|\mathbf{s}\|\leq m} \beta_{\mathbf{s}} \prod_{i=1}^d P_{k_i,s_i}(x^i - \gamma \mu_i(x)),
+\end{align}
+where for any integer $k,s$ $P_{k,s}$ is a one-dimensional polynomial of degree at most \(s\) with analytically known coefficients. We estimate $Q_{r}$ only for $r < n_{\mathrm{trunc}}$ where the truncation level \(n_{\mathrm{trunc}}\) may depend on \(d\) and \(\gamma.\) It allows us to use a smaller amount of training trajectories to approximate $Q_{r}(x)$.
 Finally  we construct a truncated version of the estimator \eqref{eq:29032018a3}:
 \[
 \pi_{K,n,n_{\mathrm{trunc}}}^N(f) = \pi_n^N(f) -  \widehat M_{K,n, n_{\mathrm{trunc}}}^{N}(f),
 \]
 where
 \begin{eqnarray*}
-\widehat M_{K,n,n_{\mathrm{trunc}}}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{0 < \|\mathbf{k}\|\leq K}\sum_{l=N+1}^{p} \widehat a_{p-l,\mathbf{k}}(X_{l-1})\phi_k(\xi_{l})\mathbbm{1}\{ | p-l | < n_{\mathrm{trunc}}\}\right].
+\widehat M_{K,n,n_{\mathrm{trunc}}}^N(f) &=&\frac{1}{n}\sum_{p=N+1}^{N+n}\left[\sum_{0 < \|\mathbf{k}\|\leq K}\sum_{l=N+1}^{p} \widehat a_{p-l,\mathbf{k}}(X_{l-1})\mathbf{H}_\mathbf{k}(\xi_{l})\mathbbm{1}\{ | p-l | < n_{\mathrm{trunc}}\}\right].
 \end{eqnarray*}
 
-\subsection{Gaussian mixtures}
- We consider a sample generated by ULA with $\pi$  given by the mixture of two equally-weighted $d$-dimensional Gaussian distributions of the following form
+\subsection{Comparison with vanilla ULA}
+In this subsection we aim at comparing cost of variance reduction, achieved by the proposed algorithm, to the cost of vanilla ULA algorithm. We consider samples, generated by ULA with $\pi$ being either the standard normal distribution in dimension $d$ or the mixture of two $d-$dimensional standard Gaussians of the form
  \[
- \pi(x) = \frac{1}{2\sqrt{(2\pi)^{d}|\Sigma|}} \left( \rme^{-\frac{(x-\mu)^T\Sigma^{-1}(x-\mu)}{2}} + \rme^{-\frac{(x+\mu)^T\Sigma^{-1}(x+\mu)}{2}}\right)
+ \pi(x) = \frac{1}{2\sqrt{(2\pi)^{d}}} \left( \rme^{-(1/2)\|x-\mu\|^2} + \rme^{-(1/2)\|x+\mu\|^2}\right)
  \]
-where $\rho \in (0,1), \mu \in \rset^d, \Sigma \in \rset^{d \times d}$ and $|\Sigma|$ is its determinant. The function $U(x)$ and its gradient are given by
+ where $d = 2$ and $\mu = (0.5,0.5)$. For both examples, we aimed at estimating $\pi(f)$ with $f(x)=\sum_{i=1}^d x_i$ and $f(x) = \sum_{i=1}^d x^2_i$. We used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 5 \times 10^4$ independent training trajectories, each one with the burn-in period $n_{\text{burn}} = 100$. Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for $f(x)=\sum_{i=1}^d x_i$ and second order polynomial approximations for $f(x) = \sum_{i=1}^d x^2_i$ as described in the previous section. We set $K=1$ or $K=2$ for $f(x)=\sum_{i=1}^d x_i$ or $f(x)=\sum_{i=1}^d x^2_i$ respectively. Then we estimate the cost-variance ratio
+\begin{eqnarray}
+\label{eq:cvR}
+\mathcal{R}(K,N,n,n_{\mathrm{trunc}})=\frac{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n,n_{\mathrm{trunc}} }^N(f)|\TrainSet]}
+\end{eqnarray}
+by its empirical counterpart, computed over $24$ independent trajectories with $n = 2\times 10^3$ and $N = 2 \times 10^3$. Since for fixed $K$ the cost of computing $\pi_{n}^N(f)$ is proportional to computing function $f$, we set for $K = 1$
+ \begin{equation*}
+ \mathrm{cost}(\widehat \pi_{K,n}^N) = \mathrm{cost}(\pi_{n}^N) \times n_{\mathrm{trunc}} \times 2
+ \end{equation*}
+ since there are only $2$ non-zero functions among $a_{r,\mathbf{k}}(x)$ for fixed $r$. Note that in this case each $a_{r,\mathbf{k}}(x)$  is a linear function, which can be computed at the same cost as $f$. Similarly, for $K = 2$ we set
+  \begin{equation*}
+ \mathrm{cost}(\widehat \pi_{K,n}^N) = \mathrm{cost}(\pi_{n}^N) \times n_{\mathrm{trunc}} \times 8
+ \end{equation*}
+since there are at most $8$ non-zero functions among $a_{r,\mathbf{k}}(x)$ for fixed $r$. Variance reduction costs for Gaussian potential and different $n_{\mathrm{trunc}}$  are summarized in Figure~\ref{fig:gaus_cost}, and for the Gaussian mixture - in Figure~\ref{fig:gmm_cost}. Note that for both examples the proposed algorithm allows us to obtain a sufficient gain in variance reduction cost.
+
+%Next we compute the cost-variance ratios
+%\begin{eqnarray}
+%\label{eq:cvR}
+%\mathcal{R}(K,N,n,n_{\mathrm{trunc}})=\frac{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n,n_{\mathrm{trunc}} }^N(f)|\TrainSet]}
+%\end{eqnarray}
+%where variances in the above definition are computed using $24$ independent trajectories each of  length $n=2\cdot10^3.$ Note that the cost of $\widehat \pi_{K,n,n_{\mathrm{trunc}}} $ is proportional to the number of nonzero coefficients in \eqref{eq:a-pol} times $n_{\mathrm{trunc}}$.  In Figure~\ref{fig:G-costvar} cost-variances ratios are shown for for the case of  Gaussian distribution with parameters. In particular, in Figure~\ref{fig:subfig3}  a function $\mathcal{R}(1,2\cdot 10^3,2\cdot 10^3,n_{\mathrm{trunc}})$ is shown in dependence on $n_{\mathrm{trunc}}$ for the case of  linear  $f$. In Figure~\ref{fig:subfig4} a similar plot of $\mathcal{R}(2,2\cdot 10^3,2\cdot 10^3,n_{\mathrm{trunc}})$ is shown for the case of  quadratic $f.$
+%Figure~\ref{fig:GMM-costvar} presents the corresponding coast-variance ratios   for the mixture of two two-dimensional normal distributions as in \eqref{eq:gmm} with $\Sigma=I$ and $\mu=(0.5,0.5).$  In each case, in order estimate functions $(Q_r),$ we have used $T=10^4$ independent trajectories in the least-squares regression and polynomials of the same order as the order of $f.$
+
+\begin{figure}[tbh]
+\centering
+\subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
+\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gaussian.png}
+\label{fig:subfig1}}
+\qquad
+\subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
+\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gaussian.png}
+\label{fig:subfig2}}
+\caption{Cost-variance ratios \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  two-dimensional standard Gaussian distribution and different test functions.
+\label{fig:gaus_cost}}
+\end{figure}
+
+\begin{figure}[tbh]
+\centering
+\subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
+\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gmm.png}
+\label{fig:subfig1}}
+\qquad
+\subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
+\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gmm.png}
+\label{fig:subfig2}}
+\caption{Cost-variance ratios  \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for a mixture of two-dimensional Gaussian distributions and different test functions.
+\label{fig:gmm_cost}}
+\end{figure}
+
+\subsection{Gaussian mixtures}
+ We consider  ULA with $\pi$  given by the mixture of two equally-weighted $d$-dimensional Gaussian distributions of the following form
+\begin{eqnarray}
+\label{eq:gmm}
+\pi(x) = \frac{1}{2\sqrt{(2\pi)^{d}|\Sigma|}} \left( \rme^{-(1/2)(x-\mu)^T\Sigma^{-1}(x-\mu)} + \rme^{-(1/2)(x+\mu)^T\Sigma^{-1}(x+\mu)}\right)
+\end{eqnarray}
+where  $\mu \in \rset^d$, $\Sigma$ is a positive-definite $d \times d$ matrix and $|\Sigma|$ is its determinant. The function $U(x)$ and its gradient are given by
 \[
-U(x) = \frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu) - \ln{\left(1 + \rme^{-2\mu^\top \Sigma^{-1}x}\right)}, \quad
+U(x) = \frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu) - \ln{\left(1 + \rme^{-2\mu^\top \Sigma^{-1}x}\right)}
 \]
+and
 \[
-\nabla U(x) = \Sigma^{-1}(x-\mu) +2\mu^\top\Sigma^{-1}\left(1 + \rme^{2 \mu^\top\Sigma^{-1} x}\right)^{-1},
+\nabla U(x) = \Sigma^{-1}(x-\mu) +2 \left(1 + \rme^{2 \mu^\top\Sigma^{-1} x}\right)^{-1} \Sigma^{-1}\mu ,
 \]
 respectively.
-In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and randomly generated positive-definite matrix $\Sigma$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) with \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i\) we used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 10$ independent training trajectories, each one of size $n = 10^4$.  Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for the coefficients \(\hat{a}_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 1$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 10^3$ and plot boxplots of the ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials, since they are used as regressors during computations of $\hat{a}_{p-l,\mathbf{k}}$.
+In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and randomly generated positive-definite matrix $\Sigma$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) with \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i\) we used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 5 \times 10^4$ independent training trajectories, each one of size $n = 50$ with the burn-in period $n_{\text{burn}} = 100$. Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for $f(x)=\sum_{i=1}^d x_i$ and second order approximations for $f(x) = \sum_{i=1}^d x^2_i$ as described in the previous section. Hence we set $K = 1$ for $f(x)=\sum_{i=1}^d x_i$ or $K = 2$ for $f(x) = \sum_{i=1}^d x^2_i$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 2 \times 10^3$ and plot boxplots of the corresponding ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials in case of $K=1$ and second order polynomials for $K = 2$.
+\par
 
  \begin{figure}[tbh]
 \centering
@@ -696,20 +769,46 @@ In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and rando
 \subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
 \includegraphics[width=0.45\textwidth]{../pictures/GMM_2d_lin_sum_squares.png}
 \label{fig:subfig2}}
-\caption{Boxplots of ergodic averages  from the variance reduced ULA algorithms for the Gaussian mixture model. The compared estimators are the ordinary empirical average  (Vanilla), our estimator of control variates (MDCV), zero variance estimator (ZV) and control variates obtained with empirical spectral variance minimisation (ESVM) 
+\caption{Boxplots of ergodic averages  from the variance reduced ULA algorithms for the Gaussian mixture model. The compared estimators are the ordinary empirical average  (Vanilla), our estimator of control variates (MDCV), zero variance estimator (ZV) and control variates obtained with empirical spectral variance minimisation (ESVM)
 \label{fig:GMM}}
 \end{figure}
 
+%\begin{figure}[tbh]
+%\centering
+%\subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
+%\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gaussian.png}
+%\label{fig:subfig3}}
+%\qquad
+%\subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
+%\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gaussian.png}
+%\label{fig:subfig4}}
+%\caption{ Cost-variance ratios \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  two-dimensional standard Gaussian distribution and different test functions. \label{fig:G-costvar}}
+%\end{figure}
+
+%\begin{figure}[tbh]
+%\centering
+%\subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
+%\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gmm.png}
+%\label{fig:subfig5}}
+%\qquad
+%\subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
+%\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gmm.png}
+%\label{fig:subfig6}}
+%\caption{ Cost-variance ratios  \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  a mixture of two-dimensional  Gaussian distribution and different test functions.
+%\label{fig:GMM-costvar}}
+%\end{figure}
+
+
 \subsection{Banana shape distribution}
-The “Banana-shape” distribution, proposed by \cite{haario1999adaptive}, can be obtained from a d-dimensional Gaussian vector with zero mean and covariance $\mathrm{diag}(p,1,\ldots,1)$ by applying transformation $\varphi_b(x) : \rset^d \rightarrow \rset^d$ of the form
+The “Banana-shape” distribution, proposed by \cite{haario1999adaptive}, can be obtained from a $d$-dimensional Gaussian vector with zero mean and covariance $\mathrm{diag}(p,1,\ldots,1)$ by applying transformation $\varphi_b(x) : \rset^d \rightarrow \rset^d$ of the form
 \[
-\varphi(x_1,\ldots,x_n) = (x_1, x_2 + bx^2_1 - pb,x_3,\ldots,x_d)
+\varphi_b(x_1,\ldots,x_n) = (x_1, x_2 + bx^2_1 - pb,x_3,\ldots,x_d)
 \]
 where $p > 0$ and $b > 0$ are parameters; $b$ accounts for the curvature of density’s level sets. The potential $U$ is given by
 \[
-U(x_1, . . . , x_d) = \frac{x_1^2}{2} + (x_2 + bx_1^2 - pb)^2 + \sum\limits_{k=3}^{d}\frac{x_k^2}{2}
+U(x_1,\ldots, x_d) = \frac{x_1^2}{2} + \frac{(x_2 + bx_1^2 - pb)^2}{2} + \frac{1}{2} \sum_{k=3}^{d} x_k^2 \eqsp.
 \]
-The quantity of interest is the expectation of $f(x) = x_2$. We set $p = 100, b = 0.1$ and consider $d=8$. We solve the least squares  problems \eqref{eq:Qregr} using the second-order polynomial approximations for the coefficients \(\hat{a}_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 2$. We use $T=10$ independent training trajectories, each of size $n=10^4$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 10^3$ and plot boxplots of the ergodic averages in Figure~\ref{fig:banana_shape}.
+The quantity of interest is the expectation of $f(x) = x_2$. We set $p = 100, b = 0.1$ and consider $d=8$. We solve the least squares  problems \eqref{eq:Qregr} using the second-order polynomial approximations for the coefficients \(\hat{a}_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 2$. We use $T= 5 \times 10^4$ independent training trajectories, each of size $n=50$ with the burn-in $n_{\text{burn}} = 100$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 2 \times 10^3$ and display boxplots of the ergodic averages in Figure~\ref{fig:banana_shape}.
 
 \begin{figure}[h]
 \begin{center}
@@ -720,11 +819,11 @@ The quantity of interest is the expectation of $f(x) = x_2$. We set $p = 100, b 
 \end{figure}
 
 \subsection{Binary Logistic Regression}
-Second experiment considers the problem of logistic regression. Let $\mathsf{Y} = \left(\mathsf{Y}_1,\ldots,\mathsf{Y}_n\right) \in \{0,1\}^m$ be binary response variables, $\mathsf{X} \in \rset^{m \times d}$ be a feature matrix and $\theta \in \rset^d$ - vector of regression parameters. We define log-likelihood of $i$-th observation as
+In this section, we consider  logistic regression. Let $\mathsf{Y} = \left(\mathsf{Y}_1,\ldots,\mathsf{Y}_n\right) \in \{0,1\}^m$ be binary response variables, $\mathsf{X} \in \rset^{m \times d}$ be a feature matrix and $\theta \in \rset^d$ - vector of regression parameters. We define log-likelihood of $i$-th observation as
 \[
-\ell(\mathsf{Y}_i | \theta, \mathsf{X}_i) = \mathsf{Y}_i \mathsf{X}_i^T\theta - \ln{\left(1 + \rme^{\mathsf{X}_i^T\theta}\right)}
+\ell(\mathsf{Y}_i | \theta, \mathsf{X}_i) = \mathsf{Y}_i \mathsf{X}_i^T\theta - \ln{(1 + \rme^{\mathsf{X}_i^T\theta})}
 \]
-In order to estimate $\theta$ according to given data, the Bayesian approach introduces prior distribution $\pi_0(\theta)$ and inferences the posterior density $\pi(\theta| \mathsf{Y}, \mathsf{X})$ using Bayes' rule.
+In order to estimate $\theta$ according to given data, the Bayesian approach introduces prior distribution $\pi_0(\theta)$ and consider the posterior density $\pi(\theta| \mathsf{Y}, \mathsf{X})$ using Bayes' rule.
 
 \begin{figure}[h]
 \begin{center}
@@ -740,7 +839,7 @@ In the case of  Gaussian prior $\pi_0(\theta) \sim \mathcal{N}(0,\sigma^2 I_d)$,
 \end{eqnarray*}
 Thus we obtain
 \begin{eqnarray*}
-U(\theta) &=& -\mathsf{Y}^T \mathsf{X} \theta + \sum_{i=1}^m \ln{\left(1 + \rme^{\theta^T \mathsf{X}_i}\right)} + \frac{1}{2\sigma^2} \left\| \theta\right\|_2^2, 
+U(\theta) &=& -\mathsf{Y}^T \mathsf{X} \theta + \sum_{i=1}^m \ln{\left(1 + \rme^{\theta^T \mathsf{X}_i}\right)} + \frac{1}{2\sigma^2} \left\| \theta\right\|_2^2,
 \\
 \nabla U(\theta) &=& -\mathsf{Y}^T \mathsf{X} + \sum_{i=1}^m \frac{\mathsf{X}_i}{1 + \rme^{-\mathsf{\theta}^T \mathsf{X}_i}} + \frac{1}{\sigma^2} \theta.
 \end{eqnarray*}
@@ -748,6 +847,8 @@ To demonstrate the performance of the proposed control variates approach in the 
 
 \section{Proofs}
 \label{sec:proofs}
+
+
 \subsection{Proof of Theorem~\ref{thm:main-repr}}
 The expansion obviously holds for $p = q=1$ and $j=0$.
 Indeed, since $\left(\phi_{k}\right)_{k \geq 0}$ is a complete orthonormal system in \(L^2(\mathbb{R}^d, P_{\xi})\), it holds in \(L^2(\mathsf{P})\) that
@@ -757,7 +858,7 @@ f(X^x_{1})=\PE[f(X^x_{1})]+\sum_{k\geq1}a_{1,1,k}(x)\phi_{k}(\xi_{1})
 for any bounded $f$ with $a_{1,1,k}(x)=\PE[f(X_{1}^x)\phi_{k}(\xi_{1})]$.
 Assume now that (\ref{eq:mart_repr}) holds for some $m < p$, any $q \leq m$, $j < q \leq m$ and all bounded $f$. Let us prove that the induction assumption holds for $q=m+1$ and all $j < q$.
 The orthonormality and completeness
-of the system $\left(\phi_{k}\right)_{k=0}^\infty$ implies that for any bounded $f$ and $y \in \rset^d$, 
+of the system $\left(\phi_{k}\right)_{k=0}^\infty$ implies that for any bounded $f$ and $y \in \rset^d$,
 $\lim_{n \rightarrow \infty}\Psi_{n,m+1,1}(y)= 0$ with $\Psi_{n,m+1,1}(y)= \PE[|f(X^y_{m,m+1}) - f_{n,m+1,1}(y)|^2]$ and
 \[
 f_{n,m+1,1}(y) = \PE[f(X^y_{m,m+1})] +  \sum\limits_{k=1}^{n}\PE[f(X^y_{m,m+1})\phi_{k}(\xi_{m+1})]\phi_k(\xi_{m+1}).
@@ -795,8 +896,11 @@ a_{m+1,l,k}(y) = \mathsf{E}\left[f(X^y_{l-1,m+1})\phi_{k}(\xi_{l})\right]
 Formulas \eqref{eq:1-step-decomp}
 and~\eqref{eq:28082017a1} conclude the induction step for $q = m+1$ and all $j < q$ and hence the proof.
 
+
 \subsection{Proof of Lemma~\ref{lem:variance}}
-Under assumptions {\bf (H1)} and {\bf (H2)} the Markov chain $(X^x_{p})_{p \in \nset_0}$ is $V-$geometrically ergodic with $V(x) = 1+\|x\|^2$ and $\rho = \rme^{-\kappa\gamma}$ with $\kappa$ specified in Lemma~\ref{lem:v_ergodicity}. Due to lemma~\ref{lem:covariance}, 
+In the sequel, the notation $A(\gamma,n,x) \lesssim B(\gamma,n,x)$ means that there exist $\gamma_0 > 0$, and $C < \infty$ such that for all  $\gamma \in (0,\gamma_0]$, $x \in \rset^d$, $n \in \nset$, $A(\gamma,n,x) \leq C B(\gamma,n,x)$.
+
+Under assumptions {\bf (H1)} and {\bf (H2)} the Markov chain $(X^x_{p})_{p \in \nset_0}$ is $V-$geometrically ergodic with $V(x) = 1+\|x\|^2$ and $\rho = \rme^{-\kappa\gamma}$ with $\kappa$ specified in Lemma~\ref{lem:v_ergodicity}. Due to lemma~\ref{lem:covariance},
 \[
 \PVar[\pi_n^N(f)]\lesssim \frac{1}{n(1-\rho^{1/2})}
 \]
@@ -843,10 +947,7 @@ where $\bar a_{p,\mathbf{k}}$ is defined in \eqref{eq:definition-bar-a}.
 \end{lem}
 
 \begin{proof}
-Let $\boldsymbol{\varphi}(z)=(2\pi)^{-d/2} \exp(-|z|^2/2)$,
-$z\in\mathbb R^d$, denote the density of a $d$-dimensional
-standard Gaussian random vector.
-We first remark that, for the normalized Hermite polynomial $\mathbf H_{\mathbf k}$ on $\mathbb R^d$,
+Note that for the normalized Hermite polynomial $\mathbf H_{\mathbf k}$ on $\mathbb R^d$,
 $\mathbf k\in\mathbb N_0^d$, it holds
 $$
 \mathbf{H}_{\mathbf{k}}(z)\boldsymbol{\varphi}(z)
@@ -948,7 +1049,7 @@ Using this identity in \eqref{eq:sumA} implies
 Next we show that under the conditions  of Theorem~\ref{th:mr}
 \begin{eqnarray*}
 \PVar\left(\sum_{p=1}^{q}\partial_{1}^{\mathbf{K}_I}f\left(X^x_{p}\right)
-\right)\leq C\gamma^{-1}e^{\varkappa n\gamma^2}(1+V(x)),\quad q=1,\ldots,n,
+\right)\leq C\gamma^{-1} \rme^{\varkappa n\gamma^2}(1+V(x)),\quad q=1,\ldots,n,
 \end{eqnarray*}
 for all $x$ and some constants $C,\varkappa>0$  not depending on $n$ and $\gamma.$
 To keep the notational burden at a reasonable level, we present the proof only in one-dimensional case.
@@ -1141,11 +1242,11 @@ This concludes the proof.
 
 \begin{lem}
 \label{lem:var_poincare}
-Under assumptions of Theorem~\ref{th:mr}, it holds 
+Under assumptions of Theorem~\ref{th:mr}, it holds
 $$
-\mathsf{Var}\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}^x\right)\right]\le  \gamma^{-1} C e^{\varkappa n\gamma^2}(1+V(x)), \quad q=1,\ldots,n,
+\mathsf{Var}\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}^x\right)\right]\le  \gamma^{-1} C \rme^{\varkappa n\gamma^2}(1+V(x)), \quad q=1,\ldots,n,
 $$
-where $C,\varkappa>0$ are constants that do not depend on $n$ and $\gamma.$ 
+where $C,\varkappa>0$ are constants that do not depend on $n$ and $\gamma.$
 \end{lem}
 \begin{proof}
 The expression
@@ -1249,15 +1350,15 @@ we get
 \]
 where we denote
 \[
-\zeta_{l,j}(u)=\mathsf{E}\left[e^{-u\gamma\sum_{k=l}^{j}\mu'(X^x_{k-1})}\right],\quad u>0.
+\zeta_{l,j}(u)=\mathsf{E}\left[\rme^{-u\gamma\sum_{k=l}^{j}\mu'(X^x_{k-1})}\right],\quad u>0.
 \]
-Note that $\mu^{\prime}(x)$ is bounded due  our assumptions and from Theorem~1 in \cite{delyon1999small} and Lemma~\ref{lem:v_ergodicity} in Appendix~\ref{sec:appendix} it follows that
+Note that $\mu^{\prime}(x)$ is bounded due  our assumptions and from \cite[Theorem~1]{delyon1999small} and Lemma~\ref{lem:v_ergodicity} in Appendix~\ref{sec:appendix} it follows that
 \[
-\mathsf{E}\left[e^{-u\gamma\left(\sum_{k=l}^{j}[\mu'(X^x_{k-1})-\pi_\gamma(\mu')]\right)}\right]\leq C_1e^{\varkappa n\gamma^2}(1+V(x)),\quad u\gamma\leq \gamma_0,
+\mathsf{E}\left[\rme^{-u\gamma\left(\sum_{k=l}^{j}[\mu'(X^x_{k-1})-\pi_\gamma(\mu')]\right)}\right]\leq C_1 \rme^{\varkappa n\gamma^2}(1+V(x)),\quad u\gamma\leq \gamma_0,
 \]
 for some constants $\gamma_0$ and $C_1,\varkappa>0$. Then we have
 \[
-\zeta_{l,j}(u)=\mathsf{E}\left[e^{-s\gamma\sum_{k=l}^{j}\mu'(X^x_{k-1})}\right]\leq  C_1 e^{\varkappa n\gamma^2}(1+V(x))e^{-s\gamma (j-l+1)\pi_\gamma(\mu')}.
+\zeta_{l,j}(u)=\mathsf{E}\left[\rme^{-s\gamma\sum_{k=l}^{j}\mu'(X^x_{k-1})}\right]\leq  C_1 \rme^{\varkappa n\gamma^2}(1+V(x)) \rme^{-s\gamma (j-l+1)\pi_\gamma(\mu')}.
 \]
 Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R})$ and $\pi^{\prime}(x) = -\frac{1}{2}\pi(x)\mu(x)$, we have
 \[
@@ -1266,23 +1367,23 @@ Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R})$ and $\pi^{\prime}(x) =
 Note also that \(\pi_\gamma(\mu^{\prime}) \geq \pi_\gamma(\mu^{\prime}) - C_2\sqrt{\gamma}\)
 yielding the bound
 \[
-\zeta_{l,j}(s) \leq  C_1e^{\varkappa n\gamma^2}(1+V(x))e^{-s\gamma(j-l+1)\alpha}
+\zeta_{l,j}(s) \leq  C_1 \rme^{\varkappa n\gamma^2}(1+V(x)) \rme^{-s\gamma(j-l+1)\alpha}
 \]
 where $ \alpha = \frac{1}{2}\int \mu^2(x)\pi(x)\,dx - C_1\sqrt{\gamma} > 0$ for sufficiently small $\gamma$. Hence we obtain
 \begin{align*}
-\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4) &\leq (C_1e^{\varkappa n\gamma^2}(1+V(x)))^{1/4}\sum_{p=j+1}^{q+1}e^{-\gamma(p-j)\alpha} 
+\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4) &\leq (C_1 \rme^{\varkappa n\gamma^2}(1+V(x)))^{1/4}\sum_{p=j+1}^{q+1} \rme^{-\gamma(p-j)\alpha}
 \\
-&\leq  (C_1e^{\varkappa n\gamma^2}(1+V(x)))^{1/4}\frac{1}{1-e^{- \gamma\alpha}}
+&\leq  (C_1 \rme^{\varkappa n\gamma^2}(1+V(x)))^{1/4}\frac{1}{1- \rme^{- \gamma\alpha}}
 \end{align*}
 and
 \begin{align*}
-\sum_{j=1}^{q} \zeta^{1/2}_{1,j}(2) \leq (C_1e^{\varkappa n\gamma^2}(1+V(x)))^{1/2}\sum_{j=0}^{q}e^{-\gamma j\alpha} 
+\sum_{j=1}^{q} \zeta^{1/2}_{1,j}(2) \leq (C_1 \rme^{\varkappa n\gamma^2}(1+V(x)))^{1/2}\sum_{j=0}^{q} \rme^{-\gamma j\alpha}
 \\
-\leq  (C_1e^{\varkappa n\gamma^2}(1+V(x)))^{1/2}\frac{ 1}{1-e^{- \gamma\alpha}}.
+\leq  (C_1 \rme^{\varkappa n\gamma^2}(1+V(x)))^{1/2}\frac{ 1}{1- \rme^{- \gamma\alpha}}.
 \end{align*}
 Thus the final bound follows:
 \begin{align*}
-\mathsf{Var}\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X^x_{p}\right)\right] \leq \gamma^{-1} C_K e^{\varkappa n\gamma^2} (1+V(x))
+\mathsf{Var}\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X^x_{p}\right)\right] \leq \gamma^{-1} C_K \rme^{\varkappa n\gamma^2} (1+V(x))
 \end{align*}
  with $C_K$  depending neither on $q$ nor on $\gamma$. The proof is completed.
 \end{proof}
@@ -1290,15 +1391,7 @@ Thus the final bound follows:
 
 \appendix
 \section{Bounds for moments of  ULA}\label{sec:appendix}
-First let us introduce some definitions 
-\begin{definition}
-\label{def:drift}
-We say that the Markov kernel $Q_{\gamma}$ satisfies Foster-Lyapunov drift condition if there exist a measurable function $V: X \rightarrow [1; +\infty)$, real numbers $\lambda \in (0,1)$ and $C > 0$ such that for any $x \in X$,
-\begin{equation}
-\label{eq:lyapunov}
-Q_{\gamma}V(x) \leq \lambda^{\gamma} V(x) + \gamma C
-\end{equation}
-\end{definition}
+
 
 \begin{definition}
 \label{def:v_ergodicity}
@@ -1309,32 +1402,43 @@ d_V(\delta_xQ^{1,n},\pi) \leq C\rho^n V(x)
 \end{equation}
 \end{definition}
 
-Note that conditions {\bf (H1)} and {\bf (H2)} imply (\cite[Lemma~16]{brosse2018diffusion}) that for some $K_2 > 0$ it holds
+In all the sequel, without loss of generality, we assume that $\nabla U(0)=0$ and we set
 \begin{equation}
-\label{eq:H3}
-\ps{\nabla U(x)}{x} \geq \frac{m}{2}\|x\|^2, \quad \|x\| \geq K_2
+\label{eq:definition-V}
+V(x) = 1 + \|x\|^2 \eqsp.
 \end{equation}
-
-Now we shall show that conditions {\bf (H1)} and {\bf (H2)} are sufficient to show that ULA kernel $Q_\gamma$ satisfies the drift condition \eqref{eq:lyapunov}
-
+\begin{lem}
+  \label{lem:quadratic_behaviour}
+  Assume {\bf (H1)} and {\bf (H2)}. Then there exists $K_2 \geq 0$ such that for any $ \| x \| \geq K_2$ $\ps{\nabla U(x)}{x} \geq (m/2) \| x \|^2$.
+\end{lem}
+\begin{proof}
+  Using {\bf (H1)} and {\bf (H2)}, we have for any $x \in \rset^d$, $\| x \|\geq K_1$,
+  \begin{align*}
+    \ps{\nabla U(x)}{x}
+    &= \int_{0}^{K_1/\| x \|} D^2 U(t x ) [x^{\otimes 2}] \rmd t + \int_{K_1/\| x \|} ^ 1 D^2 U(t x ) [x^{\otimes 2}] \rmd t\\
+    & \geq m \|x \|^2 \{1- K_1 (1 +L/m)   / \| x \| \}\eqsp,
+  \end{align*}
+which proves the first statement. The second statement is obvious.
+\end{proof}
 \begin{lem}
 \label{lem:drift}
- Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$. Then the kernel $Q_\gamma$ from \eqref{eq:ula_kernel} satisfies drift condition \eqref{eq:lyapunov} for any $0 < \gamma < \overline{\gamma} = \frac{m}{4L}$ with drift function $V(x) = 1 + \|x\|^2$,   $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = \frac{25K_2^2}{8} + d + m$ with $K_2$ from \eqref{eq:H3}, $m$ from {\bf (H2)}.
+ Assume that {\bf (H1)} and {\bf (H2)} and without loss of generality consider $\nabla U(0) = 0$.
+ Then, for any $\gamma \in (0,\bar{\gamma}]$ with $\overline{\gamma} = m/4$  the kernel $Q_\gamma$ from \eqref{eq:ula_kernel} satisfies drift condition
+ \begin{equation}
+\label{eq:lyapunov}
+Q_{\gamma}V(x) \leq \lambda^{\gamma} V(x) + \gamma C
+\end{equation}
+with   $\lambda = \exp{\left(-\frac{m}{2}\right)}$, $C = 25K_2^2/8 + d + m$ with $K_2$ from Lemma~\ref{lem:quadratic_behaviour}, and $m$ from {\bf (H2)}.
 \end{lem}
 
-\begin{proof} Let $V(x) = 1 + \|x\|^2$, then
-$$
-Q_{\gamma}V(x) = \int\limits_{\rset^d}V(y)Q_{\gamma}(x,dy) = \int\limits_{\rset^d}\frac{(1+\|y\|^2)}{(2\pi\gamma)^{\frac{d}{2}}}\exp{\left(-\frac{\|y-x+\gamma\nabla U(x)\|^2}{2\gamma}\right)}\,dy =
-$$
-
-$$
-=1 + \frac{1}{(2\pi\gamma)^{\frac{d}{2}}}\int\limits_{\mathbb{R}^d}\|z + x - \gamma \nabla U(x)\|^2 \exp{\left(-\frac{\|z\|^2}{2\gamma}\right)}\,dz
-$$
-Let us first consider the case $x \notin B(0,K_2)$. Note that
-$$
-\|z+x-\gamma \nabla U(x)\|^2 = \|z\|^2 + 2 \langle z, x - \gamma \nabla U(x) \rangle + \|x - \gamma \nabla U(x)\|^2
-$$
-and the linear term vanishes after integration, moreover, for $Z \sim \mathcal{N}(0,\gamma I_d)$, it holds $\mathbb{E}\|Z\|^2 = \gamma d$. It remains to notice that due to \eqref{eq:H3},
+\begin{proof} 
+Note first that
+\[
+Q_{\gamma}V(x) = 
+1+ \| x - \gamma \nabla U(x) \|^2 + \gamma d
+\]
+Let us first consider the case $x \notin B(0,K_2)$.  
+It remains to notice that, by Lemma~\ref{lem:quadratic_behaviour}, we get
 \[
 \|x - \gamma \nabla U(x) \|^2 = \|x\|^2 - 2\gamma \langle \nabla U(x), x\rangle + \gamma^2 \|\nabla U(x)\|^2 \leq \left(1 - \gamma m + 2\gamma^2 L^2\right)\|x\|^2
 \]
@@ -1342,7 +1446,7 @@ Since $\gamma < \frac{m}{4L}$, we obtain
 $$
 Q_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma d + (\gamma m - 2\gamma^2 L^2) \leq \exp^{-\frac{\gamma m}{2}}V(x) + \gamma (d + m)
 $$
-Now let $x \in B(0,K_2)$. Then simply using $\|x-\gamma \nabla U(x)\|^2 \leq 2(1+L\gamma)^2\|x\|^2$, we obtain
+Consider now the case $x \in B(0,K_2)$. Then simply using $\|x-\gamma \nabla U(x)\|^2 \leq 2(1+L\gamma)^2\|x\|^2$, we obtain
 $$
 Q_{\gamma}V(x) \leq (1-\gamma m + 2\gamma^2 L^2)V(x) + \gamma\left((m - 2\gamma L^2)(1+\|x\|^2) + d + 2(1+L\gamma)^2\|x\|^2\right) \leq
 $$
@@ -1356,7 +1460,7 @@ It is known that under assumption {\bf (H1)} the Markov chain generated by ULA w
 
 \begin{lem}
 \label{lem:v_ergodicity}
- Assume that the potential $U(x), x \in \mathbb{R}^d$ satisfies conditions {\bf (H1)} and {\bf (H2)}. Then for $0 < \gamma < \overline{\gamma}=\frac{m}{4L^2}$, for any $x \in X$ it holds
+ Assume  {\bf (H1)} and {\bf (H2)}. Then for $0 < \gamma < \overline{\gamma}=m / 4L^2$, for any $x \in \rset^d$ it holds
 $$
 d_V(\delta_xQ_{\gamma}^{1,n},\pi_\gamma) \leq C\rho^n\left(V(x) + \pi_\gamma(V)\right)
 $$
@@ -1379,7 +1483,7 @@ $$
 
 \section{Covariance estimation for $V-$geometrically ergodic Markov chains}\label{sec:appendix_moments}
 In this section we assume that $(X_p)_{p \in \nset_0}$ is a $V-$geometrically ergodic Markov chain and prove bounds on the variance of ergodic average $\pi_N^n(f)$ of the form \eqref{eq:29032018a2}. We use the same technique as in \cite{belomestny2019esvm} to control autocovariances for a given Markov chain. We start from auxiliary lemma:
-\begin{lem} 
+\begin{lem}
 \label{lem:fp_covariance}
 Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Let $\tilde{f}(x) = f(x) - \pi(f)$. Then it holds for some constant $C > 0$
 \begin{equation}
@@ -1395,14 +1499,14 @@ Note that
 \[
 |\mathsf{E}_x[\tilde{f}(X_0)\tilde{f}(X_s)]| \leq |\tilde{f}(x)| \mathsf{E}_x|\tilde{f}(X_s)| \leq \|\tilde{f}\|_{V^{\frac{1}{2}}}V^{\frac{1}{2}}(x)\int\limits_{\rset^d} V^{\frac{1}{2}}(y)|\mathsf{P}^{s}(x,\,dy)-\pi(dy)|
 \]
-By Hoelder inequality, 
+By Hoelder inequality,
 \begin{eqnarray*}
 \int\limits_{\rset^d} V^{\frac{1}{2}}(y)|\mathsf{P}^{s}(x,\,dy)-\pi(dy)| & \leq & \left(\int\limits_{\rset^d} V(y)|\mathsf{P}^{s}(x,\,dy)-\pi(dy)|\right)^{1/2}\left(\int\limits_{\rset^d}|\mathsf{P}^{s}(x,\,dy)-\pi(dy)|\right)^{1/2} \leq \\
 & \leq & 2\rho^{s/2}V^{1/2}(x)
 \end{eqnarray*}
-yielding the first statement of lemma. The second statement can be obtained from the first one by integration with respect to $\pi$. 
+yielding the first statement of lemma. The second statement can be obtained from the first one by integration with respect to $\pi$.
 \end{proof}
- 
+
 \begin{lem}
 \label{lem:covariance}
 Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Let $\tilde{f}(x) = f(x) - \pi(f)$. Then
@@ -1411,34 +1515,34 @@ Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a s
 \PCov_x \left[f(X_k),f(X_{k+s})\right] \leq C^2V^2(x)\rho^{k+s} + C^2\rho^{k+s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}V(x) + C\pi(V)\rho^{s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}
 \end{equation}
 \end{lem}
-\begin{proof} 
+\begin{proof}
 Note that
 \[
 \PCov_x \left[f(X_k),f(X_{k+s})\right] = \PE_x\left[f(X_k) - \pi(f)\right]\left[f(X_{k+s})-\pi(f)\right] + \left[\pi(f) - \PE_xf(X_s)\right]\left[\PE_xf(X_k) - \pi(f)\right]
 \]
-Due to $V-$ergodicity, 
+Due to $V-$ergodicity,
 \[
 \left|\left[\pi(f) - \PE_xf(X_s)\right]\left[\PE_xf(X_k) - \pi(f)\right]\right| \leq C^2V^2(x)\rho^{k+s}
 \]
 To bound the first term note that
 \begin{multline*}
-\left|\PE_x\left[f(X_k) - \pi(f)\right]\left[f(X_{k+s})-\pi(f)\right] - \PCov_{\pi}\left[f(X_k),f(X_{k+s})\right]\right| 
+\left|\PE_x\left[f(X_k) - \pi(f)\right]\left[f(X_{k+s})-\pi(f)\right] - \PCov_{\pi}\left[f(X_k),f(X_{k+s})\right]\right|
 \\
-\leq \int\limits_{\rset^d}\left|\PE_y\left[\tilde{f}(X_0)\tilde{f}(X_{s})\right]\right| |\P^k(x,dy)-\pi(dy)|  
+\leq \int\limits_{\rset^d}\left|\PE_y\left[\tilde{f}(X_0)\tilde{f}(X_{s})\right]\right| |\P^k(x,dy)-\pi(dy)|
 \leq C^2\rho^{k+s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}V(x),
 \end{multline*}
 where the last inequality is due to lemma~\ref{lem:fp_covariance}, which implies \eqref{eq:cov_v_ergodic}.
 \end{proof}
 Now we state and prove the main result of this section on the variance bound for the estimator $\pi_N^n(f)$ for $V-$geometrically ergodic Markov chain.
 \begin{lem}
-Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Assume also that $n(1-\rho^{1/2}) > 1$. Then 
+Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Assume also that $n(1-\rho^{1/2}) > 1$. Then
 \begin{equation}
 \label{eq:vanilla_var}
-\PVar_x \left[ \pi_{N}^n(f) \right] \leq \frac{C\pi(V)\|\tilde{f}\|_{V^{1/2}}}{n(1-\rho^{1/2})} + \mathcal{O}(\frac{1}{n^2(1-\rho^{1/2})}) 
+\PVar_x \left[ \pi_{N}^n(f) \right] \leq \frac{C\pi(V)\|\tilde{f}\|_{V^{1/2}}}{n(1-\rho^{1/2})} + \mathcal{O}(\frac{1}{n^2(1-\rho^{1/2})})
 \end{equation}
 \end{lem}
 \begin{proof}
-Note that 
+Note that
 \begin{eqnarray*}
 \PVar_x \left[ \frac{1}{n}\sum\limits_{k=N+1}^{N+n}f(X_k) \right] = \underbrace{\frac{1}{n^2}\sum\limits_{k=N+1}^{N+n}\PVar_x \left[ f(X_k) \right]}_{S_1} + \underbrace{\frac{2}{n^2}\sum\limits_{k=N+1}^{N+n-1}\sum\limits_{s=1}^{n-k-1}\PCov_x\left[f(X_k),f(X_{k+s})\right]}_{S_2}
 \end{eqnarray*}
@@ -1451,7 +1555,7 @@ S_2 & \leq & \frac{2}{n^2}\sum\limits_{k=N+1}^{N+n-1}\left[C^2V^2(x)\rho^{k+1}\f
 & \leq & \frac{2\rho^NC^2V^2(x)}{n^2(1-\rho)^2} + \frac{2\rho^NC^2V(x)}{n^2(1-\rho)(1-\rho^{1/2})} + \frac{C\pi(V)\|\tilde{f}\|_{V^{1/2}}}{n(1-\rho^{1/2})}
 \end{eqnarray*}
 Hence \eqref{eq:vanilla_var} follows.
-\end{proof} 
+\end{proof}
 
 %Aforementioned lemmas allow us to bound the exponential moment of the additive functional of ULA. Namely, the following theorem holds
 %
