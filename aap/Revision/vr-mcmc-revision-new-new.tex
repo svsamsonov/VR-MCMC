@@ -1557,6 +1557,85 @@ S_2 & \leq & \frac{2}{n^2}\sum\limits_{k=N+1}^{N+n-1}\left[C^2V^2(x)\rho^{k+1}\f
 Hence \eqref{eq:vanilla_var} follows.
 \end{proof}
 
+\begin{lem}
+\label{lem:exp_strongly_convex}
+Let $(X_p^x)_{p \geq 0}$ be the ULA-generated Markov chain with ... . Then for any $\lambda \in \rset$, it holds
+\begin{equation}
+\label{eq:exp_strongly_convex}
+\PE_x \rme^{\lambda\left(\pi_n^N(f) - \PE_x\pi_n^N(f)\right)} \leq e^{\frac{4\lambda^2 \|f\|^2_{\text{Lip}}\left(1+\frac{N}{n}\right)d(m+L)^2}{\gamma n m^2L^2}}
+\end{equation}
+\end{lem}
+\begin{proof} Note that for ULA algorithm the distribution $\P_x$ is Gaussian for any $x$, thus, following \cite[Proposition 3]{dm2016HighDim}, we may bound the Wasserstein-1 distance between $\P_x$ and $\P_y$ by
+\[
+W_1(\P_x,\P_y) = W_1(\mathcal{N}(x-\gamma\mu(x),\gamma),\mathcal{N}(y-\gamma\mu(y),\gamma)) = \|x-y-\gamma(\mu(x)-\mu(y))\| \leq \sqrt{1-\kappa}\|x-y\|
+\]
+where $\kappa = \frac{2mL\gamma}{m+L}$. Hence, it holds
+\[
+W_1(\P_x,\P_y) \leq \left(1-\frac{\kappa}{2}\right)\|x-y\|
+\]
+Thus, we might apply the result of \cite[Theorem 4]{joulin2010}, yielding for any $\lambda \in \rset$  
+\[
+\PE_x \rme^{\lambda\left(\pi_n^N(f) - \PE_x\pi_n^N(f)\right)} \leq e^{4\lambda^2 \|f\|^2_{\text{Lip}} V^2}
+\]
+with the quantity $V^2 = \frac{4}{\kappa n}\left(1 + \frac{N}{n}\right)\sup_{x}\frac{\sigma^2(x)}{n_x \kappa}$, $\sigma^2(x) = \frac{1}{2}\iint \|y-z\|^2P_x(dy)P_x(dz) = \gamma d$ and $n_x \geq 1$.
+\end{proof}
+
+\begin{lem} Let $\mu(x) = \mu_{0}(x) + \Delta(x)$, where $\mu_0^{\prime}(x) <-m$ for some $m > 0$, $\mu_0(x) \in Lip(L)$ and suppose that $\Delta(x)$ is bounded. Then
+\begin{equation}
+\label{eq:exp_bound}
+\PE_x \rme^{u\gamma\sum\limits_{k=N+1}^{N+n}f(X_k)} \leq C\exp\left\{n\gamma\left(\frac{8u^2\|f\|^2_{\text{Lip}}\left(1+\frac{N}{n}\right)(m+L)^2}{m^2L^2} + M^2 + C_1u\sqrt{\gamma} +  u\pi(f)\right)\right\}
+\end{equation}
+with constants $C$ and $C_1$ depending only on $m,L$.
+\end{lem}
+\begin{proof} The Markov Chain $(X_p^x)$ has the form
+\[
+X_{k+1} = X_k + \gamma(\mu_0(X_k) + \Delta(X_k)) + \sqrt{\gamma}\xi_{k+1}, X_0 = x, \xi_{k+1} \sim \mathcal{N}(0,1)
+\]
+Consider the following auxiliary Markov Chain $(Y_p^x)$, corresponding to the diffusion with strongly log-concave potential
+\[
+Y_{k+1} = Y_k + \gamma\mu_0(Y_k) + \sqrt{\gamma}\xi_{k+1}, Y_0 = x, \xi_{k+1} \sim \mathcal{N}(0,1)
+\]
+The main idea of the proof is to change expectation w.r.t. $(X_p^x)$ to the expectation w.r.t. $(Y_p^x)$, which is easier to work with:
+\begin{eqnarray*}
+\PE_x \rme^{u\gamma\sum\limits_{k=N+1}^{N+n}f(X_k)} &=& \PE_x  \exp\left\{u\gamma\sum_{k=N+1}^{N+n}\left(f(Y_k) -\frac{(Y_k - Y_{k-1} - \gamma\mu(Y_{k-1}))^2 - (Y_k - Y_{k-1} - \gamma\mu_0(Y_{k-1}))^2}{2\gamma}\right)\right\} = \\
+& = & \PE_x \exp\left\{u\gamma\sum_{k=N+1}^{N+n}f(Y_k) + \sum_{k=1}^{n}\left[(Y_k-Y_{k-1})\Delta(Y_{k-1}) - \gamma\mu_0(Y_{k-1})\Delta(Y_{k-1}) - \frac{\gamma}{2}\Delta^2(Y_{k-1})\right]\right\} = \\
+ &=& \PE_x \exp\left\{u\gamma\sum_{k=N+1}^{N+n}f(Y_k) + \sum_{k=1}^{n}\left[\sqrt{\gamma}\Delta(Y_{k-1})\xi_{k} - \frac{\gamma}{2}\Delta^2(Y_{k-1})\right]\right\} \leq \\
+ & \leq & \left(\PE_x \exp\left\{2\sqrt{\gamma}\sum_{k=N+1}^{N+n}\Delta(Y_{k-1})\xi_{k}\right\}\right)^{1/2} \left(\PE \exp\left\{2u\gamma\sum_{k=1}^{n}f(Y_k)\right\}\right)^{1/2}
+\end{eqnarray*}
+with the last line obtained from Holder inequality. We bound the first expectation using Azuma-Hoeffding inequality, that is, setting $\mathcal{F}_k = \sigma(\xi_1,\ldots,\xi_k)$, 
+\[
+\PE_x \exp\left\{2\sqrt{\gamma}\sum_{k=N+1}^{N+n}\Delta(Y_{k-1})\xi_{k}\right\} = \PE_x\left(\exp\left\{2\sqrt{\gamma}\sum_{k=N+1}^{N+n-1}\Delta(Y_{k-1})\xi_{k}\right\} \PE\left[\exp\left\{2\sqrt{\gamma}\Delta(Y_{n-1})\xi_{n}\right\}| \mathcal{F}_{N+n-1}\right]\right) \leq
+\]
+\[
+\leq \PE_x\left(\exp\left\{2\sqrt{\gamma}\sum_{k=N+1}^{N+n-1}\Delta(Y_{k-1})\xi_{k}\right\}\exp\left\{2\gamma M^2\right\}\right) \leq \{\text{by induction}\} \leq \exp\left\{2n\gamma M^2\right\}
+\]
+To bound the second exponent, note that
+\[
+\PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}f(Y_k)\right\} =
+\PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\left(f(Y_k) - \PE_xf(X_k)\right)\right\} \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\PE_x f(Y_k)\right\} 
+\]
+Now we can apply Lemma~\ref{lem:exp_strongly_convex} to the first expectation with $\lambda = 2nu\gamma$, yielding the bound
+\begin{equation}
+\label{eq:1_bound}
+\PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\left(f(Y_k) - \PE_xf(X_k)\right)\right\} \leq \exp\left\{\frac{16u^2 n\gamma \|f\|^2_{\text{Lip}}\left(1+\frac{N}{n}\right)(m+L)^2}{m^2L^2}\right\}
+\end{equation}
+Next we use \cite[Proposition 1]{joulin2010}, stating that
+\begin{equation}
+\label{eq:2_bound}
+\left|\sum_{k=N+1}^{N+n}\PE_x f(Y_k) - n\pi_{\gamma}(f)\right| \leq \frac{2\left(1-\frac{\kappa}{2}\right)^{N+1}}{\kappa}\|f\|_{\text{Lip}}\int_{\rset}|x-y|\,\pi_{\gamma}(dy) \leq \frac{m+L}{mL}\|f\|_{\text{Lip}}S(x)
+\end{equation}
+and \cite[Corollary 7]{dm2016HighDim}, that is
+\begin{equation}
+\label{eq:3_bound}
+|\pi_{\gamma}(f) - \pi(f)| \leq W_1(\pi_\gamma,\pi) \leq W_2(\pi_\gamma,\pi) \leq C_1\sqrt{\gamma}
+\end{equation}
+where $C_1 = 2L\sqrt{\frac{mL}{m+L}\left(\gamma + \frac{mL}{2(m+L)}\right)\left(2 + \frac{L^2\gamma}{m} + \frac{L^2\gamma^2}{6}\right)}$. Now we put together bounds \eqref{eq:1_bound}, \eqref{eq:2_bound} and \eqref{eq:3_bound}, leading to the final bound
+\[
+\PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}f(Y_k)\right\} \leq \exp\left\{\frac{16u^2 n\gamma \|f\|^2_{\text{Lip}}\left(1+\frac{N}{n}\right)(m+L)^2}{m^2L^2} + 2u\gamma \frac{m+L}{mL}\|f\|_{\text{Lip}}S(x) + 2n\gamma u(\pi(f) + C_1\sqrt{\gamma})\right\}
+\]
+Hence the statement of lemma follows.
+\end{proof}
+
 %Aforementioned lemmas allow us to bound the exponential moment of the additive functional of ULA. Namely, the following theorem holds
 %
 %\begin{thm}
