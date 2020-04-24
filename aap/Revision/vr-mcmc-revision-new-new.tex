@@ -1602,9 +1602,9 @@ Y_{k+1} = Y_k + \gamma\mu_0(Y_k) + \sqrt{\gamma}\xi_{k+1}, Y_0 = x, \xi_{k+1} \s
 The main idea of the proof is to change expectation w.r.t. $(X_p^x)$ to the expectation w.r.t. $(Y_p^x)$, which is easier to work with:
 \begin{eqnarray*}
 \PE_x \rme^{u\gamma\sum\limits_{k=N+1}^{N+n}f(X_k)} &=& \PE_x  \exp\left\{u\gamma\sum_{k=N+1}^{N+n}\left(f(Y_k) -\frac{(Y_k - Y_{k-1} - \gamma\mu(Y_{k-1}))^2 - (Y_k - Y_{k-1} - \gamma\mu_0(Y_{k-1}))^2}{2\gamma}\right)\right\} = \\
-& = & \PE_x \exp\left\{u\gamma\sum_{k=N+1}^{N+n}f(Y_k) + \sum_{k=1}^{n}\left[(Y_k-Y_{k-1})\Delta(Y_{k-1}) - \gamma\mu_0(Y_{k-1})\Delta(Y_{k-1}) - \frac{\gamma}{2}\Delta^2(Y_{k-1})\right]\right\} = \\
- &=& \PE_x \exp\left\{u\gamma\sum_{k=N+1}^{N+n}f(Y_k) + \sum_{k=1}^{n}\left[\sqrt{\gamma}\Delta(Y_{k-1})\xi_{k} - \frac{\gamma}{2}\Delta^2(Y_{k-1})\right]\right\} \leq \\
- & \leq & \left(\PE_x \exp\left\{2\sqrt{\gamma}\sum_{k=N+1}^{N+n}\Delta(Y_{k-1})\xi_{k}\right\}\right)^{1/2} \left(\PE \exp\left\{2u\gamma\sum_{k=1}^{n}f(Y_k)\right\}\right)^{1/2}
+& = & \PE_x \exp\left\{u\gamma\sum_{k=N+1}^{N+n}f(Y_k) + \sum_{k=N+1}^{N+n}\left[(Y_k-Y_{k-1})\Delta(Y_{k-1}) - \gamma\mu_0(Y_{k-1})\Delta(Y_{k-1}) - \frac{\gamma}{2}\Delta^2(Y_{k-1})\right]\right\} = \\
+ &=& \PE_x \exp\left\{u\gamma\sum_{k=N+1}^{N+n}f(Y_k) + \sum_{k=N+1}^{N+n}\left[\sqrt{\gamma}\Delta(Y_{k-1})\xi_{k} - \frac{\gamma}{2}\Delta^2(Y_{k-1})\right]\right\} \leq \\
+ & \leq & \left(\PE_x \exp\left\{2\sqrt{\gamma}\sum_{k=N+1}^{N+n}\Delta(Y_{k-1})\xi_{k}\right\}\right)^{1/2} \left(\PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}f(Y_k)\right\}\right)^{1/2}
 \end{eqnarray*}
 with the last line obtained from Holder inequality. We bound the first expectation using Azuma-Hoeffding inequality, that is, setting $\mathcal{F}_k = \sigma(\xi_1,\ldots,\xi_k)$, 
 \[
@@ -1616,12 +1616,12 @@ with the last line obtained from Holder inequality. We bound the first expectati
 To bound the second exponent, note that
 \[
 \PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}f(Y_k)\right\} =
-\PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\left(f(Y_k) - \PE_xf(X_k)\right)\right\} \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\PE_x f(Y_k)\right\} 
+\PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\left(f(Y_k) - \PE_xf(Y_k)\right)\right\} \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\PE_x f(Y_k)\right\} 
 \]
 Now we can apply Lemma~\ref{lem:exp_strongly_convex} to the first expectation with $\lambda = 2nu\gamma$, yielding the bound
 \begin{equation}
 \label{eq:1_bound}
-\PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\left(f(Y_k) - \PE_xf(X_k)\right)\right\} \leq \exp\left\{\frac{16u^2 n\gamma \|f\|^2_{\text{Lip}}\left(1+\frac{N}{n}\right)(m+L)^2}{m^2L^2}\right\}
+\PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\left(f(Y_k) - \PE_xf(Y_k)\right)\right\} \leq \exp\left\{\frac{16u^2 n\gamma \|f\|^2_{\text{Lip}}\left(1+\frac{N}{n}\right)(m+L)^2}{m^2L^2}\right\}
 \end{equation}
 Next we use \cite[Proposition 1]{joulin2010}, stating that
 \begin{equation}
