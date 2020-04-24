@@ -1580,7 +1580,11 @@ Thus, we might apply the result of \cite[Theorem 4]{joulin2010}, yielding for an
 with the quantity $V^2 = \frac{4}{\kappa n}\left(1 + \frac{N}{n}\right)\sup_{x}\frac{\sigma^2(x)}{n_x \kappa}$, $\sigma^2(x) = \frac{1}{2}\iint \|y-z\|^2P_x(dy)P_x(dz) = \gamma d$ and $n_x \geq 1$.
 \end{proof}
 
-\begin{lem} Let $\mu(x) = \mu_{0}(x) + \Delta(x)$, where $\mu_0^{\prime}(x) <-m$ for some $m > 0$, $\mu_0(x) \in Lip(L)$ and suppose that $\Delta(x)$ is bounded. Then
+\begin{lem} Let $(X_p)_{p \geq 0}$ be the ULA-generated Markov chain of the form
+\[
+X_{p+1} = X_p + \gamma \mu(X_p) + \sqrt{\gamma}\xi_{p+1}, \xi_{p+1} \sim \mathcal{N}(0,1)
+\]
+ with $\mu(x) = \mu_{0}(x) + \Delta(x)$, where $\mu_0^{\prime}(x) <-m$ for some $m > 0$, $\mu_0(x) \in Lip(L)$ and suppose that $\exists M > 0, \left|\Delta(x)\right| < M$. Then for any Lipschitz function $f$,
 \begin{equation}
 \label{eq:exp_bound}
 \PE_x \rme^{u\gamma\sum\limits_{k=N+1}^{N+n}f(X_k)} \leq C\exp\left\{n\gamma\left(\frac{8u^2\|f\|^2_{\text{Lip}}\left(1+\frac{N}{n}\right)(m+L)^2}{m^2L^2} + M^2 + C_1u\sqrt{\gamma} +  u\pi(f)\right)\right\}
