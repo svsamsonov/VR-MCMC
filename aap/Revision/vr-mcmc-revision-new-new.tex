@@ -1352,38 +1352,34 @@ where we denote
 \[
 \zeta_{l,j}(u)=\mathsf{E}\left[\rme^{-u\gamma\sum_{k=l}^{j}\mu'(X^x_{k-1})}\right],\quad u>0.
 \]
-Note that $\mu^{\prime}(x)$ is bounded due  our assumptions and from \cite[Theorem~1]{delyon1999small} and Lemma~\ref{lem:v_ergodicity} in Appendix~\ref{sec:appendix} it follows that
-\[
-\mathsf{E}\left[\rme^{-u\gamma\left(\sum_{k=l}^{j}[\mu'(X^x_{k-1})-\pi_\gamma(\mu')]\right)}\right]\leq C_1 \rme^{\varkappa n\gamma^2}(1+V(x)),\quad u\gamma\leq \gamma_0,
-\]
-for some constants $\gamma_0$ and $C_1,\varkappa>0$. Then we have
-\[
-\zeta_{l,j}(u)=\mathsf{E}\left[\rme^{-s\gamma\sum_{k=l}^{j}\mu'(X^x_{k-1})}\right]\leq  C_1 \rme^{\varkappa n\gamma^2}(1+V(x)) \rme^{-s\gamma (j-l+1)\pi_\gamma(\mu')}.
-\]
-Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R})$ and $\pi^{\prime}(x) = -\frac{1}{2}\pi(x)\mu(x)$, we have
+Note that $\mu^{\prime}(x)$ is bounded and Lipschitz due  our assumptions and from Lemma~\ref{lem:exp_bound} in Appendix~\ref{sec:appendix} it follows that
+\begin{align*}
+\zeta_{l,j}(u) \leq \begin{cases} C(x)\exp\left\{(j-l)\gamma\left(4u^2\kappa^{-2} \|f\|^2_{\text{Lip}} + M^2 + C_1u\sqrt{\gamma} -  u\pi(\mu')\right)\right\}, \quad \gamma(j-l) \geq C_0 := \left(\frac{4}{m+L} + \kappa^{-1}\right) \\
+\exp\left\{uC_0\max\limits_{y}|\mu'(y)|\right\}, \quad 0 \leq \gamma(j-l) \leq C_0	
+\end{cases}
+\end{align*}
+for constants $C(x)$ and $C_1$ which could be made precise. Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R})$ and $\pi^{\prime}(x) = -\frac{1}{2}\pi(x)\mu(x)$, we have
 \[
 \pi(\mu')=\int\mu'(x)\pi(x)\,dx=-\int\mu(x)\pi'(x)\,dx=\frac{1}{2}\int\mu^{2}(x)\pi(x)\,dx>0
 \]
-Note also that \(\pi_\gamma(\mu^{\prime}) \geq \pi_\gamma(\mu^{\prime}) - C_2\sqrt{\gamma}\)
-yielding the bound
-\[
-\zeta_{l,j}(s) \leq  C_1 \rme^{\varkappa n\gamma^2}(1+V(x)) \rme^{-s\gamma(j-l+1)\alpha}
-\]
-where $ \alpha = \frac{1}{2}\int \mu^2(x)\pi(x)\,dx - C_1\sqrt{\gamma} > 0$ for sufficiently small $\gamma$. Hence we obtain
+Hence the following bound follows
 \begin{align*}
-\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4) &\leq (C_1 \rme^{\varkappa n\gamma^2}(1+V(x)))^{1/4}\sum_{p=j+1}^{q+1} \rme^{-\gamma(p-j)\alpha}
-\\
-&\leq  (C_1 \rme^{\varkappa n\gamma^2}(1+V(x)))^{1/4}\frac{1}{1- \rme^{- \gamma\alpha}}
+\zeta_{l,j}(u) \leq \begin{cases} C(x)\exp\left\{-\gamma(j-l)\alpha\right\}, \quad \gamma(j-l) \geq C_0 \\
+\exp\left\{uC_0\max\limits_{y}|\mu'(y)|\right\}, \quad 0 \leq \gamma(j-l) \leq C_0	
+\end{cases}
+\end{align*}
+with the quantity $ \alpha = \min(...,...) > 0$. Hence we obtain
+\begin{align*}
+\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4) &\leq \frac{C_0}{\gamma}\rme^{uC_0\max\limits_{y}|\mu'(y)|} + C(x)\sum_{p=j+1}^{\infty} \rme^{-\gamma(p-j)\alpha}
+\leq \frac{C_0}{\gamma}\rme^{uC_0\max\limits_{y}|\mu'(y)|} + \frac{C(x)}{1-\rme^{- \gamma\alpha}}
 \end{align*}
 and
 \begin{align*}
-\sum_{j=1}^{q} \zeta^{1/2}_{1,j}(2) \leq (C_1 \rme^{\varkappa n\gamma^2}(1+V(x)))^{1/2}\sum_{j=0}^{q} \rme^{-\gamma j\alpha}
-\\
-\leq  (C_1 \rme^{\varkappa n\gamma^2}(1+V(x)))^{1/2}\frac{ 1}{1- \rme^{- \gamma\alpha}}.
+\sum_{j=1}^{q} \zeta^{1/2}_{1,j}(2) \leq \frac{C_0}{\gamma}\rme^{uC_0\max\limits_{y}|\mu'(y)|} + \frac{C(x)}{1-\rme^{- \gamma\alpha}}
 \end{align*}
 Thus the final bound follows:
 \begin{align*}
-\mathsf{Var}\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X^x_{p}\right)\right] \leq \gamma^{-1} C_K \rme^{\varkappa n\gamma^2} (1+V(x))
+\mathsf{Var}\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X^x_{p}\right)\right] \leq \gamma^{-1} C_K C(x)
 \end{align*}
  with $C_K$  depending neither on $q$ nor on $\gamma$. The proof is completed.
 \end{proof}
@@ -1580,16 +1576,19 @@ Thus, we might apply the result of \cite[Theorem 4]{joulin2010}, yielding for an
 with the quantity $V^2 = \frac{4}{\kappa n}\left(1 + \frac{N}{n}\right)\sup_{x}\frac{\sigma^2(x)}{n_x \kappa}$, $\sigma^2(x) = \frac{1}{2}\iint \|y-z\|^2P_x(dy)P_x(dz) = \gamma d$ and $n_x \geq 1$.
 \end{proof}
 
-\begin{lem} Let $(X_p)_{p \geq 0}$ be the ULA-generated Markov chain of the form
+\begin{lem} 
+\label{lem:exp_bound}
+Let $(X_p)_{p \geq 0}$ be the ULA-generated Markov chain of the form
 \[
 X_{p+1} = X_p + \gamma \mu(X_p) + \sqrt{\gamma}\xi_{p+1}, \xi_{p+1} \sim \mathcal{N}(0,1)
 \]
- with $\mu(x) = \mu_{0}(x) + \Delta(x)$, where $\mu_0^{\prime}(x) <-m$ for some $m > 0$, $\mu_0(x) \in Lip(L)$ and suppose that $\exists M > 0, \left|\Delta(x)\right| < M$. Then for any Lipschitz function $f$,
+ with $0 < \gamma < \frac{4}{m+L}, \quad \mu(x) = \mu_{0}(x) + \Delta(x)$, where $\mu_0^{\prime}(x) <-m$ for some $m > 0$, $\mu_0(x) \in Lip(L)$. Suppose that there exists $M > 0,$ such that $\left|\Delta(x)\right| \leq M$.
+ Then for any Lipschitz function $f$, $\forall N $
 \begin{equation}
 \label{eq:exp_bound}
-\PE_x \rme^{u\gamma\sum\limits_{k=N+1}^{N+n}f(X_k)} \leq C\exp\left\{n\gamma\left(\frac{8u^2\|f\|^2_{\text{Lip}}\left(1+\frac{N}{n}\right)(m+L)^2}{m^2L^2} + M^2 + C_1u\sqrt{\gamma} +  u\pi(f)\right)\right\}
+\PE_x \rme^{u\gamma\sum\limits_{k=N+1}^{N+n}f(X_k)} \leq C\exp\left\{n\gamma\left(2u^2\kappa^{-2} \|f\|^2_{\text{Lip}}\left(1+\frac{1}{n\gamma}\left(\frac{4}{m+L} + \kappa^{-1}\right)\right) + M^2 + C_1u\sqrt{\gamma} +  u\pi(f)\right)\right\}
 \end{equation}
-with constants $C$ and $C_1$ depending only on $m,L$.
+with positive constants $C < \exp\left\{\frac{4u\|f\|_{\text{Lip}}}{mL}\int_{\rset}|x-y|\,\pi_{\gamma}(dy)\right\}$ and $C_1$ depending only on $m,L$.
 \end{lem}
 \begin{proof} The Markov Chain $(X_p^x)$ has the form
 \[
@@ -1618,10 +1617,10 @@ To bound the second exponent, note that
 \PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}f(Y_k)\right\} =
 \PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\left(f(Y_k) - \PE_xf(Y_k)\right)\right\} \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\PE_x f(Y_k)\right\} 
 \]
-Now we can apply Lemma~\ref{lem:exp_strongly_convex} to the first expectation with $\lambda = 2nu\gamma$, yielding the bound
+Now we can apply \cite[Proposition 32]{dm2016HighDim} to the first expectation with $\lambda = 2nu\gamma$, yielding the bound
 \begin{equation}
 \label{eq:1_bound}
-\PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\left(f(Y_k) - \PE_xf(Y_k)\right)\right\} \leq \exp\left\{\frac{16u^2 n\gamma \|f\|^2_{\text{Lip}}\left(1+\frac{N}{n}\right)(m+L)^2}{m^2L^2}\right\}
+\PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\left(f(Y_k) - \PE_xf(Y_k)\right)\right\} \leq \exp\left\{4u^2\kappa^{-2} n\gamma \|f\|^2_{\text{Lip}}\left(1+\frac{1}{n\gamma}\left(\frac{4}{m+L} + \kappa^{-1}\right)\right)\right\}
 \end{equation}
 Next we use \cite[Proposition 1]{joulin2010}, stating that
 \begin{equation}
@@ -1635,7 +1634,7 @@ and \cite[Corollary 7]{dm2016HighDim}, that is
 \end{equation}
 where $C_1 = 2L\sqrt{\frac{mL}{m+L}\left(\gamma + \frac{mL}{2(m+L)}\right)\left(2 + \frac{L^2\gamma}{m} + \frac{L^2\gamma^2}{6}\right)}$. Now we put together bounds \eqref{eq:1_bound}, \eqref{eq:2_bound} and \eqref{eq:3_bound}, leading to the final bound
 \[
-\PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}f(Y_k)\right\} \leq \exp\left\{\frac{16u^2 n\gamma \|f\|^2_{\text{Lip}}\left(1+\frac{N}{n}\right)(m+L)^2}{m^2L^2} + 2u\gamma \frac{m+L}{mL}\|f\|_{\text{Lip}}S(x) + 2n\gamma u(\pi(f) + C_1\sqrt{\gamma})\right\}
+\PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}f(Y_k)\right\} \leq \exp\left\{4u^2\kappa^{-2} n\gamma \|f\|^2_{\text{Lip}}\left(1+\frac{1}{n\gamma}\left(\frac{4}{m+L} + \kappa^{-1}\right)\right) + 2u\gamma \frac{m+L}{mL}\|f\|_{\text{Lip}}S(x) + 2n\gamma u(\pi(f) + C_1\sqrt{\gamma})\right\}
 \]
 Hence the statement of lemma follows.
 \end{proof}
