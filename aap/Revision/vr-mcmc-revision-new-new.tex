@@ -1584,10 +1584,10 @@ X_{p+1} = X_p + \gamma \mu(X_p) + \sqrt{\gamma}\xi_{p+1}, \xi_{p+1} \sim \mathca
  \]
  the stationary distribution of the corresponding continuous-time diffusion.
  Suppose that there exists $M > 0,$ such that $\left|\Delta(x)\right| \leq M$.
- Then for any Lipschitz function $f$, $\forall N $
+ Then for any Lipschitz function $f$ and for any $ N \geq 1$,
 \begin{equation}
 \label{eq:exp_bound}
-\PE_x \rme^{u\gamma\sum\limits_{k=N+1}^{N+n}f(X_k)} \leq C(x)\exp\left\{n\gamma\left(2u^2\kappa^{-2} \|f\|^2_{\text{Lip}}\left(1+\frac{1}{n\gamma}\left(\frac{4}{m+L} + \kappa^{-1}\right)\right) + M^2 + C_1u\sqrt{\gamma} +  u\pi(f)\right)\right\}
+\PE_x \rme^{u\gamma\sum\limits_{k=N+1}^{N+n}f(X_k)} \leq C(x)\exp\left\{n\gamma\left(2u^2\kappa^{-2} \|f\|^2_{\text{Lip}}\left(1+\frac{1}{n\gamma}\left(\frac{4}{m+L} + \kappa^{-1}\right)\right) + M^2 + C_1u\sqrt{\gamma} +  u\pi_{\mu_0}(f)\right)\right\}
 \end{equation}
 with $\kappa = 2mL(m+L)^{-1}$, positive constant $C_1$ depending only on $m,L$ and 
 \[
