@@ -1572,29 +1572,6 @@ S_2 & \leq & \frac{2}{n^2}\sum\limits_{k=N+1}^{N+n-1}\left[C^2V^2(x)\rho^{k+1}\f
 Hence \eqref{eq:vanilla_var} follows.
 \end{proof}
 
-\begin{lem}
-\label{lem:exp_strongly_convex}
-Let $(X_p^x)_{p \geq 0}$ be the ULA-generated Markov chain with ... . Then for any $\lambda \in \rset$, it holds
-\begin{equation}
-\label{eq:exp_strongly_convex}
-\PE_x \rme^{\lambda\left(\pi_n^N(f) - \PE_x\pi_n^N(f)\right)} \leq e^{\frac{4\lambda^2 \|f\|^2_{\text{Lip}}\left(1+\frac{N}{n}\right)d(m+L)^2}{\gamma n m^2L^2}}
-\end{equation}
-\end{lem}
-\begin{proof} Note that for ULA algorithm the distribution $\P_x$ is Gaussian for any $x$, thus, following \cite[Proposition 3]{dm2016HighDim}, we may bound the Wasserstein-1 distance between $\P_x$ and $\P_y$ by
-\[
-W_1(\P_x,\P_y) = W_1(\mathcal{N}(x-\gamma\mu(x),\gamma),\mathcal{N}(y-\gamma\mu(y),\gamma)) = \|x-y-\gamma(\mu(x)-\mu(y))\| \leq \sqrt{1-\kappa}\|x-y\|
-\]
-where $\kappa = \frac{2mL\gamma}{m+L}$. Hence, it holds
-\[
-W_1(\P_x,\P_y) \leq \left(1-\frac{\kappa}{2}\right)\|x-y\|
-\]
-Thus, we might apply the result of \cite[Theorem 4]{joulin2010}, yielding for any $\lambda \in \rset$  
-\[
-\PE_x \rme^{\lambda\left(\pi_n^N(f) - \PE_x\pi_n^N(f)\right)} \leq e^{4\lambda^2 \|f\|^2_{\text{Lip}} V^2}
-\]
-with the quantity $V^2 = \frac{4}{\kappa n}\left(1 + \frac{N}{n}\right)\sup_{x}\frac{\sigma^2(x)}{n_x \kappa}$, $\sigma^2(x) = \frac{1}{2}\iint \|y-z\|^2P_x(dy)P_x(dz) = \gamma d$ and $n_x \geq 1$.
-\end{proof}
-
 \begin{lem} 
 \label{lem:exp_bound}
 Let $(X_p)_{p \geq 0}$ be the ULA-generated Markov chain of the form
@@ -1649,7 +1626,15 @@ Now we can apply \cite[Proposition 32]{dm2016HighDim} to the first expectation w
 \label{eq:1_bound}
 \PE \exp\left\{2u\gamma\sum_{k=N+1}^{N+n}\left(f(Y_k) - \PE_xf(Y_k)\right)\right\} \leq \exp\left\{4u^2\kappa^{-2} n\gamma \|f\|^2_{\text{Lip}}\left(1+\frac{1}{n\gamma}\left(\frac{4}{m+L} + \kappa^{-1}\right)\right)\right\}
 \end{equation}
-Next we use \cite[Proposition 1]{joulin2010}, stating that
+Note that for ULA algorithm the distribution $\P_x$ is Gaussian for any $x \in \rset^d$, thus, following \cite[Proposition 3]{dm2016HighDim}, we may bound the Wasserstein-1 distance between $\P_x$ and $\P_y$ by
+\[
+W_1(\P_x,\P_y) = W_1(\mathcal{N}(x-\gamma\mu(x),\gamma),\mathcal{N}(y-\gamma\mu(y),\gamma)) = \|x-y-\gamma(\mu(x)-\mu(y))\| \leq \sqrt{1-\kappa\gamma}\|x-y\|
+\]
+where $\kappa = \frac{2mL}{m+L}$. Hence, it holds
+\[
+W_1(\P_x,\P_y) \leq \left(1-\frac{\kappa\gamma}{2}\right)\|x-y\|
+\]
+which means that the Markov kernel $\P$ is a strict contraction in Wasserstein metric. This allows to use \cite[Proposition 1]{joulin2010}, stating that
 \begin{equation}
 \label{eq:2_bound}
 \left|\sum_{k=N+1}^{N+n}\PE_x f(Y_k) - n\pi_{\gamma}(f)\right| \leq \frac{2\left(1-\frac{\kappa}{2}\right)^{N+1}}{\kappa}\|f\|_{\text{Lip}}\int_{\rset}|x-y|\,\pi_{\gamma}(dy) \leq \frac{m+L}{mL}\|f\|_{\text{Lip}}S(x)
