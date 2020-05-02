@@ -1358,30 +1358,34 @@ Note that due to our assumptios, $\mu(x) = \mu_0(x) + \Delta(x)$ with $\mu^{\pri
 \zeta_{l,j}(u) \leq \mathsf{E}\left[\rme^{-u\gamma\sum_{k=l}^{j}\mu_0'(X^x_{k-1})}\right]\rme^{u\gamma(j-l+1)M^{\prime}}
 \end{equation}
 To bound the first exponential moment in \ref{eq:zeta}, we apply
-Lemma~\ref{lem:exp_bound} in Appendix~\ref{sec:appendix}. It implies that
+Lemma~\ref{lem:exp_bound} in Appendix~\ref{sec:appendix} to $f(x) = -\mu^{\prime}_0(x)$. It implies that
 \begin{align*}
-\zeta_{l,j}(u) \leq \begin{cases} C(x)\exp\left\{(j-l+1)\gamma\left(4u^2\kappa^{-2} \|\mu_0^{\prime}\|^2_{\text{Lip}} + M^2 + M^{\prime} + C_1u\sqrt{\gamma} -  u\pi_{\mu_0}(\mu_0')\right)\right\}, \quad \gamma(j-l+1) \geq C_0 \\
+\zeta_{l,j}(u) \leq \begin{cases} C(x)\exp\left\{(j-l+1)\gamma\left(4u^2\kappa^{-2} \|\mu_0^{\prime}\|^2_{\text{Lip}} + M^2 + M^{\prime} + C_1u\sqrt{\gamma} +  u\pi_{\mu_0}(\mu_0')\right)\right\}, \quad \gamma(j-l+1) \geq C_0 \\
 \exp\left\{uC_0(\max\limits_{y}|\mu_0'(y)| + M^{\prime})\right\}, \quad 0 \leq \gamma(j-l+1) \leq C_0	
 \end{cases}
 \end{align*}
-with $C_0 = \left(\frac{4}{m+L} + \kappa^{-1}\right)$, measure $\pi_{\mu_{0}}$ and constants $C(x)$ and $C_1$ given in Lemma~\ref{lem:exp_bound} . Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R})$ and $\pi^{\prime}(x) = -\frac{1}{2}\pi(x)\mu(x)$, we have
+with $C_0 = \left(\frac{4}{m+L} + \kappa^{-1}\right)$, measure $\pi_{\mu_{0}}$ and constants $C(x)$ and $C_1$ given in Lemma~\ref{lem:exp_bound} . Furthermore, since $\mu_0\pi_{\mu_0}',\mu_0'\pi_{\mu_0}\in L^{1}(\rset)$ and $\pi_{\mu_0}^{\prime}(x) = \pi_{\mu_0}(x)\mu_0(x)$, we have
 \[
-\pi(\mu')=\int\mu'(x)\pi(x)\,dx=-\int\mu(x)\pi'(x)\,dx=\frac{1}{2}\int\mu^{2}(x)\pi(x)\,dx>0
+\pi_{\mu_0}(\mu_0')=\int\mu_0'(x)\pi_{\mu_0}(x)\,dx=-\int\mu_{\pi_0}(x)\pi_{\mu_0}'(x)\,dx= -\int\mu_0^{2}(x)\pi_{\mu_0}(x)\,dx < 0
 \]
 Hence the following bound follows
 \begin{align*}
-\zeta_{l,j}(u) \leq \begin{cases} C(x)\exp\left\{-\gamma(j-l)\alpha\right\}, \quad \gamma(j-l) \geq C_0 \\
-\exp\left\{uC_0\max\limits_{y}|\mu'(y)|\right\}, \quad 0 \leq \gamma(j-l) \leq C_0	
+\zeta_{l,j}(u) \leq \begin{cases} C(x)\exp\left\{\gamma(j-l+1)\alpha\right\}, \quad \gamma(j-l+1) \geq C_0 \\
+\exp\left\{(\max\limits_{y}|\mu_0'(y)| + M^{\prime})\right\}, \quad 0 \leq \gamma(j-l+1) \leq C_0
 \end{cases}
 \end{align*}
-with the quantity $ \alpha = \min(...,...) > 0$. Hence we obtain
+with the quantity 
+\[
+\alpha = \max(64\kappa^{-2} \|\mu_0^{\prime}\|^2_{\text{Lip}} + M^2 + M^{\prime} + 4C_1\sqrt{\gamma} +  4\pi_{\mu_0}(\mu_0'), 16\kappa^{-2} \|\mu_0^{\prime}\|^2_{\text{Lip}} + M^2 + M^{\prime} + 2C_1\sqrt{\gamma} +  2\pi_{\mu_0}(\mu_0')) < 0
+\] 
+Hence we obtain
 \begin{align*}
-\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4) &\leq \frac{C_0}{\gamma}\rme^{uC_0\max\limits_{y}|\mu'(y)|} + C(x)\sum_{p=j+1}^{\infty} \rme^{-\gamma(p-j)\alpha}
-\leq \frac{C_0}{\gamma}\rme^{uC_0\max\limits_{y}|\mu'(y)|} + \frac{C(x)}{1-\rme^{- \gamma\alpha}}
+\sum_{p=j+1}^{q+1} \zeta^{1/4}_{j+1,p}(4) &\leq \frac{C_0}{\gamma}\rme^{uC_0\max\limits_{y}|\mu'(y)|} + C(x)\sum_{p=j+1}^{\infty} \rme^{\gamma(p-j)\alpha}
+\leq \frac{C_0}{\gamma}\rme^{uC_0\max\limits_{y}|\mu'(y)|} + \frac{C(x)}{1-\rme^{\gamma\alpha}}
 \end{align*}
 and
 \begin{align*}
-\sum_{j=1}^{q} \zeta^{1/2}_{1,j}(2) \leq \frac{C_0}{\gamma}\rme^{uC_0\max\limits_{y}|\mu'(y)|} + \frac{C(x)}{1-\rme^{- \gamma\alpha}}
+\sum_{j=1}^{q} \zeta^{1/2}_{1,j}(2) \leq \frac{C_0}{\gamma}\rme^{uC_0\max\limits_{y}|\mu'(y)|} + \frac{C(x)}{1-\rme^{\gamma\alpha}}
 \end{align*}
 Thus the final bound follows:
 \begin{align*}
@@ -1529,15 +1533,15 @@ Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a s
 \begin{proof}
 Note that
 \[
-\PCov_x \left[f(X_k),f(X_{k+s})\right] = \PE_x\left[f(X_k) - \pi(f)\right]\left[f(X_{k+s})-\pi(f)\right] + \left[\pi(f) - \PE_xf(X_s)\right]\left[\PE_xf(X_k) - \pi(f)\right]
+\PCov_x \left[f(X_k),f(X_{k+s})\right] = \PE_x\left[\tilde{f}(X_{k})\tilde{f}(X_{k+s})\right] + \left[\pi(f) - \PE_xf(X_{k+s})\right]\left[\PE_xf(X_k) - \pi(f)\right]
 \]
 Due to $V-$ergodicity,
 \[
-\left|\left[\pi(f) - \PE_xf(X_s)\right]\left[\PE_xf(X_k) - \pi(f)\right]\right| \leq C^2V^2(x)\rho^{k+s}
+\left|\left[\pi(f) - \PE_xf(X_{k+s})\right]\left[\PE_xf(X_k) - \pi(f)\right]\right| \leq C^2V^2(x)\rho^{2k+s}
 \]
 To bound the first term note that
 \begin{multline*}
-\left|\PE_x\left[f(X_k) - \pi(f)\right]\left[f(X_{k+s})-\pi(f)\right] - \PCov_{\pi}\left[f(X_k),f(X_{k+s})\right]\right|
+\left|\PE_x\left[\tilde{f}(X_{k})\tilde{f}(X_{k+s})\right] - \PCov_{\pi}\left[f(X_k),f(X_{k+s})\right]\right| = \left|\PE_x\left[\tilde{f}(X_{k})\tilde{f}(X_{k+s})\right] - \PE_\pi\left[\tilde{f}(X_{k})\tilde{f}(X_{k+s})\right]\right| \leq
 \\
 \leq \int\limits_{\rset^d}\left|\PE_y\left[\tilde{f}(X_0)\tilde{f}(X_{s})\right]\right| |\P^k(x,dy)-\pi(dy)|
 \leq C^2\rho^{k+s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}V(x),
@@ -1576,7 +1580,7 @@ X_{p+1} = X_p + \gamma \mu(X_p) + \sqrt{\gamma}\xi_{p+1}, \xi_{p+1} \sim \mathca
 \]
  with $0 < \gamma < 4(m+L)^{-1}, \quad \mu(x) = \mu_{0}(x) + \Delta(x)$, where $\mu_0^{\prime}(x) <-m$ for some $m > 0$, $\mu_0(x) \in Lip(L)$. Denote by 
  \[
- \pi(y) = \frac{\exp\left\{\int\limits_{0}^{y}\mu_{0}(x)\,dx\right\}}{\int\limits_{-\infty}^{+\infty}\exp\left\{\int\limits_{0}^{y}\mu_{0}(x)\,dx\right\}\,dy}
+ \pi_{\mu_0}(y) = \frac{\exp\left\{\int\limits_{0}^{y}\mu_{0}(x)\,dx\right\}}{\int\limits_{-\infty}^{+\infty}\exp\left\{\int\limits_{0}^{y}\mu_{0}(x)\,dx\right\}\,dy}
  \]
  the stationary distribution of the corresponding continuous-time diffusion.
  Suppose that there exists $M > 0,$ such that $\left|\Delta(x)\right| \leq M$.
