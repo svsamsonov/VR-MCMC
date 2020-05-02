@@ -900,7 +900,7 @@ and~\eqref{eq:28082017a1} conclude the induction step for $q = m+1$ and all $j <
 \subsection{Proof of Lemma~\ref{lem:variance}}
 In the sequel, the notation $A(\gamma,n,x) \lesssim B(\gamma,n,x)$ means that there exist $\gamma_0 > 0$, and $C < \infty$ such that for all  $\gamma \in (0,\gamma_0]$, $x \in \rset^d$, $n \in \nset$, $A(\gamma,n,x) \leq C B(\gamma,n,x)$.
 
-Under assumptions {\bf (H1)} and {\bf (H2)} the Markov chain $(X^x_{p})_{p \in \nset_0}$ is $V-$geometrically ergodic with $V(x) = 1+\|x\|^2$ and $\rho = \rme^{-\kappa\gamma}$ with $\kappa$ specified in Lemma~\ref{lem:v_ergodicity}. Due to lemma~\ref{lem:covariance},
+Under assumptions {\bf (H1)} and {\bf (H2)} the Markov chain $(X^x_{p})_{p \in \nset_0}$ is $V-$geometrically ergodic \eqref{eq:v_ergodicity} with $V(x) = 1+\|x\|^2$ and $\rho$ specified in Lemma~\ref{lem:v_ergodicity}. Due to lemma~\ref{lem:var_bound},
 \[
 \PVar[\pi_n^N(f)]\lesssim \frac{1}{n(1-\rho^{1/2})}
 \]
@@ -1555,6 +1555,7 @@ where $\left|\PCov_{\pi}\left[f(X_k),f(X_{k+s})\right]\right|$ can be bounded us
 \end{proof}
 Now we state and prove the main result of this section on the variance bound for the estimator $\pi_N^n(f)$ for $V-$geometrically ergodic Markov chain.
 \begin{lem}
+\label{lem:var_bound}
 Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Let $\tilde{f}(x) = f(x) - \pi(f)$ and assume that $n(1-\rho^{1/2}) > 1$. Then
 \begin{equation}
 \label{eq:vanilla_var}
