@@ -1634,12 +1634,12 @@ where $\kappa = \frac{2mL}{m+L}$. Hence, it holds
 \[
 W_1(\P_x,\P_y) \leq \left(1-\frac{\kappa\gamma}{2}\right)\|x-y\|
 \]
-which means that the Markov kernel $\P$ is a strict contraction in Wasserstein metric. This allows to use \cite[Proposition 1]{joulin2010}, stating that
+which means that the Markov kernel $\P$ is a strict contraction in the Wasserstein metric. This allows to use \cite[Proposition 1]{joulin2010}, stating that
 \begin{equation}
 \label{eq:2_bound}
-\left|\sum_{k=N+1}^{N+n}\PE_x f(Y_k) - n\pi_{\gamma}(f)\right| \leq \frac{2\left(1-\frac{\kappa}{2}\right)^{N+1}}{\kappa}\|f\|_{\text{Lip}}\int_{\rset}|x-y|\,\pi_{\gamma}(dy) \leq \frac{m+L}{mL}\|f\|_{\text{Lip}}S(x)
+\left|\sum_{k=N+1}^{N+n}\PE_x f(Y_k) - n\pi_{\gamma}(f)\right| \leq \frac{2\left(1-\frac{\kappa\gamma}{2}\right)^{N+1}}{\kappa\gamma}\|f\|_{\text{Lip}}\int_{\rset}|x-y|\,\pi_{\gamma}(dy) \leq \frac{m+L}{mL\gamma}\|f\|_{\text{Lip}}S(x)
 \end{equation}
-and \cite[Corollary 7]{dm2016HighDim}, that is
+with $S(x) = \int_{\rset}|x-y|\,\pi_{\gamma}(dy)$. Then by \cite[Corollary 7]{dm2016HighDim}, 
 \begin{equation}
 \label{eq:3_bound}
 |\pi_{\gamma}(f) - \pi(f)| \leq W_1(\pi_\gamma,\pi) \leq W_2(\pi_\gamma,\pi) \leq C_1\sqrt{\gamma}
