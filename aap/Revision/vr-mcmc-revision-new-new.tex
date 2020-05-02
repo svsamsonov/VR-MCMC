@@ -1528,8 +1528,9 @@ yielding the first statement of lemma. The second statement can be obtained from
 Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Let $\tilde{f}(x) = f(x) - \pi(f)$. Then
 \begin{equation}
 \label{eq:cov_v_ergodic}
-\PCov_x \left[f(X_k),f(X_{k+s})\right] \leq C^2V^2(x)\rho^{k+s} + C^2\rho^{k+s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}V(x) + C\pi(V)\rho^{s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}
+\PCov_x \left[f(X_k),f(X_{k+s})\right] \leq C^2V^2(x)\rho^{2k+s} + C^2\rho^{k+s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}V(x) + C\pi(V)\rho^{s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}
 \end{equation}
+with constant $C$ from Lemma~\ref{eq:fp_cov}.
 \end{lem}
 \begin{proof}
 Note that
