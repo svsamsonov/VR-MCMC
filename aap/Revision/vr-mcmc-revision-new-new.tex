@@ -576,7 +576,7 @@ Let $f$ be a bounded Borel function and $(X^x_{p})_{p \in \nset_0}$ be a Markov 
 Let $c_0>0$. Then, there exist $C < \infty$ and $\gamma_0 > 0$, such that for all $n \in \nset$, $\gamma \in (0,\gamma_0]$ satisfying $n\gamma > c_0$, and $x \in \rset^d$,
 \begin{equation}
 \label{eq:var-mc}
-\PVar\left[\pi_n^N(f)\right]\leq C (n \gamma)^{-1} V(x) \eqsp.
+\PVar\left[\pi_n^N(f)\right]\leq \frac{C}{n\gamma} + C\left(\frac{\rho^NV(x)+1}{n\gamma}\right)^2 \eqsp.
 \end{equation}
 \end{lem}
 \begin{remark}
@@ -902,9 +902,12 @@ In the sequel, the notation $A(\gamma,n,x) \lesssim B(\gamma,n,x)$ means that th
 
 Under assumptions {\bf (H1)} and {\bf (H2)} the Markov chain $(X^x_{p})_{p \in \nset_0}$ is $V-$geometrically ergodic \eqref{eq:v_ergodicity} with $V(x) = 1+\|x\|^2$ and $\rho$ specified in Lemma~\ref{lem:v_ergodicity}. Due to lemma~\ref{lem:var_bound},
 \[
-\PVar[\pi_n^N(f)]\lesssim \frac{1}{n(1-\rho^{1/2})}
+\PVar[\pi_n^N(f)]\lesssim \frac{1}{n(1-\rho^{1/2})} + \left(\frac{\rho^NV(x)+1}{n(1-\rho^{1/2})}\right)^2
 \]
-and the result of lemma follows from Taylor expansion of denominator.
+Now from Taylow expansion of denominator it follows that $1-\rho^{1/2} \sim C\gamma$ with constant $C$ not depending on $\gamma,N$ and $n$, thus yielding an estimate
+\[
+\PVar[\pi_n^N(f)] \lesssim \frac{1}{n\gamma} + \left(\frac{\rho^NV(x)+1}{n\gamma}\right)^2
+\]
 
 
 
@@ -1559,7 +1562,7 @@ Now we state and prove the main result of this section on the variance bound for
 Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Let $\tilde{f}(x) = f(x) - \pi(f)$ and assume that $n(1-\rho^{1/2}) > 1$. Then
 \begin{equation}
 \label{eq:vanilla_var}
-\PVar_x \left[ \pi_{N}^n(f) \right] \leq \frac{C_1\pi(V)\|\tilde{f}\|^2_{V^{1/2}}}{n(1-\rho^{1/2})} + \mathcal{O}(\frac{1}{n^2(1-\rho^{1/2})})
+\PVar_x \left[ \pi_{N}^n(f) \right] \leq \frac{C_1\pi(V)\|\tilde{f}\|^2_{V^{1/2}}}{n(1-\rho^{1/2})} + C_2\left(\frac{\rho^NV(x) + 1}{n(1-\rho)}\right)^2
 \end{equation}
 with constant $C_1 > 0$ and $0 < \rho <1$ from \eqref{eq:v_ergodicity}.
 \end{lem}
@@ -1571,7 +1574,7 @@ Note that
 \end{eqnarray*}
 Now we bound first and second sum using lemma~\ref{lem:covariance}:
 \[
-S_1 \leq \frac{2}{n}C\pi(V)\|\tilde{f}\|^2_{V^{1/2}} + \frac{\rho^N C^2V(x)\left(\rho^NV(x) + 2\|\tilde{f}\|^2_{V^{1/2}}\right)}{n^2(1-\rho)}
+S_1 \leq \frac{2C\pi(V)\|\tilde{f}\|^2_{V^{1/2}}}{n} + \frac{\rho^N C^2V(x)\left(\rho^NV(x) + 2\|\tilde{f}\|^2_{V^{1/2}}\right)}{n^2(1-\rho)}
 \]
 \begin{eqnarray*}
 S_2 & \leq & \frac{2}{n^2}\sum\limits_{k=N+1}^{N+n-1}\left[\frac{C^2V^2(x)\rho^{2k+1}}{1-\rho} + \frac{2C^2V(x)\|\tilde{f}\|^2_{V^{1/2}}\rho^{k+1/2}}{1-\rho^{1/2}} + \frac{2C\|\tilde{f}\|^2_{V^{1/2}}\pi(V)}{1-\rho^{1/2}}\right] \leq \\
