@@ -1352,23 +1352,19 @@ where we denote
 \[
 \zeta_{l,j}(u)=\mathsf{E}\left[\rme^{-u\gamma\sum_{k=l}^{j}\mu'(X^x_{k-1})}\right],\quad u>0.
 \]
-Note that due to our assumptios, $\mu(x) = \mu_0(x) + \Delta(x)$ with $\mu^{\prime}_0(x) < -m$. Thus by applying Holder inequality to $\zeta_{l,j}(u)$, we obtain
+Note that due to our assumptios, $\mu(x) = \mu_0(x) + \Delta(x)$ with $\mu^{\prime}_0(x) < -m$. Note that $\left|\Delta^{\prime}(x)\right| \leq M^{\prime}$, hence
 \begin{equation}
 \label{eq:zeta}
-\zeta_{l,j}(u) \leq \left(\mathsf{E}\left[\rme^{-2u\gamma\sum_{k=l}^{j}\mu_0'(X^x_{k-1})}\right]\right)^{1/2}\left(\mathsf{E}\left[\rme^{-2u\gamma\sum_{k=l}^{j}\Delta'(X^x_{k-1})}\right]\right)^{1/2}
+\zeta_{l,j}(u) \leq \mathsf{E}\left[\rme^{-u\gamma\sum_{k=l}^{j}\mu_0'(X^x_{k-1})}\right]\rme^{u\gamma(j-l+1)M^{\prime}}
 \end{equation}
-Note that $\left|\Delta^{\prime}(x)\right| \leq M^{\prime}$, hence
-\[
-\left(\mathsf{E}\left[\rme^{-2u\gamma\sum_{k=l}^{j}\Delta'(X^x_{k-1})}\right]\right)^{1/2} \leq \mathsf{E}\rme^{2u(j-l)M^{\prime}}
-\]
 To bound the first exponential moment in \ref{eq:zeta}, we apply
 Lemma~\ref{lem:exp_bound} in Appendix~\ref{sec:appendix}. It implies that
 \begin{align*}
-\zeta_{l,j}(u) \leq \begin{cases} C(x)\exp\left\{(j-l)\gamma\left(4u^2\kappa^{-2} \|\mu^{\prime}\|^2_{\text{Lip}} + M^2 + M^{\prime} + C_1u\sqrt{\gamma} -  u\pi(\mu')\right)\right\}, \quad \gamma(j-l) \geq C_0 \\
-\exp\left\{uC_0\max\limits_{y}|\mu'(y)|\right\}, \quad 0 \leq \gamma(j-l) \leq C_0	
+\zeta_{l,j}(u) \leq \begin{cases} C(x)\exp\left\{(j-l+1)\gamma\left(4u^2\kappa^{-2} \|\mu_0^{\prime}\|^2_{\text{Lip}} + M^2 + M^{\prime} + C_1u\sqrt{\gamma} -  u\pi_{\mu_0}(\mu_0')\right)\right\}, \quad \gamma(j-l+1) \geq C_0 \\
+\exp\left\{uC_0(\max\limits_{y}|\mu_0'(y)| + M^{\prime})\right\}, \quad 0 \leq \gamma(j-l+1) \leq C_0	
 \end{cases}
 \end{align*}
-with $C_0 = \left(\frac{4}{m+L} + \kappa^{-1}\right)$, and constants $C(x)$ and $C_1$ given in Lemma~\ref{lem:exp_bound} . Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R})$ and $\pi^{\prime}(x) = -\frac{1}{2}\pi(x)\mu(x)$, we have
+with $C_0 = \left(\frac{4}{m+L} + \kappa^{-1}\right)$, measure $\pi_{\mu_{0}}$ and constants $C(x)$ and $C_1$ given in Lemma~\ref{lem:exp_bound} . Furthermore, since $\mu\pi',\mu'\pi\in L^{1}(\mathbb{R})$ and $\pi^{\prime}(x) = -\frac{1}{2}\pi(x)\mu(x)$, we have
 \[
 \pi(\mu')=\int\mu'(x)\pi(x)\,dx=-\int\mu(x)\pi'(x)\,dx=\frac{1}{2}\int\mu^{2}(x)\pi(x)\,dx>0
 \]
@@ -1424,7 +1420,7 @@ V(x) = 1 + \|x\|^2 \eqsp.
     &= \int_{0}^{K_1/\| x \|} D^2 U(t x ) [x^{\otimes 2}] \rmd t + \int_{K_1/\| x \|} ^ 1 D^2 U(t x ) [x^{\otimes 2}] \rmd t\\
     & \geq m \|x \|^2 \{1- K_1 (1 +L/m)   / \| x \| \}\eqsp,
   \end{align*}
-which proves the first statement. The second statement is obvious.
+Now the result follows given that $K_1 (1 +L/m)   / \| x \| \geq \frac{1}{2}$.
 \end{proof}
 \begin{lem}
 \label{lem:drift}
