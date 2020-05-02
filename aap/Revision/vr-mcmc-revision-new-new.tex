@@ -1502,6 +1502,7 @@ In this section we assume that $(X_p)_{p \in \nset_0}$ is a $V-$geometrically er
 \label{lem:fp_covariance}
 Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Let $\tilde{f}(x) = f(x) - \pi(f)$. Then it holds for some constant $C > 0$
 \begin{equation}
+\label{eq:fp_cov}
 |\mathsf{E}_x[\tilde{f}(X_0)\tilde{f}(X_s)]| \leq C\rho^{s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}V(x)
 \end{equation}
 For the stationary distribution it holds
@@ -1544,13 +1545,15 @@ To bound the first term note that
 \left|\PE_x\left[\tilde{f}(X_{k})\tilde{f}(X_{k+s})\right] - \PCov_{\pi}\left[f(X_k),f(X_{k+s})\right]\right| = \left|\PE_x\left[\tilde{f}(X_{k})\tilde{f}(X_{k+s})\right] - \PE_\pi\left[\tilde{f}(X_{k})\tilde{f}(X_{k+s})\right]\right| \leq
 \\
 \leq \int\limits_{\rset^d}\left|\PE_y\left[\tilde{f}(X_0)\tilde{f}(X_{s})\right]\right| |\P^k(x,dy)-\pi(dy)|
-\leq C^2\rho^{k+s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}V(x),
+\leq \{\eqref{eq:fp_cov}\}\leq C\rho^{s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}\int\limits_{\rset^d} V(y) |\P^k(x,dy)-\pi(dy)| \leq 
+\\
+\leq C^2\rho^{s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}\|\P^k(x,dy)-\pi(dy)\|_{V} \leq C^2\rho^{k+s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}V(x)
 \end{multline*}
 where the last inequality is due to lemma~\ref{lem:fp_covariance}, which implies \eqref{eq:cov_v_ergodic}.
 \end{proof}
 Now we state and prove the main result of this section on the variance bound for the estimator $\pi_N^n(f)$ for $V-$geometrically ergodic Markov chain.
 \begin{lem}
-Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Assume also that $n(1-\rho^{1/2}) > 1$. Then
+Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Let $\tilde{f}(x) = f(x) - \pi(f)$ and assume that $n(1-\rho^{1/2}) > 1$. Then
 \begin{equation}
 \label{eq:vanilla_var}
 \PVar_x \left[ \pi_{N}^n(f) \right] \leq \frac{C\pi(V)\|\tilde{f}\|_{V^{1/2}}}{n(1-\rho^{1/2})} + \mathcal{O}(\frac{1}{n^2(1-\rho^{1/2})})
