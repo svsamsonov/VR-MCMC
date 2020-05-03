@@ -1475,17 +1475,20 @@ d_V(\delta_xQ_{\gamma}^{n},\pi_\gamma) \leq C\rho^{n}V(x)
 $$
 with $V(x) = 1 + \|x\|^2$ and constants
 $$
-C = \left(1+\pi_\gamma(V)\right)\left(1 + \exp{\left(-\frac{m\gamma}{2}\right)}\right)\left(1+\frac{\overline{b}}{(1-\varepsilon)(1-\exp{\left(-\frac{m\gamma}{2}\right)} - \frac{2b}{2+K^2})}\right);
+C = \left(1+\pi_\gamma(V)\right)\left(1 + \exp{\left(-\frac{m\gamma}{2}\right)}\right)\left(1+\frac{b\exp{\left(-\frac{m\gamma}{2}\right)} + K^2 + 1}{(1-\varepsilon)(1-\exp{\left(-\frac{m\gamma}{2}\right)} - \frac{2b}{2+K^2})}\right);
 $$
 
 $$
-b = \gamma\left(2K_2^2(L+m) + d + m\right); \quad \overline{b} = b\exp{\left(-\frac{m\gamma}{2}\right)} + K^2 + 1; \quad \varepsilon = 2\Phi\left(-K\sqrt{\left(1+\frac{1}{L}\right)\left(1 + 2L\right)}\right); \quad
+b = \gamma\left(2K_2^2(L+m) + d + m\right); \quad \varepsilon = 2\Phi\left(-K\sqrt{\left(1+\frac{1}{L}\right)\left(1 + 2L\right)}\right); \quad
 $$
 
 $$
-\rho = \exp\left\{\gamma\left(\frac{m}{2} - 2\frac{2K_2^2(L+m) + d + m}{K^2 + 1}\right)\frac{\log{(1-\varepsilon)}}{\log{(1-\varepsilon)} + \log{(\exp{\left(-\frac{m\gamma}{2}\right)} + \frac{2b}{K^2+2})}}\right\}
+\rho = \exp\left\{\frac{\gamma m}{4}\frac{\log{(1-\varepsilon)}}{\log{(1-\varepsilon)} + \log{(\exp{\left(-\frac{m\gamma}{2}\right)} + \frac{2b}{K^2+2})}}\right\}
 $$
-where $K_2 > 0$ is from Lemma~\ref{lem:quadratic_behaviour} and $K > 0$ is arbitrary
+where $K_2 > 0$ is from Lemma~\ref{lem:quadratic_behaviour} and $K>0$ is a positive parameter such that 
+$$
+K^2 > 4\frac{2K_2^2(L+m) + d + m}{m}
+$$
 \end{lem}
 
 \begin{proof} Note that the condition {\bf (H1)} implies that for any $x,y \in \rset^d$,
