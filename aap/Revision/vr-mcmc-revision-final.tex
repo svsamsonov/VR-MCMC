@@ -1531,9 +1531,10 @@ To bound the first term note that
 where we have used Lemma~\ref{lem:fp_covariance} and ergodicity of $(X_k)_{k\geq 0}.$ This implies \eqref{eq:cov_v_ergodic}.
 \end{proof}
 Now we state and prove the main result of this section on the variance bound for the estimator $\pi_N^n(f)$ in the case of a $V-$geometrically ergodic Markov chain.
+
 \begin{lem}
 \label{lem:var_bound}
-Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and let $f$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$.  Then
+Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and let $f$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Denote $\tilde{f}(x) = f(x) - \pi(f)$. Then
 \begin{equation}
 \label{eq:vanilla_var}
 \PVar_x \left[ \pi_{N}^n(f) \right] \leq \frac{C_1\pi(V)\|\tilde{f}\|^2_{V^{1/2}}}{n(1-\rho^{1/2})} + C_2\left(\frac{V(x) + 1}{n(1-\rho)}\right)^2
@@ -1692,7 +1693,7 @@ yielding the first statement of lemma. The second statement can be obtained from
 
 \begin{lem}
 \label{lem:covariance}
-Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Let $\tilde{f}(x) = f(x) - \pi(f)$. Then
+Let $(X_p)_{p \in \nset_0}$ be a $V-$geometrically ergodic Markov chain with a stationary distribution $\pi$, and $f(x)$ be a function with $\|f\|_{V^{\frac{1}{2}}} < \infty$. Denote $\tilde{f}(x) = f(x) - \pi(f)$. Then
 \begin{equation}
 \label{eq:cov_v_ergodic}
 \PCov_x \left[f(X_k),f(X_{k+s})\right] \leq C^2V^2(x)\rho^{k+s} + C^2\rho^{k+s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}V(x) + C\pi(V)\rho^{s/2}\|\tilde{f}\|_{V^{\frac{1}{2}}}
