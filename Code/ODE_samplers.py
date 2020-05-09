@@ -122,7 +122,8 @@ def MALA_ODE(r_seed,Potential,step,params,N, n, d, typ, t = 1.0):
         #Lotki-Volterra system
         mu = params["mu"]
         sigma = params["sigma"]
-        step = step*np.array([10.0,0.1,10.0,0.1])
+        #step = step*np.array([10.0,0.1,10.0,0.1])
+        step = step*np.array([1.0,0.1,1.0,0.1])
         mu_init = Potential.theta_mle
         sigma_init = mu_init/20.0
         x = mu_init + sigma_init*np.random.randn(d)
