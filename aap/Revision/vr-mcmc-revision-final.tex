@@ -489,12 +489,12 @@ for a sequence  $(R_k)$ satisfying $\sum_{k=1}^\infty R^2_k\leq C$ with constant
 \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]\leq \frac{2C}{n}.
 \end{eqnarray*}
 % Note that the above estimate is rather rough, as we ignore here the fact that the difference between $\widehat A_{n-l,k}$ and $A_{n-l,k}$ is small.
-If the class of functions $\Psi$ is a linear one of dimension $\mathtt{D}_\Psi,$ then the cost of computing the coefficients $\widehat A_{l,k}$ for all $l=1,\ldots,n,$ and $k=1,\ldots,K,$ is of order  $ \mathtt{D}_\Psi K T^2 n$. Given $(\widehat A_{l,k})$ the cost of computing  $\widehat \pi_{K,n}^N$ is proportional to $\mathtt{D}_\Psi K n.$ At the same time the variance of the standard estimate $ \pi_{n}^N(f)$ is of order $1/(n\gamma)$ and this bound can not be improved, see Lemma~\ref{lem:variance} and Remark~\ref{rem:var-low}. Thus, the ratio of the corresponding cost-to-variance characteristics  is of order
+If the class of functions $\Psi$ is a linear one of dimension $\mathtt{D}_\Psi,$ then the cost of computing the coefficients $\widehat A_{l,k}$ for all $l=1,\ldots,n,$ and $k=1,\ldots,K,$ is of order  $ \mathtt{D}_\Psi K T^2 n$. Given $(\widehat A_{l,k})$ the cost of evaluating  $\widehat \pi_{K,n}^N$ is proportional to $\mathtt{D}_\Psi K n.$ At the same time the variance of the standard estimate $ \pi_{n}^N(f)$ is of order $1/(n\gamma)$ and this bound can not be improved, see Lemma~\ref{lem:variance} and Remark~\ref{rem:var-low}. Thus, the ratio of the corresponding cost-to-variance characteristics  is of order
 \begin{equation}
 \label{eq:cost_theoretical}
 \frac{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]}{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}\leq C  K \gamma \, T^2 \mathtt{D}_\Psi.
 \end{equation}
-Thus, for any fixed $K\geq 1,$  our variance reduction method is advantageous if $\gamma\ll\min\{1/(\mathtt{D}_\Psi T^2),1/\sqrt{n}\}.$  Note that in order to achieve convergence of the corresponding MSE to zero, we need to let $\gamma\to 0$ as the invariant measure of the ULA with a constant time step $\gamma$ is not equal to $\pi.$
+Thus, for any fixed $K\geq 1,$  our variance reduction method is advantageous if $\gamma\ll\min\{1/(\mathtt{D}_\Psi T^2),1/\sqrt{n}\}.$  Note that in order to achieve convergence of the corresponding MSE to zero, we need anyway that $\gamma\to 0$ as the invariant measure of the ULA with a constant time step $\gamma$ is not equal to $\pi.$
 \section{Analysis of variance reduced ULA}\label{sec:ula_analysis}
 In this section we perform the convergence analysis of the ULA algorithm. We use the notations of Example~\ref{exam:langevin-algorithm}. For the sake of clarity and notational simplicity we restrict our attention to the constant time step, that is, we take $\gamma_k =\gamma$ for any $k \in \nset$.
 By $H_k$, $k\in\mathbb N_0$,
@@ -537,7 +537,7 @@ Our analysis is carried out under the following two assumptions.
 \begin{eqnarray*}
 | \nabla U(x)-\nabla U(y) | \leq L |x-y|, \quad x,y\in \rset^d.
 \end{eqnarray*}
-\item[(H2)][\textbf{Convexity}] The potential $U$ is of the form $U(x)=U_0(x)+\Delta(x),$ where $\Delta$ has  compact support and $U_0\in C^2(\mathbb{R}^d)$ with
+\item[(H2)][\textbf{Convexity}] The potential $U$ has the form $U(x)=U_0(x)+\Delta(x)$ where $\Delta$ has  a compact support and $U_0\in C^2(\mathbb{R}^d)$ with
 \begin{equation*}
 \mathfrak{m} |x|^2 \leq \ps{D^2U_0(x)}{x} \leq \mathfrak{M} |x|^2,\quad   x\in \mathbb{R}
 \end{equation*}
@@ -622,9 +622,10 @@ where the sum in \eqref{eq:Aqk2} runs over all nonempty subsets $I$ of the set $
 \end{thm}
 \begin{cor}
 Suppose that  {\bf (H2)} holds with  $\Delta \in C^2(\mathbb{R}^d)$ satisfying $|\mathsf{D}^{2}\Delta(x)|\leq D$ for all $x\in \mathbb{R}^d$ and some constant $D>0.$ Then for  $\gamma  <1/\mathfrak{M}$ we have
- \begin{eqnarray*}
+ \begin{eqnarray}
+ \label{eq:cor-bound}
 \sum_{p=j+1}^{\infty}\gamma\left\Vert\prod_{k=j+1}^{p} (I-\gamma\mathsf{D}^{2}U(X^x_{k-1}))\right\Vert _{r}&\leq &  \frac{1}{\mathfrak{m}}+\frac{ D}{\mathfrak{m}^2(1-\gamma \mathfrak{M})}.
-\end{eqnarray*}
+\end{eqnarray}
 Hence under assumptions of Theorem~\ref{th:mr}, there exists  a constant $\widetilde{C}_K < \infty$  such that for all $n \in \nset$ and $x \in \rset^d$,
 \begin{eqnarray}
 \label{eq:var-bound}
@@ -636,16 +637,16 @@ We have
 \begin{multline*}
 \prod_{k=j+1}^{p}\left(I-\gamma\mathsf{D}^{2}U(X_{k-1})\right)=\prod_{k=j+1}^{p}\left(I-\gamma\mathsf{D}^{2}U_0(X_{k-1})\right)+
 \\
-\gamma\sum_{l=j+1}^{p}\prod_{k=j+1}^{l-1}\left(I-\gamma\mathsf{D}^{2}U_{0}(X_{k-1})\right)\mathsf{D}^{2}\Delta(X_{l-1})\prod_{k=l+1}^{p}\left(I-\gamma\mathsf{D}^{2}U_0(X_{k-1})\right),
+\gamma\sum_{l=j+1}^{p}\prod_{k=j+1}^{l-1}\left(I-\gamma\mathsf{D}^{2}U_{0}(X_{k-1})\right)\mathsf{D}^{2}\Delta(X_{l-1})\prod_{k=l+1}^{p}\left(I-\gamma\mathsf{D}^{2}U_0(X_{k-1})\right)
 \end{multline*}
 where empty products are equal $1$ by definition.
 Hence
 \begin{eqnarray*}
 \left|\prod_{k=j+1}^{p}\left(I-\gamma\mathsf{D}^{2}U(X_{k-1})\right)\right|&\leq &\left(1+\frac{\gamma (p-j) D}{1-\gamma\mathfrak{M}}\right)\prod_{k=j+1}^{p}\left |I-\gamma\mathsf{D}^{2}U_0(X_{k-1})\right|
 \\
-&\leq &  \left(1+\frac{\gamma (p-j) D}{1-\gamma\mathfrak{M}}\right) (1-\gamma \mathfrak{m})^{p-j}.
+&\leq &  \left(1+\frac{\gamma (p-j) D}{1-\gamma\mathfrak{M}}\right) (1-\gamma \mathfrak{m})^{p-j}
 \end{eqnarray*}
-
+and  \eqref{eq:cor-bound} follows.
 \end{proof}
 
 Let us sketch the main steps of the proof. First using integration by parts, we prove that
@@ -657,27 +658,27 @@ where $F_q(x,Z_1,\ldots,Z_q):=\sum_{r=0}^q f(X^x_r)$ and $\partial_{Z_1}^{\mathb
 stands for a weak partial derivative of the functional $F_s$ that also can be viewed as discretised version of Malliavin derivative.
 Now by taking $\mathbf{k}'=\mathbf{k},$ we get
 \begin{eqnarray*}
-A^2_{q,\mathbf{k}}(x)\leq \gamma^{|\mathbf{k}|} \PVar \left( \sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X_{p}^x\right)
+A^2_{q,\mathbf{k}}(x)\leq \gamma^{|\mathbf{k}|} \PVar \left( \sum_{p=0}^{q}\partial_{Z_{1}}^{\mathbf{k}}f\left(X_{p}^x\right)
 \right),\quad q=0,\ldots,n-1.
 \end{eqnarray*}
 Also from \eqref{eq:Ask-part} we can derive that
 \begin{eqnarray*}
 \sum_{\|\mathbf{k}\|\geq K+1} A^2_{q,\mathbf{k}}(x)\leq \sum_{I\subseteq\{1,\ldots,d\},\, I\neq \emptyset}
 \left(\frac{\gamma}{2}\right)^{|I|K}
-\PVar \left( \sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X_{p}^x\right)
-\right),
+\PVar \left( \sum_{p=0}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X_{p}^x\right)
+\right)
 \end{eqnarray*}
-where
+where 
 \[
 \mathbf{\mathbf{K}}_{I}=K(\indi{I}(1),\ldots, \indi{I}(d)).
 \]
 Finally, using the Gaussian Poincare inequality, we show  that under  assumptions \eqref{eq:smooth-mu} and  \eqref{eq:main-ass-prod} it holds
 \begin{equation}
 \label{eq:varboundV}
-\PVar \left(\sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{K}_I}f\left(X^x_{p}\right)
+\PVar \left(\sum_{p=1}^{q}\partial_{Z_{1}}^{\mathbf{k}}f\left(X^x_{p}\right)
 \right)\leq C_{K}\gamma^{-1}\Xi(x),\quad q=0,\ldots,n-1,
 \end{equation}
-for some positive constants $\varkappa, C_K$ not depending on $n$ and  $\gamma.$
+for any $\| \mathbf{k} \| \leq K$ and some positive constants $\varkappa, C_K$ not depending on $n$ and  $\gamma.$
 \section{Numerical analysis}
 \label{sec:num}
 In this section we illustrate the performance of the proposed variance reduction method for ULA.
