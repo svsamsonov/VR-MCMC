@@ -60,10 +60,10 @@ comments by Referee 2
 
 \item \textit{... Restrictive assumptions for the theoretical analysis. The main theorems of the paper, which seem to be Theorem 4 and the results of section 6.1, have the restrictive assumption that the drift vector field  needs to satisfy the strong convexity assumption ... In typically interesting cases, such as Bayesian inverse problems and machine learning, this assumption is not satisfied. Unfortunately, even in the numerical examples provided in Section 7, this assumption is not fulfilled ? it already doesn't hold for a two-component Gaussian mixture in one dimension. This is a serious restriction ... }
 \par
-In the revised version we significantly weaken  the assumptions and prove our main result (Theorem~3 and Corollary~2) for ULA under smoothness  and convexity of the underlying potential outside a ball (assumption  (H2)).  Thus we avoid the strong convexity assumption.  Note that all assumptions needed are now collected in Theorem~3. These  assumptions can now be validated for a large class of examples including example of Gaussian mixtures considered in Section~6.1.
+In the revised version we significantly weaken  these assumptions and prove our main result (Theorem~10 and Corollary~11) for ULA under smoothness  and convexity of the underlying potential outside a ball (assumption  (H2)) hence avoiding the strong convexity assumption.  Note that all assumptions needed are now collected in Theorem~10 and Corollary~11. These  assumptions can now be validated for a large class of examples including the case of Gaussian mixtures considered in Section~6.2.
 \item \textit{... in complicated models such as PDE-related Bayesian inverse problems or machine learning, the computation of \(\nabla \log(\pi)\) is expensive ? but these examples are typically ones where \(\log(\pi)\) does not satisfy the needed concavity assumptions ...}
 \par
-Now we replaced the strong convexity assumption by a much weaker one (H2) (convexity outside a ball). Hence our method may gain additional efficiency as compared to other variance reduction approaches due to the fact that \(\nabla \log(\pi)\) doesn't need to be computed to construct control variates.
+As mentioned above we have replaced the strong convexity assumption by a much weaker one (H2) (convexity outside a ball). Hence our method may gain additional efficiency as compared to other variance reduction approaches due to the fact that \(\nabla \log(\pi)\) doesn't need to be computed for the construction of control variates.
 \end{itemize}
 
 
