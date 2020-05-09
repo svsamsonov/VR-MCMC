@@ -584,13 +584,13 @@ Let $f$ be a bounded Borel function and $(X^x_{p})_{p \in \nset_0}$ be a Markov 
 The bound in Lemma~\ref{lem:variance} is sharp and cannot be improved even in the case of a normal distribution $\pi.$
 Indeed,  ULA for the standard normal distribution takes form
 \begin{eqnarray*}
-X_{k+1} = (1-2\gamma)X_k + \sqrt{\gamma}\xi_{k+1},\quad \xi_{k+1} \sim \mathcal{N}(0,1).
+X_{k+1} = \left(1-\frac{\gamma}{2}\right)X_k + \sqrt{\gamma}\xi_{k+1},\quad \xi_{k+1} \sim \mathcal{N}(0,1).
 \end{eqnarray*}
 Thus, setting $X_0 = 0$, we obtain
 \begin{eqnarray*}
 \PVar_{0} [\pi_n^0(f)] &=& \PVar_{0}\left[\frac{1}{n}\sum\limits_{i=1}^{n}X_i\right]
-= \frac{1}{n^2}\PVar\left[\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{i}\sqrt{\gamma}(1-2\gamma)^{i-j}\xi_{j}\right]
-\geq  \frac{1}{n\gamma} - \frac{2(1-2\gamma)}{n^2\gamma^2}.
+= \frac{1}{n^2}\PVar\left[\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{i}\sqrt{\gamma}\left(1-\frac{\gamma}{2}\right)^{i-j}\xi_{j}\right]
+\geq  \frac{4}{n\gamma} - \frac{16(1-\frac{\gamma}{2})}{n^2\gamma^2}.
 \end{eqnarray*}
 \end{remark}
 One of the main results of this paper is the following  upper bound for the functions $(A_{q,\mathbf{k}})$ in \eqref{eq:A-ula}.
@@ -1485,7 +1485,7 @@ Hence,   \cite[Corollary 5]{DurmusBortoli} implies that for all $x,y$ such that 
 \]
 where $\lceil \cdot \rceil$ denotes an upper integer part and $\varepsilon = 2\Phi\left(-K\sqrt{\left(1+\frac{1}{L}\right)\left(1 + 2L\right)}\right)$. Note also that the drift condition \eqref{eq:lyapunov} implies that
 \[
-Q^{[1/\gamma]}_{\gamma}V(x) \leq \lambda V(x) + \frac{\gamma b(1-\lambda^{\gamma(\lceil 1/\gamma\rceil + 1)})}{1-\lambda^{\gamma}} \leq \lambda V(x) + \frac{b}{\lambda \log{1 /\lambda}} 
+Q^{\lceil 1/\gamma \rceil}_{\gamma}V(x) \leq \lambda V(x) + \frac{\gamma b(1-\lambda^{\gamma(\lceil 1/\gamma\rceil + 1)})}{1-\lambda^{\gamma}} \leq \lambda V(x) + \frac{b}{\lambda \log{1 /\lambda}} 
 \]
 where the last inequality is due to \cite[Lemma 1]{durmus:moulines:2017}. Hence, the kernel $Q^{\lceil 1/\gamma \rceil}_{\gamma}$ satisfies $(1,\varepsilon)$-Doeblin condition on the set $\{x: V(x) < 1+K^2\}$ and drift condition \eqref{eq:lyapunov} with appropriate constants. Now the statement of the lemma follows from \cite[Theorem~19.4.1]{moulines2018}.
 \end{proof}
