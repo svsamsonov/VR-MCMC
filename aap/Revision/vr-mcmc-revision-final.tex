@@ -719,20 +719,20 @@ In this subsection we aim at comparing cost of variance reduction, achieved by t
  \[
  \pi(x) = \frac{1}{2\sqrt{(2\pi)^{d}}} \left( \rme^{-(1/2)\|x-\mu\|^2} + \rme^{-(1/2)\|x+\mu\|^2}\right)
  \]
- where $d = 2$ and $\mu = (0.5,0.5)$. For both examples, we aimed at estimating $\pi(f)$ with $f(x)=\sum_{i=1}^d x_i$ and $f(x) = \sum_{i=1}^d x^2_i$. We used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 5 \times 10^4$ independent training trajectories, each one with the burn-in period $n_{\text{burn}} = 100$. Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for $f(x)=\sum_{i=1}^d x_i$ and second order polynomial approximations for $f(x) = \sum_{i=1}^d x^2_i$ as described in the previous section. We set $K=1$ or $K=2$ for $f(x)=\sum_{i=1}^d x_i$ or $f(x)=\sum_{i=1}^d x^2_i$ respectively. Then we estimate the cost-variance ratio
+ where $d = 2$ and $\mu = (0.5,0.5)$. For both examples, we aimed at estimating $\pi(f)$ with $f(x)=\sum_{i=1}^d x_i$ and $f(x) = \sum_{i=1}^d x^2_i$. We used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 5 \times 10^4$ independent training trajectories, each one with the burn-in period $n_{\text{burn}} = 100$. Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for $f(x)=\sum_{i=1}^d x_i$ and second order polynomial approximations for $f(x) = \sum_{i=1}^d x^2_i$ as described in the previous section. We set $K=1$ or $K=2$ for $f(x)=\sum_{i=1}^d x_i$ or $f(x)=\sum_{i=1}^d x^2_i$ respectively. Then we estimate the cost-to-variance ratio
 \begin{eqnarray}
 \label{eq:cvR}
 \mathcal{R}(K,N,n,n_{\mathrm{trunc}})=\frac{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n,n_{\mathrm{trunc}} }^N(f)|\TrainSet]}
 \end{eqnarray}
-by its empirical counterpart, computed over $24$ independent trajectories with $n = 2\times 10^3$ and $N = 2 \times 10^3$. Since for fixed $K$ the cost of computing $\pi_{n}^N(f)$ is proportional to computing function $f$, we set for $K = 1$
+by its empirical counterpart, computed over $24$ independent trajectories with $n = 2\times 10^3$ and $N = 2 \times 10^3$. Since for a fixed $K$ the cost of computing $\pi_{n}^N(f)$ is proportional to the cost of computing function $f$, we set for $K = 1$
  \begin{equation*}
  \mathrm{cost}(\widehat \pi_{K,n}^N) = \mathrm{cost}(\pi_{n}^N) \times n_{\mathrm{trunc}} \times 2
  \end{equation*}
- since there are only $2$ non-zero functions among $a_{r,\mathbf{k}}(x)$ for fixed $r$. Note that in this case each $a_{r,\mathbf{k}}(x)$  is a linear function, which can be computed at the same cost as $f$. Similarly, for $K = 2$ we set
+ since there are only $2$ non-zero functions among $a_{r,\mathbf{k}}$ for a fixed $r$. Note that in this case each $a_{r,\mathbf{k}}$  is a linear function, which can be computed at the same cost as $f$. Similarly, for $K = 2$ we set
   \begin{equation*}
- \mathrm{cost}(\widehat \pi_{K,n}^N) = \mathrm{cost}(\pi_{n}^N) \times n_{\mathrm{trunc}} \times 8
+ \mathrm{cost}(\widehat \pi_{K,n}^N) = \mathrm{cost}(\pi_{n}^N) \times n_{\mathrm{trunc}} \times 8,
  \end{equation*}
-since there are at most $8$ non-zero functions among $a_{r,\mathbf{k}}(x)$ for fixed $r$. Variance reduction costs for Gaussian potential and different $n_{\mathrm{trunc}}$  are summarized in Figure~\ref{fig:gaus_cost}, and for the Gaussian mixture - in Figure~\ref{fig:gmm_cost}. Note that for both examples the proposed algorithm allows us to obtain a sufficient gain in variance reduction cost.
+since there are at most $8$ non-zero functions among $a_{r,\mathbf{k}}(x)$ for a fixed $r$. Variance reduction costs for Gaussian potential and different $n_{\mathrm{trunc}}$  are summarized in Figure~\ref{fig:gaus_cost}, and for the Gaussian mixture - in Figure~\ref{fig:gmm_cost}. Note that for both examples the proposed algorithm allows us to obtain a sufficient gain in variance reduction cost.
 
 %Next we compute the cost-variance ratios
 %\begin{eqnarray}
@@ -751,7 +751,7 @@ since there are at most $8$ non-zero functions among $a_{r,\mathbf{k}}(x)$ for f
 \subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
 \includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gaussian.png}
 \label{fig:subfig2}}
-\caption{Cost-variance ratios \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  two-dimensional standard Gaussian distribution and different test functions.
+\caption{Cost-to-variance ratios \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  a two-dimensional standard Gaussian distribution and different test functions.
 \label{fig:gaus_cost}}
 \end{figure}
 
@@ -764,7 +764,7 @@ since there are at most $8$ non-zero functions among $a_{r,\mathbf{k}}(x)$ for f
 \subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
 \includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gmm.png}
 \label{fig:subfig2}}
-\caption{Cost-variance ratios  \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for a mixture of two-dimensional Gaussian distributions and different test functions.
+\caption{Cost-to-variance ratios  \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for the mixture \eqref{eq:gmm} of two-dimensional Gaussian distributions and two  test functions.
 \label{fig:gmm_cost}}
 \end{figure}
 
