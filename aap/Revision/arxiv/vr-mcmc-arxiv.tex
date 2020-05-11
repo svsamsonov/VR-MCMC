@@ -1,4 +1,4 @@
-\documentclass[bj]{imsart}
+\documentclass[preprint]{imsart}
 \makeatletter
 \def\set@curr@file#1{%
   \begingroup
@@ -75,8 +75,8 @@
 \begin{document}
 
 \begin{frontmatter}
-\title{Variance reduction for Markov chains via martingale representations}
-\runtitle{Variance reduction for Markov chains}
+\title{Variance reduction for MCMC algorithms via martingale representations}
+\runtitle{Variance reduction for MCMC algorithms}
 %\thankstext{T1}{This research was }
 
 
@@ -113,7 +113,7 @@ National University Higher School of Economics, Moscow, Russia
 \end{aug}
 
 \begin{abstract}
-In this paper we propose an efficient variance reduction approach for  additive functionals of Markov chains relying on a novel discrete time martingale representation. Our approach is fully non-asymptotic and does not require the knowledge of the stationary distribution (and even any type of ergodicity) or specific structure of the underlying density.  By rigorously analyzing the  convergence properties of the proposed algorithm, we show that its cost-to-variance relation is indeed  smaller than one of the naive algorithm. The numerical performance of the new method is illustrated for Langevin-type Markov Chain Monte Carlo (MCMC) methods.
+In this paper we propose an efficient variance reduction approach for  additive functionals of Markov chains relying on a novel discrete time martingale representation. Our approach is fully non-asymptotic and does not require the knowledge of the stationary distribution (and even any type of ergodicity) or specific structure of the underlying density.  By rigorously analyzing the  convergence properties of the proposed algorithm, we show that its cost-to-variance product is indeed  smaller than one of the naive algorithm. The numerical performance of the new method is illustrated for the Langevin-type Markov Chain Monte Carlo (MCMC) methods.
 \end{abstract}
 
 \begin{keyword}[class=MSC]
@@ -183,7 +183,7 @@ where \(f:\) \(\mathcal{X}\longrightarrow \mathbb{R}\) and \(\pi\) is a probabil
 If  the dimension of the space \(\mathcal{X}\) is large and \(\pi(f)\) can not be computed analytically, one can apply Monte Carlo methods. However, in many practical situations  direct sampling from \(\pi\) is impossible and this precludes the use of plain Monte Carlo methods in this case. One popular alternative to Monte Carlo  is Markov Chain Monte Carlo (MCMC) where one is looking for a discrete time  (possibly non-homogeneous) Markov chain   \((X_p)_{p \in \nset_0}\) such that \(\pi\) is its unique invariant measure. In this paper we study a class of MCMC algorithms with \((X_p)_{p \in \nset_0}\) satisfying the  the following recurrence relation:
 \begin{equation}
 \label{eq:chain_gen}
-X_{p}=\Phi_{p}(X_{p-1},\xi_{p}),\quad p=1,2,\ldots ,\quad X_{0}=x,
+X_{p}=\Phi_{p}(X_{p-1},\xi_{p}),\quad p=1,2,\ldots ,\quad X_{0}=x
 \end{equation}
 for some i.i.d.  random vectors \(\xi_p\in \mathbb{R}^m\) with distribution \(P_{\xi}\)
 and some Borel-measurable
@@ -255,7 +255,7 @@ The MALA algorithms usually provide noticeable speed-ups in convergence for most
 X_{p+1} &=X_p+\mathbbm{1}\bigl(U_{p+1}\leq \alpha(X_{p},Y_{p})\bigr)(Y_{p}-X_p),  \,
 Y_{p}&=X_p-\gamma_{p+1}\mu(X_p)+\sqrt{\gamma_{p+1}}Z_{p+1},
 \end{align*}
-where \((U_{p})_{p\geq 1}\) is an i.i.d. sequence of uniformly distributed on \([0,1]\) random variables independent of \((Z_p)_{p\geq 1}.\) Thus we recover \eqref{eq:chain_gen} with  \(\xi_p=(U_p,Z_p)\in \mathbb{R}^{d+1}\) and
+where \((U_{p})_{p\geq 1}\) is an i.i.d. sequence of uniformly distributed on \([0,1]\) random variables independent of \((Z_p)_{p\geq 1}.\) Thus, we recover \eqref{eq:chain_gen} with  \(\xi_p=(U_p,Z_p)\in \mathbb{R}^{d+1}\) and
 \begin{eqnarray*}
 \Phi_p(x,(u,z)^\top)=x+\mathbbm{1}\bigl(u\leq \alpha(x,x-\gamma_{p}\mu(x)+\sqrt{\gamma_{p}}z)\bigr)(-\gamma_{p}\mu(x)+\sqrt{\gamma_{p}}z).
 \end{eqnarray*}
@@ -489,7 +489,7 @@ for a sequence  $(R_k)$ satisfying $\sum_{k=1}^\infty R^2_k\leq C$ with constant
 \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]\leq \frac{2C}{n}.
 \end{eqnarray*}
 % Note that the above estimate is rather rough, as we ignore here the fact that the difference between $\widehat A_{n-l,k}$ and $A_{n-l,k}$ is small.
-If the class of functions $\Psi$ is a linear one of dimension $\mathtt{D}_\Psi,$ then the cost of computing the coefficients $\widehat A_{l,k}$ for all $l=1,\ldots,n,$ and $k=1,\ldots,K,$ is of order  $ \mathtt{D}_\Psi K T^2 n$. Given $(\widehat A_{l,k})$ the cost of evaluating  $\widehat \pi_{K,n}^N$ is proportional to $\mathtt{D}_\Psi K n.$ At the same time the variance of the standard estimate $ \pi_{n}^N(f)$ is of order $1/(n\gamma)$ and this bound can not be improved, see Lemma~\ref{lem:variance} and Remark~\ref{rem:var-low}. Thus, the ratio of the corresponding cost-to-variance characteristics  is of order
+If the class of functions $\Psi$ is a linear one of dimension $\mathtt{D}_\Psi,$ then the cost of computing the coefficients $\widehat A_{l,k}$ for all $l=1,\ldots,n,$ and $k=1,\ldots,K,$ is of order  $ \mathtt{D}_\Psi K T^2 n$. Given $(\widehat A_{l,k})$ the cost of evaluating  $\widehat \pi_{K,n}^N$ is proportional to $\mathtt{D}_\Psi K n.$ At the same time the variance of the standard estimate $ \pi_{n}^N(f)$ is of order $1/(n\gamma)$ and this bound can not be improved, see Lemma~\ref{lem:variance} and Remark~\ref{rem:var-low}. Thus, the ratio of the corresponding cost-to-variance characteristics (product of cost and variance)   can be bounded as
 \begin{equation}
 \label{eq:cost_theoretical}
 \frac{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n}^N(f)|\TrainSet]}{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}\leq C  K \gamma \, T^2 \mathtt{D}_\Psi.
@@ -681,12 +681,12 @@ Finally, using the Gaussian Poincare inequality, we show  that under  assumption
 for any $\| \mathbf{k} \| \leq K$ and some positive constants $\varkappa, C_K$ not depending on $n$ and  $\gamma.$
 \section{Numerical analysis}
 \label{sec:num}
-In this section we illustrate the performance of the proposed variance reduction method for ULA.
-First we construct a polynomial approximation  for each \(Q_r(x)\)  in the form:
+In this section we illustrate the performance of the proposed variance reduced ULA algorithm for  various potential functions $U$. In our we implementation we follow the next steps.
+First we construct a polynomial approximation  for each \(Q_r\)  in the form:
 \begin{equation*}
 \widehat{Q}_{r}(x) = \sum_{\|\mathbf{s}\|\leq m} \widehat\beta_{\mathbf{s}} x^{\mathbf{s}},\quad s=(s_1,\ldots,s_d) \in \nset_0^d.
 \end{equation*}
-The coefficients \(\widehat \beta_{\mathbf{s}}\in \mathbb{R}\) are obtained using a modified least-squares criteria based on $T$ independent training trajectories \(\bigl\{\bigl(X_1^{(s)},\ldots,X_{N+n}^{(s)}\bigr)\bigr\}_{s=1}^{T}\). More precisely  we define $\widehat{Q}_0(x) = f(x)$ and for \(1 \leq r \leq n-1,\) we set
+The coefficients \(\widehat \beta_{\mathbf{s}}\in \mathbb{R}\) are obtained via a modified least-squares criteria based on $T$ independent training trajectories \(\bigl\{\bigl(X_1^{(s)},\ldots,X_{N+n}^{(s)}\bigr)\bigr\}_{s=1}^{T}\). More precisely  we define $\widehat{Q}_0(x) = f(x)$ and for \(1 \leq r \leq n-1,\) we set
 \begin{eqnarray}
 \label{eq:Qregr}
 \widehat{Q}_r = \argmin_{\psi \in \Psi_m} \sum_{s = 1}^{T}  \left| f(X_{N+r}^{(s)}) - \psi(X_{N}^{(s)})\right|^2,
@@ -695,19 +695,19 @@ The coefficients \(\widehat \beta_{\mathbf{s}}\in \mathbb{R}\) are obtained usin
 \[
 \xi^j = j! \sum_{r = 0}^{\lfloor j/2 \rfloor} \frac{1}{2^r  r! \sqrt{(j-2r)!}} H_{j-2r}(\xi),\quad \xi \in \mathbb{R},
 \]
-we obtain closed-form expression for the estimates $\widehat a_{r,k}(x)$ of functions $\bar a_{r,k}(x)$ in \eqref{eq:definition-bar-a}. Namely, for all $x=(x^1,\dots,x^d) \in \mathbb{R}^d$,
+we obtain a closed-form expression for the estimates $\widehat a_{r,\mathbf{k}}$ of functions $\bar a_{r,\mathbf{k}}$ in \eqref{eq:definition-bar-a}. Namely, for all $x=(x^1,\dots,x^d) \in \mathbb{R}^d$ and $\mu=\nabla U,$  we have
 \begin{align}
 \nonumber
-\widehat a_{r,\mathbf{k}} (x) &= \int \mathbf{H}_\mathbf{k}(z) \widehat{Q}_{r}(x - \gamma \mu(x) + \sqrt{\gamma}z) P_\xi(\rmd z)
+\widehat a_{r,\mathbf{k}} (x) &= \int \mathbf{H}_\mathbf{k}(z) \widehat{Q}_{r}(x - \gamma \mu(x) + \sqrt{\gamma}z) \boldsymbol{\varphi}(\rmd z)
 \\
 &=
 \label{eq:a-pol}
 \sum_{\|\mathbf{s}\|\leq m} \beta_{\mathbf{s}} \prod_{i=1}^d P_{k_i,s_i}(x^i - \gamma \mu_i(x)),
 \end{align}
 where for any integer $k,s$ $P_{k,s}$ is a one-dimensional polynomial of degree at most \(s\) with analytically known coefficients. We estimate $Q_{r}$ only for $r < n_{\mathrm{trunc}}$ where the truncation level \(n_{\mathrm{trunc}}\) may depend on \(d\) and \(\gamma.\) It allows us to use a smaller amount of training trajectories to approximate $Q_{r}(x)$.
-Finally  we construct a truncated version of the estimator \eqref{eq:29032018a3}:
+Finally,  we construct a truncated version of the estimator \eqref{eq:29032018a3}:
 \[
-\pi_{K,n,n_{\mathrm{trunc}}}^N(f) = \pi_n^N(f) -  \widehat M_{K,n, n_{\mathrm{trunc}}}^{N}(f),
+\pi_{K,n,n_{\mathrm{trunc}}}^N(f) = \pi_n^N(f) -  \widehat M_{K,n, n_{\mathrm{trunc}}}^{N}(f)
 \]
 where
 \begin{eqnarray*}
@@ -715,24 +715,24 @@ where
 \end{eqnarray*}
 
 \subsection{Comparison with vanilla ULA}
-In this subsection we aim at comparing cost of variance reduction, achieved by the proposed algorithm, to the cost of vanilla ULA algorithm. We consider samples, generated by ULA with $\pi$ being either the standard normal distribution in dimension $d$ or the mixture of two $d-$dimensional standard Gaussians of the form
+In this subsection we aim at comparing the degree of variance reduction relative to costs, achieved by the proposed algorithm as compared to  the vanilla ULA algorithm. We consider samples, generated by ULA with $\pi$ being either the standard normal distribution in dimension $d$ or the mixture of two $d-$dimensional standard Gaussians of the form
  \[
  \pi(x) = \frac{1}{2\sqrt{(2\pi)^{d}}} \left( \rme^{-(1/2)\|x-\mu\|^2} + \rme^{-(1/2)\|x+\mu\|^2}\right)
  \]
- where $d = 2$ and $\mu = (0.5,0.5)$. For both examples, we aimed at estimating $\pi(f)$ with $f(x)=\sum_{i=1}^d x_i$ and $f(x) = \sum_{i=1}^d x^2_i$. We used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 5 \times 10^4$ independent training trajectories, each one with the burn-in period $n_{\text{burn}} = 100$. Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for $f(x)=\sum_{i=1}^d x_i$ and second order polynomial approximations for $f(x) = \sum_{i=1}^d x^2_i$ as described in the previous section. We set $K=1$ or $K=2$ for $f(x)=\sum_{i=1}^d x_i$ or $f(x)=\sum_{i=1}^d x^2_i$ respectively. Then we estimate the cost-to-variance ratio
+ where $d = 2$ and $\mu = (0.5,0.5)$. For both examples, our goal is to estimate $\pi(f)$ with $f(x)=\sum_{i=1}^d x_i$ and $f(x) = \sum_{i=1}^d x^2_i$. We used a constant step size $\gamma=0.1$ and sampled $\NtrainPath = 5 \times 10^4$ independent training trajectories, each one with the burn-in period $n_{\text{burn}} = 100$. Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for $f(x)=\sum_{i=1}^d x_i$ and second order polynomial approximations for $f(x) = \sum_{i=1}^d x^2_i$ as described in the previous section. We set $K=1$ or $K=2$ for $f(x)=\sum_{i=1}^d x_i$ or $f(x)=\sum_{i=1}^d x^2_i,$ respectively. Then we estimate the cost-to-variance ratio (degree of variance reduction relative to costs)
 \begin{eqnarray}
 \label{eq:cvR}
 \mathcal{R}(K,N,n,n_{\mathrm{trunc}})=\frac{\mathrm{cost}(\pi_{n}^N)\PVar[\pi_{n}^N(f)]}{\mathrm{cost}(\widehat \pi_{K,n}^N) \PVar[\widehat \pi_{K,n,n_{\mathrm{trunc}} }^N(f)|\TrainSet]}
 \end{eqnarray}
 by its empirical counterpart, computed over $24$ independent trajectories with $n = 2\times 10^3$ and $N = 2 \times 10^3$. Since for a fixed $K$ the cost of computing $\pi_{n}^N(f)$ is proportional to the cost of computing function $f$, we set for $K = 1$
  \begin{equation*}
- \mathrm{cost}(\widehat \pi_{K,n}^N) = \mathrm{cost}(\pi_{n}^N) \times n_{\mathrm{trunc}} \times 2
+ \mathrm{cost}(\widehat \pi_{K,n}^N) = \mathrm{cost}(\pi_{n}^N) \times n_{\mathrm{trunc}} \times 2,
  \end{equation*}
  since there are only $2$ non-zero functions among $a_{r,\mathbf{k}}$ for a fixed $r$. Note that in this case each $a_{r,\mathbf{k}}$  is a linear function, which can be computed at the same cost as $f$. Similarly, for $K = 2$ we set
   \begin{equation*}
  \mathrm{cost}(\widehat \pi_{K,n}^N) = \mathrm{cost}(\pi_{n}^N) \times n_{\mathrm{trunc}} \times 8,
  \end{equation*}
-since there are at most $8$ non-zero functions among $a_{r,\mathbf{k}}(x)$ for a fixed $r$. Variance reduction costs for Gaussian potential and different $n_{\mathrm{trunc}}$  are summarized in Figure~\ref{fig:gaus_cost}, and for the Gaussian mixture - in Figure~\ref{fig:gmm_cost}. Note that for both examples the proposed algorithm allows us to obtain a sufficient gain in variance reduction cost.
+since there are at most $8$ non-zero functions among $a_{r,\mathbf{k}}$ for a fixed $r$. Variance reduction costs for Gaussian potential and different $n_{\mathrm{trunc}}$  are summarized in Figure~\ref{fig:gaus_cost}, and for the Gaussian mixture - in Figure~\ref{fig:gmm_cost}. Note that for both examples the proposed algorithm allows us to obtain a significant gain in efficiency.
 
 %Next we compute the cost-variance ratios
 %\begin{eqnarray}
@@ -745,11 +745,11 @@ since there are at most $8$ non-zero functions among $a_{r,\mathbf{k}}(x)$ for a
 \begin{figure}[tbh]
 \centering
 \subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
-\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gaussian.png}
+\includegraphics[width=0.45\textwidth]{vr_cost_linear_gaussian.png}
 \label{fig:subfig1}}
 \qquad
 \subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
-\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gaussian.png}
+\includegraphics[width=0.45\textwidth]{vr_cost_quadratic_gaussian.png}
 \label{fig:subfig2}}
 \caption{Cost-to-variance ratios \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for  a two-dimensional standard Gaussian distribution and different test functions.
 \label{fig:gaus_cost}}
@@ -758,11 +758,11 @@ since there are at most $8$ non-zero functions among $a_{r,\mathbf{k}}(x)$ for a
 \begin{figure}[tbh]
 \centering
 \subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
-\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_linear_gmm.png}
+\includegraphics[width=0.45\textwidth]{vr_cost_linear_gmm.png}
 \label{fig:subfig1}}
 \qquad
 \subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
-\includegraphics[width=0.45\textwidth]{../pictures/vr_cost_quadratic_gmm.png}
+\includegraphics[width=0.45\textwidth]{vr_cost_quadratic_gmm.png}
 \label{fig:subfig2}}
 \caption{Cost-to-variance ratios  \eqref{eq:cvR} as  functions of the truncation level $n_{\mathrm{trunc}}$ for the mixture \eqref{eq:gmm} of two-dimensional Gaussian distributions and two  test functions.
 \label{fig:gmm_cost}}
@@ -783,19 +783,19 @@ and
 \nabla U(x) = \Sigma^{-1}(x-\mu) +2 \left(1 + \rme^{2 \mu^\top\Sigma^{-1} x}\right)^{-1} \Sigma^{-1}\mu ,
 \]
 respectively.
-In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and randomly generated positive-definite matrix $\Sigma$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) with \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i\) we used constant step size $\gamma=0.1$ and sampled $\NtrainPath = 5 \times 10^4$ independent training trajectories, each one of size $n = 50$ with the burn-in period $n_{\text{burn}} = 100$. Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for $f(x)=\sum_{i=1}^d x_i$ and second order approximations for $f(x) = \sum_{i=1}^d x^2_i$ as described in the previous section. Hence we set $K = 1$ for $f(x)=\sum_{i=1}^d x_i$ or $K = 2$ for $f(x) = \sum_{i=1}^d x^2_i$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 2 \times 10^3$ and plot boxplots of the corresponding ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials in case of $K=1$ and second order polynomials for $K = 2$.
+In our experiments we considered $d = 2$, $\mu = \left(0.5,0.5\right)$ and randomly generated positive-definite matrix $\Sigma$ (heterogeneous structure). In order to approximate the expectation \(\pi(f)\) with \(f(x)=\sum_{i=1}^d x_i\) or \(f(x) = \sum_{i=1}^d x^2_i,\) we used a constant step size $\gamma=0.1$ and sampled $\NtrainPath = 5 \times 10^4$ independent training trajectories, each one of size $n = 50$ with the burn-in period $n_{\text{burn}} = 100$. Then we solve the least squares  problems \eqref{eq:Qregr} using the first order polynomial approximations for $f(x)=\sum_{i=1}^d x_i$ and second order approximations for $f(x) = \sum_{i=1}^d x^2_i$ as described in the previous section. Also we set $K = 1$ for $f(x)=\sum_{i=1}^d x_i$ or $K = 2$ for $f(x) = \sum_{i=1}^d x^2_i$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated \(100\) independent trajectories of length $n = 2 \times 10^3$ and plot boxplots of the corresponding ergodic averages in Figure ~\ref{fig:GMM}. Our approach (MDCV, Martingale decomposition control variates) is compared to other variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we used the first order polynomials in case of $K=1$ and second order polynomials for $K = 2$.
 \par
 
  \begin{figure}[tbh]
 \centering
 \subfloat[Subfigure 1 list of figures text][$f(x)=\sum_{i=1}^d x_i$]{
-\includegraphics[width=0.45\textwidth]{../pictures/GMM_2d_lin_sum.png}
+\includegraphics[width=0.45\textwidth]{GMM_2d_lin_sum.png}
 \label{fig:subfig1}}
 \qquad
 \subfloat[Subfigure 2 list of figures text][$f(x)=\sum_{i=1}^d x^2_i$]{
-\includegraphics[width=0.45\textwidth]{../pictures/GMM_2d_lin_sum_squares.png}
+\includegraphics[width=0.45\textwidth]{GMM_2d_lin_sum_squares.png}
 \label{fig:subfig2}}
-\caption{Boxplots of ergodic averages  from the variance reduced ULA algorithms for the Gaussian mixture model. The compared estimators are the ordinary empirical average  (Vanilla), our estimator of control variates (MDCV), zero variance estimator (ZV) and control variates obtained with empirical spectral variance minimisation (ESVM)
+\caption{Boxplots of ergodic averages  obtained by the variance reduced ULA algorithm for the Gaussian mixture model. The compared estimators are the ordinary empirical average  (Vanilla), our method of martingale control variates (MDCV), zero variance estimator (ZV) and the control variates approach based on the empirical spectral variance minimisation (ESVM)
 \label{fig:GMM}}
 \end{figure}
 
@@ -834,11 +834,11 @@ where $p > 0$ and $b > 0$ are parameters; $b$ accounts for the curvature of dens
 \[
 U(x_1,\ldots, x_d) = \frac{x_1^2}{2} + \frac{(x_2 + bx_1^2 - pb)^2}{2} + \frac{1}{2} \sum_{k=3}^{d} x_k^2 \eqsp.
 \]
-The quantity of interest is the expectation of $f(x) = x_2$. We set $p = 100, b = 0.1$ and consider $d=8$. We solve the least squares  problems \eqref{eq:Qregr} using the second-order polynomial approximations for the coefficients \(\hat{a}_{p,\mathbf{k}}\) as described in the previous section, hence we set $K = 2$. We use $T= 5 \times 10^4$ independent training trajectories, each of size $n=50$ with the burn-in $n_{\text{burn}} = 100$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated 100 independent trajectories of length $n = 2 \times 10^3$ and display boxplots of the ergodic averages in Figure~\ref{fig:banana_shape}.
+The quantity of interest is the expectation of $f(x) = x_2$. We set $p = 100, b = 0.1$ and consider $d=8$. We solved the least squares  problems \eqref{eq:Qregr} using the second-order polynomial approximations for the coefficients \(\hat{a}_{p,\mathbf{k}}\) as described in the previous section, we also set $K = 2$. We used $T= 5 \times 10^4$ independent training trajectories, each of size $n=50$ with the burn-in $n_{\text{burn}} = 100$. We set the truncation level \(n_{\mathrm{trunc}} = 50\). To test our variance reduction algorithm, we generated \(100\) independent trajectories of length $n = 2 \times 10^3$ and display boxplots of the ergodic averages in Figure~\ref{fig:banana_shape}.
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=0.6\textwidth]{../pictures/banana_shape.png}
+\includegraphics[width=0.6\textwidth]{banana_shape.png}
 \caption{Boxplots of ergodic averages  from the variance reduced ULA algorithms for the Banana shape density. The compared estimators are the ordinary empirical average (Vanilla), our estimator of control variates (MDCV), zero variance estimator (ZV) control variates obtained with empirical spectral variance minimisation (ESVM).
 \label{fig:banana_shape}}
 \end{center}
@@ -853,12 +853,11 @@ In order to estimate $\theta$ according to given data, the Bayesian approach int
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[width=0.6\textwidth]{../pictures/logreg_1st_order.png}
+\includegraphics[width=0.6\textwidth]{logreg_1st_order.png}
 \caption{Boxplots of ergodic averages  from the variance reduced ULA algorithms for the Logistic Regression. The compared estimators are the ordinary empirical average (Vanilla), our estimator of control variates (MDCV), zero variance estimator (ZV) control variates obtained with empirical spectral variance minimisation (ESVM).
  \label{fig:2}}
 \end{center}
 \end{figure}
-
 In the case of  Gaussian prior $\pi_0(\theta) \sim \mathcal{N}(0,\sigma^2 I_d)$, the unnormalized posterior density takes the form:
 \begin{eqnarray*}
 \pi(\theta | \mathsf{Y}, \mathsf{X}) \propto \exp \left\{ \mathsf{Y}^T \mathsf{X} \theta - \sum\limits_{i=1}^m \ln{\left(1 + \rme^{\mathsf{X}_i \theta}\right)} - \frac{1}{2\sigma^2} \left\|\theta\right\|_2^2 \right\},
@@ -869,7 +868,7 @@ U(\theta) &=& -\mathsf{Y}^T \mathsf{X} \theta + \sum_{i=1}^m \ln{\left(1 + \rme^
 \\
 \nabla U(\theta) &=& -\mathsf{Y}^T \mathsf{X} + \sum_{i=1}^m \frac{\mathsf{X}_i}{1 + \rme^{-\mathsf{\theta}^T \mathsf{X}_i}} + \frac{1}{\sigma^2} \theta.
 \end{eqnarray*}
-To demonstrate the performance of the proposed control variates approach in the above Bayesian logistic regression model, we take a simple dataset from \cite{mira2013zero}, which contains the measurements of four variables on $m=200$ Swiss banknotes. Prior distribution of the regression parameter $\mathbf{\theta} = \left( \theta_1, \theta_2, \theta_3, \theta_4 \right)$ assumed to be normal with the covariance matrix $\sigma^2 I_4$, where $\sigma^2 = 100$. To construct trajectories of length $n = 1 \times 10^4, $ we take step size $\gamma = 0.1$ for the ULA scheme with $N = 10^3$ burn-in steps. As in the previous experiment we use the first order polynomials approximations to analytically compute the coefficients $\hat{a}_{p-l,\mathbf{k}},$ based on $T = 10$ training trajectories. We put $n_{trunc} = 50$ and $K = 1$. The target function is taken to be $f(\theta) = \sum_{i=1}^{i=d}\theta_i$.  In order to test our variance reduction algorithm, we generate \(100\) independent test trajectories of length $n = 10^3$. In Figure ~\ref{fig:2} we compare our approach to the variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use first order polynomials for the same reasons as in the Gaussian mixtures example.
+To demonstrate the performance of the proposed control variates approach in the above Bayesian logistic regression model, we take a simple dataset from \cite{mira2013zero}, which contains the measurements of four variables on $m=200$ Swiss banknotes. Prior distribution of the regression parameter $\mathbf{\theta} = \left( \theta_1, \theta_2, \theta_3, \theta_4 \right)$ assumed to be normal with the covariance matrix $\sigma^2 I_4$, where $\sigma^2 = 100$. To construct trajectories of length $n = 1 \times 10^4, $ we take step size $\gamma = 0.1$ for the ULA scheme with $N = 10^3$ burn-in steps. As in the previous experiment we used the first order polynomials approximations to analytically compute the coefficients $\hat{a}_{p-l,\mathbf{k}},$ based on $T = 10$ training trajectories. We put $n_{trunc} = 50$ and $K = 1$. The target function is taken to be $f(\theta) = \sum_{i=1}^{d}\theta_i$.  In order to test our variance reduction algorithm, we generate \(100\) independent test trajectories of length $n = 10^3$. In Figure ~\ref{fig:2} we compare our approach to the variance reduction methods of \cite{mira2013zero} and \cite{belomestny2019esvm}. In the baselines we use the first order polynomials for the same reasons as in the Gaussian mixtures example.
 
 \section{Proofs}
 \label{sec:proofs}
@@ -952,7 +951,7 @@ with, for $x,y\in\mathbb R^d$,   $\Phi(x,y)=x-\gamma\mu(x)+y$.
 As a consequence, for a function $f\colon\mathbb R^d\to\mathbb R$
 as in Section~\ref{sec:setup}, we have
 $$
-f\left(X_{p}\right) =f\circ G_{p}(X_{0},\sqrt{\gamma}Z_{1},\ldots,\sqrt{\gamma}Z_{p}).
+f\left(X_{p}\right) =[f\circ G_{p}](X_{0},\sqrt{\gamma}Z_{1},\ldots,\sqrt{\gamma}Z_{p}).
 $$
 In what follows, for $\mathbf{k}\in\mathbb N_0^d$,
 we use the shorthand notation
@@ -1293,11 +1292,10 @@ we have
 $$
 \mathsf{Var}\left[\sum_{p=1}^{q}\partial_{y_{1}}^{K}f\left(X_{p}^x\right)\right]
 \le\mathsf E_x\left[
-\|\nabla_Z F(x,Z_1,Z_{2},\ldots,Z_q)\|^2
+|\nabla_Z F(x,Z_1,Z_{2},\ldots,Z_q)|^2
 \right],
 $$
-where $\nabla_Z F=(\partial_{Z_1} F,\ldots,\partial_{Z_q} F)$,
-and $\|\cdot\|$ denotes the Euclidean norm.
+where $\nabla_Z F=(\partial_{Z_1} F,\ldots,\partial_{Z_q} F)$.
 Notice that \(\partial_{Z_j} F=\sqrt{\gamma}\,\partial_{y_j} F\) and
 hence
 $$
