@@ -44,7 +44,7 @@ def ULA(r_seed,Potential,step, N, n, d, burn_type = "SGLD",main_type = "SGLDFP")
     #select method for gradient updates during main loop   
     traj = np.zeros((n, d))
     traj_grad = np.zeros((n, d))
-    x = np.random.normal(scale=5.0, size=d) # initial value X_0
+    x = np.random.normal(scale=1.0, size=d) # initial value X_0
     for k in np.arange(N): # burn-in period
         grad_burn_val = grad_burn(x)
         x = x + step * grad_burn_val +\
@@ -110,7 +110,7 @@ def ULA_light(r_seed,Potential,step, N, n, d, return_noise = False, x0 = None, f
     #traj_grad = np.zeros((n, d))
     if return_noise:
         noise = np.zeros((n, d))
-    x = np.random.normal(scale=10.0, size=d) # initial value X_0
+    x = np.random.normal(scale=2.0, size=d) # initial value X_0
     for k in np.arange(N): # burn-in period
         grad_burn_val = grad_burn(x)
         x = x + step * grad_burn_val +\
@@ -179,7 +179,7 @@ def MALA(r_seed,Potential, step, N, n, d, burn_type = "SGLD",main_type = "SGLDFP
     grad_main = Potential.gradpotential
     traj = np.zeros((n, d))
     traj_grad = np.zeros((n, d))
-    x = np.random.normal(scale=1.0, size=d)
+    x = np.random.normal(scale=2.0, size=d)
     for k in np.arange(N):
         y = x + step * grad_burn(x) + np.sqrt(2*step)*np.random.normal(size=d)
         #if full gradient computed during burn-in, do acceptance-rejection step
@@ -221,7 +221,7 @@ def RWM(r_seed,Potential, step, N, n, d):
     grad_U = Potential.gradpotential # for control variates only
     traj = np.zeros((n, d))
     traj_grad = np.zeros((n, d))
-    x = np.random.normal(scale=5.0, size=d)
+    x = np.random.normal(scale=2.0, size=d)
     for k in np.arange(N):
         y = x + np.sqrt(2*step)*np.random.normal(size=d)
         logratio = U(y)-U(x)
