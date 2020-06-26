@@ -7,6 +7,8 @@ def ZVpolyOne(traj, traj_grad, f_target, params, W_spec):
         samples = traj.sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_comps":
         samples = traj[:,params["ind"]].reshape(-1,1)
+    elif f_target == "sum_comps_squared":
+        samples = np.square(traj[:,params["ind"]]).reshape(-1,1)
     elif f_target == "sum_squared":
         samples = np.square(traj).sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_4th":
@@ -19,7 +21,10 @@ def ZVpolyOne(traj, traj_grad, f_target, params, W_spec):
         traj = traj[0]
         samples = samples[0]
     cov1 = np.cov(traj_grad, rowvar=False)
-    A = np.linalg.inv(cov1)
+    if d==1 :
+        A = 1/cov1
+    else:
+        A = np.linalg.inv(cov1)
     covariance = np.cov(np.concatenate((-traj_grad, samples), axis=1), rowvar=False)
     paramZV1 = -np.dot(A,covariance[:d, d:])
     #print("ZV1: ",paramZV1)
@@ -36,6 +41,8 @@ def ZVpolyTwo(traj, traj_grad, f_target, params, W_spec):
         samples = traj[:,params["ind"]].reshape(-1,1)
     elif f_target == "sum_squared":
         samples = np.square(traj).sum(axis = 1).reshape(-1,1)
+    elif f_target == "sum_comps_squared":
+        samples = np.square(traj[:,params["ind"]]).reshape(-1,1)
     elif f_target == "sum_4th":
         samples = ((traj)**4).sum(axis = 1).reshape(-1,1)
     elif f_target == "exp_sum":
@@ -54,9 +61,11 @@ def ZVpolyTwo(traj, traj_grad, f_target, params, W_spec):
             Lpoisson[:,k] = -np.multiply(traj_grad[:,i], traj[:,j]) \
                     -np.multiply(traj_grad[:,j], traj[:,i])
             k=k+1
-    
     cov1 = np.cov(Lpoisson, rowvar=False)
-    A = np.linalg.inv(cov1)
+    if cov1.shape[0] == 1:
+        A = 1/cov1
+    else:
+        A = np.linalg.inv(cov1)
     cov2 = np.cov(np.concatenate((Lpoisson, samples),axis=1), rowvar=False)
     B = cov2[0:int(d*(d+3)/2), int(d*(d+3)/2):]
     paramZV2 = - np.dot(A,B)
@@ -71,6 +80,8 @@ def CVpolyOne(traj,traj_grad, f_target, params, W_spec):
         samples = traj.sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_comps":
         samples = traj[:,params["ind"]].reshape(-1,1)
+    elif f_target == "sum_comps_squared":
+        samples = np.square(traj[:,params["ind"]]).reshape(-1,1)
     elif f_target == "sum_squared":
         samples = np.square(traj).sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_4th":
@@ -155,6 +166,8 @@ def CVpolyTwo(traj, traj_grad, f_target, params, W_spec):
         samples = traj.sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_comps":
         samples = traj[:,params["ind"]].reshape(-1,1)
+    elif f_target == "sum_comps_squared":
+        samples = np.square(traj[:,params["ind"]]).reshape(-1,1)
     elif f_target == "sum_squared":
         samples = np.square(traj).sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_4th":
@@ -265,6 +278,8 @@ def CVpolyGaussian(traj, traj_grad, f_target, params, W_spec):
         samples = traj[:,params["ind"]].reshape(-1,1)
     elif f_target == "sum_squared":
         samples = np.square(traj).sum(axis = 1).reshape(-1,1)
+    elif f_target == "sum_comps_squared":
+        samples = np.square(traj[:,params["ind"]]).reshape(-1,1)
     elif f_target == "sum_4th":
         samples = ((traj)**4).sum(axis = 1).reshape(-1,1)
     elif f_target == "exp_sum":
@@ -290,6 +305,8 @@ def Eval_ZVCV_Gaus(traj,traj_grad, f_target, params, W_spec):
         samples = traj.sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_comps":
         samples = traj[:,params["ind"]].reshape(-1,1)
+    elif f_target == "sum_comps_squared":
+        samples = np.square(traj[:,params["ind"]]).reshape(-1,1)
     elif f_target == "sum_squared":
         samples = np.square(traj).sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_4th":
@@ -313,6 +330,8 @@ def Eval_ZVCV(traj,traj_grad, f_target, params, W_spec):
         samples = traj.sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_comps":
         samples = traj[:,params["ind"]].reshape(-1,1)
+    elif f_target == "sum_comps_squared":
+        samples = np.square(traj[:,params["ind"]]).reshape(-1,1)
     elif f_target == "sum_squared":
         samples = np.square(traj).sum(axis = 1).reshape(-1,1)
     elif f_target == "sum_4th":
@@ -332,6 +351,58 @@ def Eval_ZVCV(traj,traj_grad, f_target, params, W_spec):
     mean_CV1, var_CV1 = CVpolyOne(traj,traj_grad,f_target,params,W_spec)
     mean_CV2, var_CV2 = CVpolyTwo(traj,traj_grad,f_target,params,W_spec)
     return (mean_vanilla,mean_ZV1, mean_ZV2, mean_CV1, mean_CV2), (vars_vanilla, var_ZV1, var_ZV2, var_CV1, var_CV2)
+
+def ZVpoly1d(traj,traj_grad,f_target,deg,lamda_reg,W_spec):
+    if f_target == "sum":
+        samples = traj[:,0].reshape(-1,1)
+    else:
+        raise "Unexpected function type in Eval_ZVCV_1d"
+    L_psi = np.zeros(deg,samples.shape[0])
+    for i in range(deg):
+        L_psi[i] = (i+1)*traj_grad*(traj**i) + i*(i+1)*(traj**(i-1))
+    #compute main matrix
+    H_zv = np.dot(L_psi,L_psi.T)/samples.shape[0]
+    #compute right side
+    b_zv = (L_psi.T @ (samples - samples.mean()))/samples.shape[0]
+    theta = np.linalg.inv(H_zv + lambda_reg*np.eye(deg)) @ b_zv
+    ZV_est = samples - L_psi.T @ theta
+    mean_ZV = np.mean(ZV_est, axis = 0)
+    var_ZV = Spectral_var(ZV_est[:,0],W_spec)
+    return mean_ZV, var_ZV
+
+def CVpoly1d(traj,traj_grad,f_target,deg,lamda_reg,W_spec):
+    if f_target == "sum":
+        samples = traj[:,0].reshape(-1,1)
+    else:
+        raise "Unexpected function type in Eval_ZVCV_1d"
+    Nabla_psi = np.zeros(deg,samples.shape[0])
+    Psi = np.zeros(deg,samples.shape[0])
+    L_psi = np.zeros(deg,samples.shape[0])
+    for i in range(deg):
+        Nabla_psi[i] = (i+1)*(traj**i)
+        Psi[i] = traj**(i+1)
+        L_psi[i] = (i+1)*traj_grad*(traj**i) + i*(i+1)*(traj**(i-1))
+    #compute main matrix
+    H_cv = np.dot(Nabla_psi,Nabla_psi.T)/samples.shape[0]
+    #compute right side
+    b_cv = (Psi.T @ (samples - samples.mean()))/samples.shape[0]
+    theta = np.linalg.inv(H_cv + lambda_reg*np.eye(deg)) @ b_cv
+    CV_est = samples + L_psi.T @ theta
+    mean_CV = np.mean(CV_est, axis = 0)
+    var_CV = Spectral_var(CV_est[:,0],W_spec)
+    return mean_CV, var_CV
+    
+
+def Eval_ZVCV_1d(traj,traj_grad,f_target,deg,W_spec):
+    if f_target == "sum":
+        samples = traj.sum(axis = 1).reshape(-1,1)
+    else:
+        raise "Unexpected function type in Eval_ZVCV_1d"
+    mean_vanilla = np.mean(samples)
+    vars_vanilla = Spectral_var(samples[:,0],W_spec)
+    mean_ZV, var_ZV = ZVpoly1d(traj,traj_grad,f_target,deg,lambda_reg,W_spec)
+    mean_CV, var_CV = CVpoly1d(traj,traj_grad,f_target,deg,lambda_reg,W_spec)
+    return (mean_vanilla,mean_ZV, mean_CV), (vars_vanilla, var_ZV, var_CV)
     
     
     
