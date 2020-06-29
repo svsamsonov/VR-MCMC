@@ -94,7 +94,7 @@ def boxplot_2ind(data1, data2, title, labels):
 
     plt.show()
     
-def boxplot_ind(data, title, labels):
+def boxplot_ind(data, title, labels, path):
     meanprops = dict(linestyle='-', linewidth=1, color='black')
     medianprops = dict(linestyle='', linewidth=0)
 
@@ -104,7 +104,7 @@ def boxplot_ind(data, title, labels):
     set_axis_style_boxplot(ax1, labels, parts)
     fig.tight_layout()
     fig.subplots_adjust(top=0.85)
-
+    plt.savefig(path)
     plt.show()   
     
 

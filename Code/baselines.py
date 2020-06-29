@@ -352,6 +352,29 @@ def construct_ESVM_kernel(n,bn):
     c[-2*bn:-bn] = trap_left
     return c
 
+def construct_Tukey_Hanning(n,bn):
+    """
+    Same as before, but now returns only first row of embedding circulant matrix;
+    Arguments:
+        n - int,size of the matrix;
+        bn - truncation point (lag-window size);
+    Returns:
+        c - np.array of size (2n-1);
+    """
+    c = np.zeros(2*n-1,dtype = np.float64)
+    if bn == 0:#1-dioagonal matrix
+        c[0] = 1.0
+        return c
+    elif bn == 1:#3-diagonal matrix
+        c[0] = 1.0
+        c[1] = 1.0
+        c[-1] = 1.0
+        return c
+    diag_elems = 1./2 + 1./2*np.cos(np.pi/bn*np.arange(-bn,bn+1))
+    c[0:(bn+1)] = diag_elems[bn:]
+    c[-bn:] = diag_elems[:bn]
+    return c
+
 def construct_W_spec(n):
     """
     constructs toeplitz matrix W of given size n, to estimate the spectral variance
