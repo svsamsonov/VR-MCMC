@@ -360,5 +360,5 @@ def SAGA_sampler(n_traj, Potential, step_start, step_end, step_decay, cv_type, N
         traj, traj_grad = ULA_SAGA(Potential, step_start, step_end, step_decay, cv_type, N_burn, N_gen, d)
         traj_all.append(traj)
         traj_grad_all.append(traj_grad)
-    return traj_all,traj_grad_all        
+    return traj_all,traj_grad_all
         
